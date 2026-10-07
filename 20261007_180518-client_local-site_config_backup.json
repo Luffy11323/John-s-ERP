@@ -1,0 +1,10 @@
+{
+ "db_name": "_6dfe868e599ddfc9",
+ "db_password": "ONfzS75iUq1jW4pi",
+ "db_type": "mariadb",
+ "redis_cache": "redis://127.0.0.1:13001",
+ "redis_queue": "redis://127.0.0.1:11001",
+ "redis_socketio": "redis://127.0.0.1:12010",
+ "socketio_port": "9001",
+ "webserver_port": "8001"
+}
