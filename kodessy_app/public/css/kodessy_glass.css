@@ -1,104 +1,127 @@
 /* ==========================================================================
-   Kodessy Pharma ERP — Ultra-Lightweight Airy Glassmorphism Design System
-   Fast, elegant light theme with violet/magenta aurora accents & glowing hover effects
+   Kodessy Pharma ERP — Clean Cyan/Sky-Blue & Emerald Glassmorphism Theme
+   Designed for clinical clarity, executive confidence & high performance in Light & Dark modes
    ========================================================================== */
 
 :root {
-  --kodessy-aurora: linear-gradient(135deg, rgba(99, 102, 241, 0.18) 0%, rgba(168, 85, 247, 0.15) 50%, rgba(236, 72, 153, 0.18) 100%);
-  --kodessy-glow: 0 8px 25px -4px rgba(168, 85, 247, 0.35);
-  --kodessy-card-bg: rgba(255, 255, 255, 0.72);
-  --kodessy-border: rgba(255, 255, 255, 0.85);
-  --kodessy-border-glow: rgba(168, 85, 247, 0.45);
+  --pharma-cyan: #0284c7;
+  --pharma-emerald: #10b981;
+  --pharma-teal: #0d9488;
+  --pharma-sky-glow: 0 10px 30px -4px rgba(2, 132, 199, 0.28), 0 0 16px 2px rgba(16, 185, 129, 0.2);
+  --pharma-glass-bg: rgba(255, 255, 255, 0.8);
+  --pharma-glass-border: rgba(255, 255, 255, 0.85);
 }
 
-/* 1. Navbar Fading in after the Logo */
+/* 1. Navbar — Clinical Pure Glass with Subtle Cyan-Emerald Horizon Fade */
 .navbar {
-  background: rgba(255, 255, 255, 0.82) !important;
+  background: rgba(255, 255, 255, 0.85) !important;
   backdrop-filter: blur(16px) saturate(180%) !important;
   -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
   border-bottom: 1px solid rgba(226, 232, 240, 0.8) !important;
-  box-shadow: 0 4px 20px -2px rgba(99, 102, 241, 0.08) !important;
+  box-shadow: 0 4px 20px -2px rgba(2, 132, 199, 0.06) !important;
   position: relative;
   overflow: visible;
 }
 
-/* Soft aurora ambient glow radiating from right of the logo across navbar */
+[data-theme="dark"] .navbar {
+  background: rgba(15, 23, 42, 0.85) !important;
+  border-bottom: 1px solid rgba(51, 65, 85, 0.7) !important;
+  box-shadow: 0 4px 25px -2px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* Navbar Fading Horizon Line after Logo */
 .navbar::after {
   content: "";
   position: absolute;
   top: 0;
-  left: 140px;
+  left: 130px;
   right: 0;
   bottom: 0;
-  background: linear-gradient(90deg, transparent 0%, rgba(168, 85, 247, 0.08) 30%, rgba(236, 72, 153, 0.06) 70%, transparent 100%);
+  background: linear-gradient(90deg, transparent 0%, rgba(2, 132, 199, 0.08) 25%, rgba(16, 185, 129, 0.06) 65%, transparent 100%);
   pointer-events: none;
-  animation: navbarFadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: navbarFadeIn 0.8s ease forwards;
 }
 
 @keyframes navbarFadeIn {
-  0% { opacity: 0; transform: translateX(-20px); }
+  0% { opacity: 0; transform: translateX(-15px); }
   100% { opacity: 1; transform: translateX(0); }
 }
 
 .navbar .navbar-home img.app-logo {
   max-height: 28px !important;
-  transition: transform 0.25s ease;
+  transition: transform 0.2s ease;
 }
 
 .navbar .navbar-home:hover img.app-logo {
-  transform: scale(1.06);
+  transform: scale(1.05);
 }
 
-/* 2. Airy Workspace Hero Banner (Soft light violet-rose gradient) */
+/* 2. Professional Sky-Blue to Emerald Hero Workspace Banner */
 .desk-page .widget.widget-custom,
 .desk-page .widget-quick-list:first-child,
 .kodessy-hero-banner {
-  background: linear-gradient(135deg, rgba(79, 70, 229, 0.85) 0%, rgba(147, 51, 234, 0.82) 45%, rgba(219, 39, 119, 0.88) 100%) !important;
+  background: linear-gradient(135deg, #0369a1 0%, #0284c7 35%, #0d9488 70%, #059669 100%) !important;
   backdrop-filter: blur(20px) !important;
   -webkit-backdrop-filter: blur(20px) !important;
-  border-radius: 20px !important;
+  border-radius: 18px !important;
   padding: 24px !important;
-  box-shadow: 0 14px 40px -8px rgba(147, 51, 234, 0.3) !important;
+  box-shadow: 0 12px 35px -8px rgba(2, 132, 199, 0.35) !important;
   color: #ffffff !important;
-  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
 }
 
-/* 3. Pure Light Glassmorphism Cards on Home & Workspace */
+/* 3. Pure Frosted Glass UI Components (Light & Dark Ready) */
 .desk-page .widget-number-card,
 .desk-page .widget-quick-list,
 .desk-page .widget-dashboard-chart,
 .desk-page .widget-custom,
-.form-section,
-.grid-row,
 .kodessy-glass-card {
   background: rgba(255, 255, 255, 0.78) !important;
   backdrop-filter: blur(14px) saturate(180%) !important;
   -webkit-backdrop-filter: blur(14px) saturate(180%) !important;
   border: 1px solid rgba(255, 255, 255, 0.85) !important;
   border-radius: 14px !important;
-  box-shadow: 0 4px 20px -2px rgba(99, 102, 241, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02) !important;
+  box-shadow: 0 4px 18px -2px rgba(15, 23, 42, 0.05) !important;
   transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
-/* 4. Elegant Glowing Hover Effect on EVERY Glass Card */
+[data-theme="dark"] .desk-page .widget-number-card,
+[data-theme="dark"] .desk-page .widget-quick-list,
+[data-theme="dark"] .desk-page .widget-dashboard-chart {
+  background: rgba(30, 41, 59, 0.65) !important;
+  border: 1px solid rgba(71, 85, 105, 0.4) !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* 4. Elegant Sky-Blue & Emerald Glowing Hover Effect on EVERY Component */
 .desk-page .widget-number-card:hover,
 .desk-page .widget-quick-list:hover,
 .desk-page .widget-dashboard-chart:hover,
 .kodessy-glass-card:hover {
   transform: translateY(-3px) scale(1.008) !important;
-  box-shadow: 0 14px 32px -4px rgba(168, 85, 247, 0.22), 0 0 18px 2px rgba(236, 72, 153, 0.15) !important;
-  border-color: rgba(168, 85, 247, 0.45) !important;
+  box-shadow: 0 12px 30px -4px rgba(2, 132, 199, 0.28), 0 0 16px 2px rgba(16, 185, 129, 0.2) !important;
+  border-color: rgba(2, 132, 199, 0.45) !important;
 }
 
-/* Metric Card Typography */
+[data-theme="dark"] .desk-page .widget-number-card:hover,
+[data-theme="dark"] .desk-page .widget-quick-list:hover {
+  box-shadow: 0 14px 35px -4px rgba(2, 132, 199, 0.4), 0 0 18px 2px rgba(16, 185, 129, 0.25) !important;
+  border-color: rgba(56, 189, 248, 0.5) !important;
+}
+
+/* Card Numbers */
 .desk-page .widget-number-card .number-card-number {
   font-size: 26px !important;
   font-weight: 800 !important;
-  color: #1e1b4b !important;
+  color: #0f172a !important;
   letter-spacing: -0.5px !important;
 }
 
-/* 5. Shortcuts as Frosted Light Pill Buttons with Glow */
+[data-theme="dark"] .desk-page .widget-number-card .number-card-number {
+  color: #f8fafc !important;
+}
+
+/* 5. Shortcuts — Frosted Glass Pills with Subtle Teal Hover */
 .desk-page .widget-shortcut,
 .desk-page .shortcut-widget-box {
   background: rgba(255, 255, 255, 0.75) !important;
@@ -111,20 +134,33 @@
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
+[data-theme="dark"] .desk-page .widget-shortcut,
+[data-theme="dark"] .desk-page .shortcut-widget-box {
+  background: rgba(30, 41, 59, 0.6) !important;
+  border-color: rgba(71, 85, 105, 0.5) !important;
+  color: #e2e8f0 !important;
+}
+
 .desk-page .widget-shortcut:hover,
 .desk-page .shortcut-widget-box:hover {
-  background: linear-gradient(135deg, rgba(238, 242, 255, 0.95), rgba(253, 242, 248, 0.95)) !important;
-  border-color: rgba(168, 85, 247, 0.4) !important;
-  box-shadow: 0 6px 20px -2px rgba(168, 85, 247, 0.25), 0 0 12px rgba(236, 72, 153, 0.15) !important;
+  background: linear-gradient(135deg, rgba(240, 249, 255, 0.95), rgba(236, 253, 245, 0.95)) !important;
+  border-color: rgba(2, 132, 199, 0.4) !important;
+  box-shadow: 0 6px 18px -2px rgba(2, 132, 199, 0.25), 0 0 12px rgba(16, 185, 129, 0.15) !important;
   transform: translateY(-2px) !important;
 }
 
-/* 6. Buttons: Light Soft Theme with Elegant Gradient & Hover Glow */
+[data-theme="dark"] .desk-page .widget-shortcut:hover,
+[data-theme="dark"] .desk-page .shortcut-widget-box:hover {
+  background: linear-gradient(135deg, rgba(12, 74, 110, 0.5), rgba(6, 78, 59, 0.5)) !important;
+  border-color: rgba(56, 189, 248, 0.5) !important;
+}
+
+/* 6. Professional Sky-Blue & Emerald Action Buttons */
 .btn-primary {
-  background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%) !important;
+  background: linear-gradient(135deg, #0284c7 0%, #0d9488 55%, #10b981 100%) !important;
   border: none !important;
   color: #ffffff !important;
-  box-shadow: 0 4px 14px -2px rgba(168, 85, 247, 0.35) !important;
+  box-shadow: 0 4px 14px -2px rgba(2, 132, 199, 0.35) !important;
   border-radius: 8px !important;
   font-weight: 600 !important;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
@@ -132,8 +168,8 @@
 
 .btn-primary:hover,
 .btn-primary:focus {
-  background: linear-gradient(135deg, #4f46e5 0%, #9333ea 50%, #db2777 100%) !important;
-  box-shadow: 0 8px 24px -2px rgba(219, 39, 119, 0.45), 0 0 15px rgba(168, 85, 247, 0.3) !important;
+  background: linear-gradient(135deg, #0369a1 0%, #0f766e 55%, #059669 100%) !important;
+  box-shadow: 0 8px 24px -2px rgba(2, 132, 199, 0.45), 0 0 16px rgba(16, 185, 129, 0.3) !important;
   transform: translateY(-1.5px) !important;
 }
 
@@ -141,22 +177,29 @@
 .btn-secondary {
   background: rgba(255, 255, 255, 0.8) !important;
   backdrop-filter: blur(8px) !important;
-  border: 1px solid #e2e8f0 !important;
+  border: 1px solid #cbd5e1 !important;
   border-radius: 8px !important;
   color: #334155 !important;
   transition: all 0.2s ease !important;
 }
 
+[data-theme="dark"] .btn-default,
+[data-theme="dark"] .btn-secondary {
+  background: rgba(30, 41, 59, 0.7) !important;
+  border-color: #475569 !important;
+  color: #e2e8f0 !important;
+}
+
 .btn-default:hover,
 .btn-secondary:hover {
   background: #ffffff !important;
-  border-color: rgba(168, 85, 247, 0.5) !important;
-  color: #7c3aed !important;
-  box-shadow: 0 4px 12px rgba(168, 85, 247, 0.18) !important;
+  border-color: rgba(2, 132, 199, 0.5) !important;
+  color: #0284c7 !important;
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.18) !important;
   transform: translateY(-1px) !important;
 }
 
-/* 7. Input Fields & Dropdowns (Clean Frosted Borders) */
+/* 7. Input Fields & Dropdowns */
 .form-control,
 .frappe-control input,
 .frappe-control select {
@@ -166,17 +209,24 @@
   transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
 }
 
+[data-theme="dark"] .form-control,
+[data-theme="dark"] .frappe-control input {
+  background: rgba(15, 23, 42, 0.7) !important;
+  border-color: #475569 !important;
+  color: #f8fafc !important;
+}
+
 .form-control:focus,
 .frappe-control input:focus {
-  border-color: #a855f7 !important;
-  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.15) !important;
+  border-color: #0284c7 !important;
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.18) !important;
 }
 
 /* 8. Storage Badges */
 .badge-cold-chain {
-  background: rgba(14, 165, 233, 0.12) !important;
+  background: rgba(2, 132, 199, 0.12) !important;
   color: #0284c7 !important;
-  border: 1px solid rgba(14, 165, 233, 0.3) !important;
+  border: 1px solid rgba(2, 132, 199, 0.35) !important;
   padding: 3px 10px;
   border-radius: 16px;
   font-weight: 600;
@@ -184,9 +234,9 @@
 }
 
 .badge-ambient {
-  background: rgba(34, 197, 94, 0.12) !important;
-  color: #16a34a !important;
-  border: 1px solid rgba(34, 197, 94, 0.3) !important;
+  background: rgba(16, 185, 129, 0.12) !important;
+  color: #059669 !important;
+  border: 1px solid rgba(16, 185, 129, 0.35) !important;
   padding: 3px 10px;
   border-radius: 16px;
   font-weight: 600;
@@ -196,7 +246,7 @@
 .badge-quarantine {
   background: rgba(239, 68, 68, 0.12) !important;
   color: #dc2626 !important;
-  border: 1px solid rgba(239, 68, 68, 0.3) !important;
+  border: 1px solid rgba(239, 68, 68, 0.35) !important;
   padding: 3px 10px;
   border-radius: 16px;
   font-weight: 600;
