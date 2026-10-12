@@ -1,6 +1,6 @@
 [build-system]
-requires = ["flit_core >=3.4,<4", "flit"]
-build-backend = "flit.core.buildapi"
+requires = ["flit_core >=3.4,<4"]
+build-backend = "flit_core.buildapi"
 
 [project]
 name = "kodessy_app"
@@ -19,7 +19,3 @@ Home = "https://github.com/Luffy11323/John-s-ERP"
 [tool.bench.frappe-dependencies]
 frappe = ">=15.0.0,<16.0.0"
 erpnext = ">=15.0.0,<16.0.0"
-
-[tool.uv.extra-build-dependencies]
-kodessy_app = ["flit"]
-"kodessy-app" = ["flit"]
