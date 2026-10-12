@@ -1,0 +1,42 @@
+[
+  {
+    "doctype": "Workflow State",
+    "workflow_state_name": "Draft",
+    "icon": "octicon octicon-git-commit"
+  },
+  {
+    "doctype": "Workflow State",
+    "workflow_state_name": "Pending Sales Manager Approval",
+    "icon": "octicon octicon-clock"
+  },
+  {
+    "doctype": "Workflow State",
+    "workflow_state_name": "Pending Purchasing Manager Approval",
+    "icon": "octicon octicon-clock"
+  },
+  {
+    "doctype": "Workflow State",
+    "workflow_state_name": "Pending Finance Approval",
+    "icon": "octicon octicon-clock"
+  },
+  {
+    "doctype": "Workflow State",
+    "workflow_state_name": "Approved",
+    "icon": "octicon octicon-check"
+  },
+  {
+    "doctype": "Workflow State",
+    "workflow_state_name": "Rejected",
+    "icon": "octicon octicon-x"
+  },
+  {
+    "doctype": "Workflow State",
+    "workflow_state_name": "Under Quality Assessment",
+    "icon": "octicon octicon-microscope"
+  },
+  {
+    "doctype": "Workflow State",
+    "workflow_state_name": "Return Approved",
+    "icon": "octicon octicon-check"
+  }
+]

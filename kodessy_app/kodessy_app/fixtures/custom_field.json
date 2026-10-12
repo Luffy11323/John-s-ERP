@@ -1,0 +1,126 @@
+[
+  {
+    "doctype": "Custom Field",
+    "dt": "Item",
+    "fieldname": "custom_product_category",
+    "label": "Product Category",
+    "fieldtype": "Select",
+    "options": "Pharmaceutical\nMedical Device\nVeterinary",
+    "default": "Pharmaceutical",
+    "insert_after": "item_group",
+    "reqd": 1,
+    "in_standard_filter": 1
+  },
+  {
+    "doctype": "Custom Field",
+    "dt": "Item",
+    "fieldname": "custom_pack_size",
+    "label": "Pack Size",
+    "fieldtype": "Data",
+    "insert_after": "custom_product_category",
+    "description": "e.g., 10x10 Blister, 5x3ml Pens, 100ml Bottle",
+    "reqd": 1
+  },
+  {
+    "doctype": "Custom Field",
+    "dt": "Item",
+    "fieldname": "custom_storage_condition",
+    "label": "Storage Temperature",
+    "fieldtype": "Select",
+    "options": "Ambient (25-30\u00b0C)\nCold Chain (2-8\u00b0C)\nFrozen (< -20\u00b0C)",
+    "default": "Ambient (25-30\u00b0C)",
+    "insert_after": "custom_pack_size",
+    "reqd": 1
+  },
+  {
+    "doctype": "Custom Field",
+    "dt": "Item",
+    "fieldname": "custom_registration_no",
+    "label": "Product Registration No. (NPRA/MDA)",
+    "fieldtype": "Data",
+    "insert_after": "custom_storage_condition"
+  },
+  {
+    "doctype": "Custom Field",
+    "dt": "Item",
+    "fieldname": "custom_requires_qc_release",
+    "label": "Requires Quality Unit Release Before Sale",
+    "fieldtype": "Check",
+    "default": 1,
+    "insert_after": "custom_registration_no"
+  },
+  {
+    "doctype": "Custom Field",
+    "dt": "Customer",
+    "fieldname": "custom_credit_limit",
+    "label": "Credit Limit (MYR)",
+    "fieldtype": "Currency",
+    "insert_after": "customer_group",
+    "default": 0
+  },
+  {
+    "doctype": "Custom Field",
+    "dt": "Quotation",
+    "fieldname": "custom_sales_manager_approval",
+    "label": "Sales Manager Approved By",
+    "fieldtype": "Link",
+    "options": "User",
+    "read_only": 1,
+    "insert_after": "customer_name"
+  },
+  {
+    "doctype": "Custom Field",
+    "dt": "Quotation",
+    "fieldname": "custom_credit_override",
+    "label": "Allow Credit Limit Override",
+    "fieldtype": "Check",
+    "insert_after": "custom_sales_manager_approval"
+  },
+  {
+    "doctype": "Custom Field",
+    "dt": "Sales Order",
+    "fieldname": "custom_credit_override_approved_by",
+    "label": "Credit Override Approved By",
+    "fieldtype": "Link",
+    "options": "User",
+    "read_only": 1,
+    "insert_after": "customer_name"
+  },
+  {
+    "doctype": "Custom Field",
+    "dt": "Delivery Note",
+    "fieldname": "custom_delivery_type",
+    "label": "Movement Type",
+    "fieldtype": "Select",
+    "options": "Standard Delivery\nConsignment\nSample / Promotional\nInter-Warehouse Transfer",
+    "default": "Standard Delivery",
+    "insert_after": "customer_name"
+  },
+  {
+    "doctype": "Custom Field",
+    "dt": "Delivery Note",
+    "fieldname": "custom_temperature_recorded",
+    "label": "Dispatch Temperature (\u00b0C)",
+    "fieldtype": "Data",
+    "insert_after": "custom_delivery_type"
+  },
+  {
+    "doctype": "Custom Field",
+    "dt": "Sales Invoice Item",
+    "fieldname": "custom_return_reason",
+    "label": "Return Reason",
+    "fieldtype": "Select",
+    "options": "Damaged in Transit\nQuality / Defective Batch\nWrong Delivery\nNear Expiry / Expired\nCustomer Order Error",
+    "insert_after": "description"
+  },
+  {
+    "doctype": "Custom Field",
+    "dt": "Sales Invoice Item",
+    "fieldname": "custom_assessment_status",
+    "label": "QA Assessment Status",
+    "fieldtype": "Select",
+    "options": "Pending Inspection\nAccepted - Quarantine & Scrap\nAccepted - Return to Saleable Stock\nRejected",
+    "default": "Pending Inspection",
+    "insert_after": "custom_return_reason"
+  }
+]

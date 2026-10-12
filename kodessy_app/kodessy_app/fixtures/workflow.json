@@ -1,0 +1,117 @@
+[
+  {
+    "doctype": "Workflow",
+    "workflow_name": "Quotation Approval Workflow",
+    "document_type": "Quotation",
+    "is_active": 1,
+    "workflow_state_field": "workflow_state",
+    "states": [
+      {
+        "state": "Draft",
+        "doc_status": 0,
+        "allow_edit": "Sales User"
+      },
+      {
+        "state": "Pending Sales Manager Approval",
+        "doc_status": 0,
+        "allow_edit": "Sales Manager"
+      },
+      {
+        "state": "Approved",
+        "doc_status": 1,
+        "allow_edit": "Sales Manager"
+      },
+      {
+        "state": "Rejected",
+        "doc_status": 0,
+        "allow_edit": "Sales Manager"
+      }
+    ],
+    "transitions": [
+      {
+        "state": "Draft",
+        "action": "Submit for Approval",
+        "next_state": "Pending Sales Manager Approval",
+        "allowed": "Sales User"
+      },
+      {
+        "state": "Pending Sales Manager Approval",
+        "action": "Approve",
+        "next_state": "Approved",
+        "allowed": "Sales Manager"
+      },
+      {
+        "state": "Pending Sales Manager Approval",
+        "action": "Reject",
+        "next_state": "Rejected",
+        "allowed": "Sales Manager"
+      }
+    ]
+  },
+  {
+    "doctype": "Workflow",
+    "workflow_name": "Purchase Order Two-Tier Approval",
+    "document_type": "Purchase Order",
+    "is_active": 1,
+    "workflow_state_field": "workflow_state",
+    "states": [
+      {
+        "state": "Draft",
+        "doc_status": 0,
+        "allow_edit": "Purchase User"
+      },
+      {
+        "state": "Pending Purchasing Manager Approval",
+        "doc_status": 0,
+        "allow_edit": "Purchase Manager"
+      },
+      {
+        "state": "Pending Finance Approval",
+        "doc_status": 0,
+        "allow_edit": "Finance Manager"
+      },
+      {
+        "state": "Approved",
+        "doc_status": 1,
+        "allow_edit": "Finance Manager"
+      },
+      {
+        "state": "Rejected",
+        "doc_status": 0,
+        "allow_edit": "Purchase Manager"
+      }
+    ],
+    "transitions": [
+      {
+        "state": "Draft",
+        "action": "Submit for Approval",
+        "next_state": "Pending Purchasing Manager Approval",
+        "allowed": "Purchase User"
+      },
+      {
+        "state": "Pending Purchasing Manager Approval",
+        "action": "Approve Tier 1",
+        "next_state": "Pending Finance Approval",
+        "allowed": "Purchase Manager"
+      },
+      {
+        "state": "Pending Purchasing Manager Approval",
+        "action": "Reject",
+        "next_state": "Rejected",
+        "allowed": "Purchase Manager"
+      },
+      {
+        "state": "Pending Finance Approval",
+        "action": "Approve Tier 2",
+        "next_state": "Approved",
+        "allowed": "Finance Manager"
+      },
+      {
+        "state": "Pending Finance Approval",
+        "action": "Reject",
+        "next_state": "Rejected",
+        "allowed": "Finance Manager"
+      }
+    ]
+  }
+]
