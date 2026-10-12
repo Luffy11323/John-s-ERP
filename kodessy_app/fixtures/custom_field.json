@@ -9,7 +9,8 @@
     "default": "Pharmaceutical",
     "insert_after": "item_group",
     "reqd": 1,
-    "in_standard_filter": 1
+    "in_standard_filter": 1,
+    "name": "Item-custom_product_category"
   },
   {
     "doctype": "Custom Field",
@@ -19,7 +20,8 @@
     "fieldtype": "Data",
     "insert_after": "custom_product_category",
     "description": "e.g., 10x10 Blister, 5x3ml Pens, 100ml Bottle",
-    "reqd": 1
+    "reqd": 1,
+    "name": "Item-custom_pack_size"
   },
   {
     "doctype": "Custom Field",
@@ -30,7 +32,8 @@
     "options": "Ambient (25-30\u00b0C)\nCold Chain (2-8\u00b0C)\nFrozen (< -20\u00b0C)",
     "default": "Ambient (25-30\u00b0C)",
     "insert_after": "custom_pack_size",
-    "reqd": 1
+    "reqd": 1,
+    "name": "Item-custom_storage_condition"
   },
   {
     "doctype": "Custom Field",
@@ -38,7 +41,8 @@
     "fieldname": "custom_registration_no",
     "label": "Product Registration No. (NPRA/MDA)",
     "fieldtype": "Data",
-    "insert_after": "custom_storage_condition"
+    "insert_after": "custom_storage_condition",
+    "name": "Item-custom_registration_no"
   },
   {
     "doctype": "Custom Field",
@@ -47,7 +51,8 @@
     "label": "Requires Quality Unit Release Before Sale",
     "fieldtype": "Check",
     "default": 1,
-    "insert_after": "custom_registration_no"
+    "insert_after": "custom_registration_no",
+    "name": "Item-custom_requires_qc_release"
   },
   {
     "doctype": "Custom Field",
@@ -56,7 +61,8 @@
     "label": "Credit Limit (MYR)",
     "fieldtype": "Currency",
     "insert_after": "customer_group",
-    "default": 0
+    "default": 0,
+    "name": "Customer-custom_credit_limit"
   },
   {
     "doctype": "Custom Field",
@@ -66,7 +72,8 @@
     "fieldtype": "Link",
     "options": "User",
     "read_only": 1,
-    "insert_after": "customer_name"
+    "insert_after": "customer_name",
+    "name": "Quotation-custom_sales_manager_approval"
   },
   {
     "doctype": "Custom Field",
@@ -74,7 +81,8 @@
     "fieldname": "custom_credit_override",
     "label": "Allow Credit Limit Override",
     "fieldtype": "Check",
-    "insert_after": "custom_sales_manager_approval"
+    "insert_after": "custom_sales_manager_approval",
+    "name": "Quotation-custom_credit_override"
   },
   {
     "doctype": "Custom Field",
@@ -84,7 +92,8 @@
     "fieldtype": "Link",
     "options": "User",
     "read_only": 1,
-    "insert_after": "customer_name"
+    "insert_after": "customer_name",
+    "name": "Sales Order-custom_credit_override_approved_by"
   },
   {
     "doctype": "Custom Field",
@@ -94,7 +103,8 @@
     "fieldtype": "Select",
     "options": "Standard Delivery\nConsignment\nSample / Promotional\nInter-Warehouse Transfer",
     "default": "Standard Delivery",
-    "insert_after": "customer_name"
+    "insert_after": "customer_name",
+    "name": "Delivery Note-custom_delivery_type"
   },
   {
     "doctype": "Custom Field",
@@ -102,7 +112,8 @@
     "fieldname": "custom_temperature_recorded",
     "label": "Dispatch Temperature (\u00b0C)",
     "fieldtype": "Data",
-    "insert_after": "custom_delivery_type"
+    "insert_after": "custom_delivery_type",
+    "name": "Delivery Note-custom_temperature_recorded"
   },
   {
     "doctype": "Custom Field",
@@ -111,7 +122,8 @@
     "label": "Return Reason",
     "fieldtype": "Select",
     "options": "Damaged in Transit\nQuality / Defective Batch\nWrong Delivery\nNear Expiry / Expired\nCustomer Order Error",
-    "insert_after": "description"
+    "insert_after": "description",
+    "name": "Sales Invoice Item-custom_return_reason"
   },
   {
     "doctype": "Custom Field",
@@ -121,6 +133,7 @@
     "fieldtype": "Select",
     "options": "Pending Inspection\nAccepted - Quarantine & Scrap\nAccepted - Return to Saleable Stock\nRejected",
     "default": "Pending Inspection",
-    "insert_after": "custom_return_reason"
+    "insert_after": "custom_return_reason",
+    "name": "Sales Invoice Item-custom_assessment_status"
   }
 ]

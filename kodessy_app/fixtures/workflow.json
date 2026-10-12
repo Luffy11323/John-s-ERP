@@ -46,7 +46,8 @@
         "next_state": "Rejected",
         "allowed": "Sales Manager"
       }
-    ]
+    ],
+    "name": "Quotation Approval Workflow"
   },
   {
     "doctype": "Workflow",
@@ -112,6 +113,7 @@
         "next_state": "Rejected",
         "allowed": "Finance Manager"
       }
-    ]
+    ],
+    "name": "Purchase Order Two-Tier Approval"
   }
 ]

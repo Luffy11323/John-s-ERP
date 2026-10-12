@@ -1,26 +1,32 @@
 [
   {
     "doctype": "Workflow Action Master",
-    "workflow_action_name": "Submit for Approval"
+    "workflow_action_name": "Submit for Approval",
+    "name": "Submit for Approval"
   },
   {
     "doctype": "Workflow Action Master",
-    "workflow_action_name": "Approve"
+    "workflow_action_name": "Approve",
+    "name": "Approve"
   },
   {
     "doctype": "Workflow Action Master",
-    "workflow_action_name": "Reject"
+    "workflow_action_name": "Reject",
+    "name": "Reject"
   },
   {
     "doctype": "Workflow Action Master",
-    "workflow_action_name": "Approve Tier 1"
+    "workflow_action_name": "Approve Tier 1",
+    "name": "Approve Tier 1"
   },
   {
     "doctype": "Workflow Action Master",
-    "workflow_action_name": "Approve Tier 2"
+    "workflow_action_name": "Approve Tier 2",
+    "name": "Approve Tier 2"
   },
   {
     "doctype": "Workflow Action Master",
-    "workflow_action_name": "Submit for QA Assessment"
+    "workflow_action_name": "Submit for QA Assessment",
+    "name": "Submit for QA Assessment"
   }
 ]
