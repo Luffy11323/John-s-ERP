@@ -1,5 +1,5 @@
 [build-system]
-requires = ["flit_core >=3.4,<4"]
+requires = ["flit_core >=3.4,<4", "flit"]
 build-backend = "flit.core.buildapi"
 
 [project]
@@ -11,9 +11,7 @@ description = "Kodessy Custom ERPNext Extensions and Business Workflows"
 requires-python = ">=3.10"
 readme = "README.md"
 dynamic = ["version"]
-dependencies = [
-    # "frappe~=15.0.0"
-]
+dependencies = []
 
 [project.urls]
 Home = "https://github.com/Luffy11323/John-s-ERP"
@@ -21,3 +19,7 @@ Home = "https://github.com/Luffy11323/John-s-ERP"
 [tool.bench.frappe-dependencies]
 frappe = ">=15.0.0,<16.0.0"
 erpnext = ">=15.0.0,<16.0.0"
+
+[tool.uv.extra-build-dependencies]
+kodessy_app = ["flit"]
+"kodessy-app" = ["flit"]
