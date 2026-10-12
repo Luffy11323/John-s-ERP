@@ -1,123 +1,130 @@
 /* ==========================================================================
-   Kodessy ERP — Signature Dark/Light Gradient & Frosted Glassmorphism Theme
-   Matches Radiant Medical UI with dynamic ambient neon glow
+   Kodessy Pharma ERP — Ultra-Lightweight Airy Glassmorphism Design System
+   Fast, elegant light theme with violet/magenta aurora accents & glowing hover effects
    ========================================================================== */
 
 :root {
-  --kodessy-gradient-hero: linear-gradient(135deg, #2b1055 0%, #7597de 50%, #d80064 100%);
-  --kodessy-gradient-subtle: linear-gradient(135deg, rgba(76, 29, 149, 0.9) 0%, rgba(147, 51, 234, 0.8) 50%, rgba(219, 39, 119, 0.85) 100%);
-  --kodessy-glass-border: rgba(255, 255, 255, 0.12);
-  --kodessy-glass-bg: rgba(23, 23, 37, 0.75);
-  --kodessy-pill-bg: rgba(255, 255, 255, 0.08);
+  --kodessy-aurora: linear-gradient(135deg, rgba(99, 102, 241, 0.18) 0%, rgba(168, 85, 247, 0.15) 50%, rgba(236, 72, 153, 0.18) 100%);
+  --kodessy-glow: 0 8px 25px -4px rgba(168, 85, 247, 0.35);
+  --kodessy-card-bg: rgba(255, 255, 255, 0.72);
+  --kodessy-border: rgba(255, 255, 255, 0.85);
+  --kodessy-border-glow: rgba(168, 85, 247, 0.45);
 }
 
-/* 1. Hero Workspace Banner (Top Ambient Aurora Gradient as seen in screenshot) */
-.desk-page .workspace-header,
-.desk-page .codex-editor,
-.desk-page .layout-main-section-wrapper > div:first-child {
+/* 1. Navbar Fading in after the Logo */
+.navbar {
+  background: rgba(255, 255, 255, 0.82) !important;
+  backdrop-filter: blur(16px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8) !important;
+  box-shadow: 0 4px 20px -2px rgba(99, 102, 241, 0.08) !important;
   position: relative;
+  overflow: visible;
 }
 
-/* The Signature Large Hero Card with Deep Violet/Purple/Pink Gradient */
+/* Soft aurora ambient glow radiating from right of the logo across navbar */
+.navbar::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 140px;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(168, 85, 247, 0.08) 30%, rgba(236, 72, 153, 0.06) 70%, transparent 100%);
+  pointer-events: none;
+  animation: navbarFadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes navbarFadeIn {
+  0% { opacity: 0; transform: translateX(-20px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+.navbar .navbar-home img.app-logo {
+  max-height: 28px !important;
+  transition: transform 0.25s ease;
+}
+
+.navbar .navbar-home:hover img.app-logo {
+  transform: scale(1.06);
+}
+
+/* 2. Airy Workspace Hero Banner (Soft light violet-rose gradient) */
 .desk-page .widget.widget-custom,
 .desk-page .widget-quick-list:first-child,
 .kodessy-hero-banner {
-  background: linear-gradient(135deg, #1e1b4b 0%, #4338ca 40%, #a855f7 70%, #ec4899 100%) !important;
+  background: linear-gradient(135deg, rgba(79, 70, 229, 0.85) 0%, rgba(147, 51, 234, 0.82) 45%, rgba(219, 39, 119, 0.88) 100%) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
   border-radius: 20px !important;
   padding: 24px !important;
-  box-shadow: 0 12px 35px -8px rgba(168, 85, 247, 0.4) !important;
+  box-shadow: 0 14px 40px -8px rgba(147, 51, 234, 0.3) !important;
   color: #ffffff !important;
-  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
 }
 
-/* 2. Frosted Glass Inner Metric Cards (Inside Hero Banner) */
-.desk-page .widget-number-card {
-  background: rgba(15, 23, 42, 0.65) !important;
-  backdrop-filter: blur(16px) saturate(190%) !important;
-  -webkit-backdrop-filter: blur(16px) saturate(190%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.15) !important;
-  border-radius: 16px !important;
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25) !important;
-  color: #ffffff !important;
+/* 3. Pure Light Glassmorphism Cards on Home & Workspace */
+.desk-page .widget-number-card,
+.desk-page .widget-quick-list,
+.desk-page .widget-dashboard-chart,
+.desk-page .widget-custom,
+.form-section,
+.grid-row,
+.kodessy-glass-card {
+  background: rgba(255, 255, 255, 0.78) !important;
+  backdrop-filter: blur(14px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(180%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.85) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 4px 20px -2px rgba(99, 102, 241, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02) !important;
   transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
-.desk-page .widget-number-card:hover {
-  transform: translateY(-4px) scale(1.01) !important;
-  box-shadow: 0 16px 40px rgba(168, 85, 247, 0.25) !important;
-  border-color: rgba(192, 132, 252, 0.5) !important;
+/* 4. Elegant Glowing Hover Effect on EVERY Glass Card */
+.desk-page .widget-number-card:hover,
+.desk-page .widget-quick-list:hover,
+.desk-page .widget-dashboard-chart:hover,
+.kodessy-glass-card:hover {
+  transform: translateY(-3px) scale(1.008) !important;
+  box-shadow: 0 14px 32px -4px rgba(168, 85, 247, 0.22), 0 0 18px 2px rgba(236, 72, 153, 0.15) !important;
+  border-color: rgba(168, 85, 247, 0.45) !important;
 }
 
+/* Metric Card Typography */
 .desk-page .widget-number-card .number-card-number {
   font-size: 26px !important;
   font-weight: 800 !important;
+  color: #1e1b4b !important;
   letter-spacing: -0.5px !important;
-  color: #ffffff !important;
 }
 
-/* Light Theme Adaptability */
-[data-theme="light"] .desk-page .widget-number-card {
-  background: rgba(255, 255, 255, 0.85) !important;
-  border: 1px solid rgba(255, 255, 255, 0.8) !important;
-  box-shadow: 0 8px 24px rgba(147, 51, 234, 0.08) !important;
-  color: #0f172a !important;
-}
-
-[data-theme="light"] .desk-page .widget-number-card .number-card-number {
-  color: #0f172a !important;
-}
-
-/* 3. Shortcuts (Pill Glass Buttons as seen in screenshot) */
+/* 5. Shortcuts as Frosted Light Pill Buttons with Glow */
 .desk-page .widget-shortcut,
 .desk-page .shortcut-widget-box {
-  background: rgba(30, 41, 59, 0.5) !important;
+  background: rgba(255, 255, 255, 0.75) !important;
   backdrop-filter: blur(12px) !important;
   -webkit-backdrop-filter: blur(12px) !important;
-  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border: 1px solid rgba(226, 232, 240, 0.8) !important;
   border-radius: 24px !important;
-  padding: 8px 16px !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
-  transition: all 0.2s ease !important;
+  padding: 8px 18px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03) !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
 .desk-page .widget-shortcut:hover,
 .desk-page .shortcut-widget-box:hover {
-  background: linear-gradient(135deg, rgba(79, 70, 229, 0.25), rgba(236, 72, 153, 0.25)) !important;
-  border-color: rgba(236, 72, 153, 0.4) !important;
+  background: linear-gradient(135deg, rgba(238, 242, 255, 0.95), rgba(253, 242, 248, 0.95)) !important;
+  border-color: rgba(168, 85, 247, 0.4) !important;
+  box-shadow: 0 6px 20px -2px rgba(168, 85, 247, 0.25), 0 0 12px rgba(236, 72, 153, 0.15) !important;
   transform: translateY(-2px) !important;
 }
 
-[data-theme="light"] .desk-page .widget-shortcut,
-[data-theme="light"] .desk-page .shortcut-widget-box {
-  background: rgba(255, 255, 255, 0.7) !important;
-  border: 1px solid rgba(226, 232, 240, 0.8) !important;
-}
-
-/* 4. Reports & Masters Container Cards */
-.desk-page .widget-quick-list,
-.desk-page .widget-dashboard-chart,
-.desk-page .widget-custom {
-  background: rgba(15, 23, 42, 0.5) !important;
-  backdrop-filter: blur(14px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(14px) saturate(180%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  border-radius: 18px !important;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15) !important;
-}
-
-[data-theme="light"] .desk-page .widget-quick-list,
-[data-theme="light"] .desk-page .widget-dashboard-chart {
-  background: rgba(255, 255, 255, 0.75) !important;
-  border: 1px solid rgba(226, 232, 240, 0.9) !important;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04) !important;
-}
-
-/* 5. Every UI Button Reflects the Signature Violet/Pink Gradient Glow */
+/* 6. Buttons: Light Soft Theme with Elegant Gradient & Hover Glow */
 .btn-primary {
-  background: linear-gradient(135deg, #4f46e5 0%, #9333ea 50%, #db2777 100%) !important;
+  background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%) !important;
   border: none !important;
   color: #ffffff !important;
-  box-shadow: 0 4px 15px rgba(147, 51, 234, 0.35) !important;
+  box-shadow: 0 4px 14px -2px rgba(168, 85, 247, 0.35) !important;
   border-radius: 8px !important;
   font-weight: 600 !important;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
@@ -125,34 +132,73 @@
 
 .btn-primary:hover,
 .btn-primary:focus {
-  background: linear-gradient(135deg, #4338ca 0%, #7e22ce 50%, #be185d 100%) !important;
-  box-shadow: 0 6px 20px rgba(219, 39, 119, 0.5) !important;
+  background: linear-gradient(135deg, #4f46e5 0%, #9333ea 50%, #db2777 100%) !important;
+  box-shadow: 0 8px 24px -2px rgba(219, 39, 119, 0.45), 0 0 15px rgba(168, 85, 247, 0.3) !important;
   transform: translateY(-1.5px) !important;
 }
 
 .btn-default,
 .btn-secondary {
-  background: rgba(255, 255, 255, 0.08) !important;
+  background: rgba(255, 255, 255, 0.8) !important;
   backdrop-filter: blur(8px) !important;
-  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  border: 1px solid #e2e8f0 !important;
   border-radius: 8px !important;
+  color: #334155 !important;
   transition: all 0.2s ease !important;
-}
-
-[data-theme="light"] .btn-default,
-[data-theme="light"] .btn-secondary {
-  background: rgba(241, 245, 249, 0.8) !important;
-  border: 1px solid #cbd5e1 !important;
 }
 
 .btn-default:hover,
 .btn-secondary:hover {
-  border-color: #a855f7 !important;
-  color: #a855f7 !important;
+  background: #ffffff !important;
+  border-color: rgba(168, 85, 247, 0.5) !important;
+  color: #7c3aed !important;
+  box-shadow: 0 4px 12px rgba(168, 85, 247, 0.18) !important;
+  transform: translateY(-1px) !important;
 }
 
-/* 6. Navbar & Logo Branding */
-.navbar .navbar-home img.app-logo {
-  max-height: 28px !important;
-  filter: drop-shadow(0 2px 8px rgba(168, 85, 247, 0.5));
+/* 7. Input Fields & Dropdowns (Clean Frosted Borders) */
+.form-control,
+.frappe-control input,
+.frappe-control select {
+  background: rgba(255, 255, 255, 0.85) !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 8px !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.form-control:focus,
+.frappe-control input:focus {
+  border-color: #a855f7 !important;
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.15) !important;
+}
+
+/* 8. Storage Badges */
+.badge-cold-chain {
+  background: rgba(14, 165, 233, 0.12) !important;
+  color: #0284c7 !important;
+  border: 1px solid rgba(14, 165, 233, 0.3) !important;
+  padding: 3px 10px;
+  border-radius: 16px;
+  font-weight: 600;
+  font-size: 11px;
+}
+
+.badge-ambient {
+  background: rgba(34, 197, 94, 0.12) !important;
+  color: #16a34a !important;
+  border: 1px solid rgba(34, 197, 94, 0.3) !important;
+  padding: 3px 10px;
+  border-radius: 16px;
+  font-weight: 600;
+  font-size: 11px;
+}
+
+.badge-quarantine {
+  background: rgba(239, 68, 68, 0.12) !important;
+  color: #dc2626 !important;
+  border: 1px solid rgba(239, 68, 68, 0.3) !important;
+  padding: 3px 10px;
+  border-radius: 16px;
+  font-weight: 600;
+  font-size: 11px;
 }
