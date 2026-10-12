@@ -10,7 +10,7 @@
 
 ## 📌 1. Executive Project Overview
 
-This repository contains the custom app (`kodessy_app`) and production database for an enterprise pharmaceutical distribution system covering:
+This repository contains the production custom app (`kodessy_app`) and database for an enterprise pharmaceutical distribution system covering:
 1. **Sales & Distribution** (Quotations, Approval Workflows, Credit Limit Enforcement, Delivery Orders, Invoicing)
 2. **Fulfilment & Warehousing** (Multi-temperature Warehouses, Quarantine, FEFO Batch Allocation, Pick & Pack Slips)
 3. **Procurement** (Overseas & Local Suppliers, Two-Tier Purchase Order Approvals, Lead Time Tracking)
@@ -19,26 +19,27 @@ This repository contains the custom app (`kodessy_app`) and production database 
 
 ---
 
-## 💎 2. Frontend Aesthetics: Glassmorphic UI & Optimization Engine
+## 💎 2. Clinical Aesthetics: Sky-Blue & Light Emerald Glassmorphism Theme
 
-To create a stunning first impression while ensuring ultra-fast load times, the system integrates a **custom Glassmorphism Design System** powered by lightweight JavaScript:
+The frontend features a **clean, bright, and clinical glassmorphism design system** (`kodessy_app/public/css/kodessy_glass.css`) tailored specifically for healthcare and medical technology environments:
 
-### A. Glassmorphic Workspace Cards (`kodessy_app/public/css/kodessy_glass.css`)
-* **Frosted Glass Cards**: Applies `backdrop-filter: blur(14px) saturate(180%)` to all workspace Number Cards, Quick Lists, and Dashboard Charts.
-* **Micro-Hover Elevations**: Cards elevate with a smooth 3D lift (`translateY(-3px)`) and subtle border luminescence on mouse hover.
-* **Storage Temperature Badges**:
-  * ❄️ **Cold Chain (2–8°C)**: Frosted sky-blue badge (`.badge-cold-chain`)
-  * 🌿 **Ambient (25–30°C)**: Frosted emerald badge (`.badge-ambient`)
-  * ⚠️ **Quarantine**: Frosted amber-red warning badge (`.badge-quarantine`)
+### A. Color Palette & Harmonized Dark/Light Modes
+* **Brand Tones**: **Sky Blue (`#0284c7`) → Fresh Teal (`#0d9488`) → Light Emerald (`#10b981`)**
+* **Light Mode**: Translucent frosted white cards (`rgba(255, 255, 255, 0.78)`) with `backdrop-filter: blur(14px)` and high-contrast dark slate typography (`#0f172a`).
+* **Dark Mode**: Frosted midnight-slate cards (`rgba(30, 41, 59, 0.65)`) with crisp borders (`rgba(71, 85, 105, 0.4)`) and glowing white typography (`#f8fafc`).
 
-### B. Lightweight JS Optimizer (`kodessy_app/public/js/kodessy_glass.js`)
-* **Zero Dependencies & Blazing Fast**: Runs in **< 1.5ms**, completely non-blocking to the main browser thread.
-* **Dynamic Accent Indicator**: Scans card contexts and injects custom accent side-bars:
-  * 🔴 **Red Accent**: Stocks in Quarantine
-  * 🟠 **Amber Accent**: Near-Expiry Batches (Next 90 Days)
-  * 🟣 **Purple Accent**: Customer Credit Limit Alerts
-  * 🔵 **Cyan Accent**: Two-Tier PO Approvals & Quotations
-* **SPA Reactive**: Hooks directly into Frappe Desk's single-page router via `frappe.router.on('change')` and a targeted `MutationObserver`.
+### B. Navbar Horizon Fade & Logo Branding
+* **Branded Logo & Favicon**: Loaded from root `logo.png` into `kodessy_app/public/images/logo.png` and `favicon.png`, and linked in database `Website Settings`, `Navbar Settings`, and `System Settings`.
+* **Navbar Fading Horizon**: A subtle cyan-to-emerald gradient aura (`linear-gradient(90deg, transparent 0%, rgba(2, 132, 199, 0.08) 25%, rgba(16, 185, 129, 0.06) 65%, transparent 100%)`) animates in across the navigation bar directly to the right of the brand logo.
+
+### C. Hover Glowing Effects on All UI Components
+* **Cards & Charts**: Elevated 3D lift (`translateY(-3px)`) with dual-tone Sky-Blue and Emerald outer glow (`box-shadow: 0 12px 30px -4px rgba(2, 132, 199, 0.28), 0 0 16px 2px rgba(16, 185, 129, 0.2)`).
+* **Action Buttons**: Primary buttons reflect the sky-blue to emerald gradient with soft glowing states; secondary buttons illuminate cyan on hover.
+* **Shortcut Pills**: Frosted rounded pills (`border-radius: 24px`) with soft teal illumination.
+
+### D. Zero-Overhead Lightweight Performance (`kodessy_glass.js`)
+* **Execution Time**: **< 1.5ms per render**, non-blocking to the main thread.
+* Pure hardware-accelerated CSS transitions ensuring 60fps responsiveness across desks, lists, and forms.
 
 ---
 
@@ -47,7 +48,7 @@ To create a stunning first impression while ensuring ultra-fast load times, the 
 Custom high-fidelity print formats are included in `kodessy_app/fixtures/print_format.json`:
 
 1. **Warehouse Pick & Pack Slip (DocType: `Pick List`)**:
-   * **On-Screen Preview**: Renders inside a centered, frosted glass document card with pill status badges.
+   * **On-Screen Preview**: Renders inside a centered, frosted glass document card with clean pill status badges.
    * **Physical Print Mode**: Automatically strips backdrop blur and converts to high-contrast monochrome for crystal-clear thermal or laser printing.
    * **Pharma Traceability**: Shows Item Code, Name, Storage Zone, Allocated FEFO Batch, Expiry Date, and 3-stage signature verification (Picked By, QA Verified, Driver Hand-off).
 
@@ -83,6 +84,7 @@ John-s-ERP/
 ├── pyproject.toml                                  # Flit/uv packaging with [tool.bench.frappe-dependencies]
 ├── setup.py                                        # Backward compatibility for editable pip install
 ├── requirements.txt                                # Python requirements (flit)
+├── logo.png                                        # Official Kodessy brand logo
 ├── kodessy_app/                                    # Root Frappe Custom App Package
 │   ├── __init__.py                                 # App version 0.0.1
 │   ├── hooks.py                                    # Event hooks, assets registration, fixture exports
@@ -90,9 +92,12 @@ John-s-ERP/
 │   ├── patches.txt                                 # Migration patches
 │   ├── public/                                     # Frontend Assets
 │   │   ├── css/
-│   │   │   └── kodessy_glass.css                   # Glassmorphic CSS Design System
-│   │   └── js/
-│   │       └── kodessy_glass.js                    # Ultra-fast non-blocking UI optimization script
+│   │   │   └── kodessy_glass.css                   # Sky-Blue & Light Emerald Glassmorphism Theme
+│   │   ├── js/
+│   │   │   └── kodessy_glass.js                    # Ultra-fast non-blocking UI optimization script
+│   │   └── images/
+│   │       ├── logo.png                            # Deployed brand logo
+│   │       └── favicon.png                         # Deployed favicon
 │   ├── controllers/                                # Custom Business Logic Controllers
 │   │   ├── credit_control.py                       # Customer Credit Limit monitoring & blocking
 │   │   ├── quarantine_control.py                   # Quarantine / unreleased stock restrictions
