@@ -1,0 +1,2 @@
+# Frappe App Requirements
+# Add your third-party Python packages here
