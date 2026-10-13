@@ -33,12 +33,11 @@ fixtures = [
     "Custom Field",
     "Property Setter",
 
-    # Print formats
-    # Note: Notification and Email Template fixtures removed — all records fetched
-    # from the live site are standard ERPNext/HRMS system docs (is_standard=1 or
-    # HRMS-owned). Frappe blocks overwriting standard Notifications. Email templates
-    # are HRMS-only (Leave, Interview, Dispatch) — not pharma-specific.
-    # Workflow notifications are handled in code by workflow_notify.py.
+    # Print formats (all standard=No, safe to overwrite)
+    # NOTE: notification.json, email_template.json and client_script.json have been
+    # physically DELETED from fixtures/. Frappe v15 imports every JSON file that
+    # exists in fixtures/ regardless of this list, so removing from this list alone
+    # is not enough — the file must not exist.
     "Print Format",
 
     # Dashboards
