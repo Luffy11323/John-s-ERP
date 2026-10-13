@@ -5,25 +5,42 @@ app_description = "Pharma, Medical Device and Veterinary Distribution ERPNext So
 app_email = "info@kodessy.com"
 app_license = "mit"
 
-# Export fixtures for bench migrate
+# Fixtures - loaded from fixtures/*.json on every bench migrate
+# All records exported from the live Frappe Cloud DB to make the app standalone.
 fixtures = [
-    {
-        "dt": "Custom Field",
-        "filters": [["module", "in", ["Kodessy App", "Selling", "Stock", "Accounts"]]]
-    },
+    # Roles
+    "Role",
+
+    # Workflow engine
+    "Workflow State",
+    "Workflow Action Master",
     {
         "dt": "Workflow",
-        "filters": [["workflow_name", "in", ["Quotation Approval Workflow", "Purchase Order Two-Tier Approval"]]]
+        "filters": [["name", "in", [
+            "Customer",
+            "Item V3",
+            "Journal Entry",
+            "Payment Entry",
+            "Purchase Order Two-Tier Approval",
+            "Quotation Approval Workflow",
+            "Sales Order V3",
+            "Stock Reconciliation Approval",
+            "Supplier"
+        ]]]
     },
-    {
-        "dt": "Workflow State"
-    },
-    {
-        "dt": "Workflow Action Master"
-    },
-    {
-        "dt": "Print Format"
-    }
+
+    # Field & Form customisation
+    "Custom Field",
+    "Property Setter",
+
+    # Print & notifications
+    "Print Format",
+    "Notification",
+    "Email Template",
+
+    # Dashboards
+    "Number Card",
+    "Workspace",
 ]
 
 doc_events = {
