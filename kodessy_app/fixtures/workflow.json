@@ -1,4 +1,4 @@
-[
+﻿[
   {
     "doctype": "Workflow",
     "workflow_name": "Quotation Approval Workflow",
@@ -69,12 +69,12 @@
       {
         "state": "Pending Finance Approval",
         "doc_status": 0,
-        "allow_edit": "Finance Manager"
+        "allow_edit": "Accounts Manager"
       },
       {
         "state": "Approved",
         "doc_status": 1,
-        "allow_edit": "Finance Manager"
+        "allow_edit": "Accounts Manager"
       },
       {
         "state": "Rejected",
@@ -105,13 +105,13 @@
         "state": "Pending Finance Approval",
         "action": "Approve Tier 2",
         "next_state": "Approved",
-        "allowed": "Finance Manager"
+        "allowed": "Accounts Manager"
       },
       {
         "state": "Pending Finance Approval",
         "action": "Reject",
         "next_state": "Rejected",
-        "allowed": "Finance Manager"
+        "allowed": "Accounts Manager"
       }
     ],
     "name": "Purchase Order Two-Tier Approval"

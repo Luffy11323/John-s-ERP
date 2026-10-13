@@ -1,13 +1,16 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 import frappe
 from frappe import _
 from frappe.utils import flt
 
 def check_customer_credit_limit(doc, method=None):
-    if not doc.customer:
+    customer = doc.get("customer")
+    if not customer and doc.get("quotation_to") == "Customer":
+        customer = doc.get("party_name")
+    if not customer:
         return
 
-    credit_limit = flt(frappe.db.get_value("Customer", doc.customer, "custom_credit_limit") or 0)
+    credit_limit = flt(frappe.db.get_value("Customer", customer, "custom_credit_limit") or 0)
     if credit_limit <= 0:
         return
 
@@ -15,7 +18,7 @@ def check_customer_credit_limit(doc, method=None):
         SELECT SUM(outstanding_amount) 
         FROM `tabSales Invoice`
         WHERE customer = %s AND docstatus = 1 AND company = %s
-    ''', (doc.customer, doc.company))[0][0] or 0.0)
+    ''', (customer, doc.company))[0][0] or 0.0)
 
     total_exposure = outstanding + flt(doc.grand_total)
 
@@ -27,7 +30,7 @@ def check_customer_credit_limit(doc, method=None):
             "Outstanding Balance: {3:,.2f} {2}<br>"
             "Current Order Total: {4:,.2f} {2}<br>"
             "<b>Total Exposure: {5:,.2f} {2}</b> (Exceeds by {6:,.2f} {2})"
-        ).format(doc.customer, credit_limit, doc.currency, outstanding, flt(doc.grand_total), total_exposure, exceeded_by)
+        ).format(customer, credit_limit, doc.currency, outstanding, flt(doc.grand_total), total_exposure, exceeded_by)
 
         if doc.doctype == "Sales Order":
             if not doc.get("custom_credit_override_approved_by"):

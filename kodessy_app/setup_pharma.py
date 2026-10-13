@@ -1,0 +1,320 @@
+"""Idempotent pharma configuration applied on every `bench migrate`.
+
+Every step is isolated: a failure in one step is logged to the Error Log and
+never blocks the migration or the other steps.
+"""
+import frappe
+from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
+
+from kodessy_app.setup_naming import apply_naming_series
+
+DEMO_CREDIT_LIMITS = {
+	"Gleneagles Hospital KL": 100000,
+	"Sunway Medical Centre": 50000,
+	"Klinik Mediviron Subang": 15000,
+}
+
+DEMO_ITEMS = ["AMOX-500", "INS-100", "PARAC-IV", "PULSE-OX", "VET-AMOX"]
+EXTRA_UOMS = ["Box", "Pack", "Vial", "Bottle", "Pen", "Unit", "Nos"]
+DEFAULT_SHELF_LIFE_DAYS = 730
+
+QC_PARAMETERS = [
+	"Physical Appearance",
+	"Packaging Integrity",
+	"Label & Batch Verification",
+	"Certificate of Analysis (CoA) Present",
+	"Temperature on Arrival",
+]
+
+
+def after_migrate():
+	steps = [
+		apply_naming_series,
+		set_fefo_allocation,
+		fix_workflow_roles,
+		ensure_roles,
+		ensure_uoms,
+		fix_demo_items,
+		set_demo_credit_limits,
+		ensure_custom_fields,
+		make_return_fields_mandatory,
+		ensure_quality_templates,
+		ensure_stock_reconciliation_workflow,
+	]
+	for step in steps:
+		try:
+			step()
+			frappe.db.commit()
+		except Exception:
+			frappe.db.rollback()
+			frappe.log_error(title=f"Kodessy setup step failed: {step.__name__}")
+
+
+# --------------------------------------------------------------------------
+# System settings / roles
+# --------------------------------------------------------------------------
+def set_fefo_allocation():
+	"""FEFO: pick batches by earliest expiry instead of FIFO."""
+	if frappe.get_meta("Stock Settings").has_field("pick_serial_and_batch_based_on"):
+		frappe.db.set_single_value("Stock Settings", "pick_serial_and_batch_based_on", "Expiry")
+
+
+def fix_workflow_roles():
+	"""Safeguard: 'Finance Manager' is not a standard role; use 'Accounts Manager'."""
+	if frappe.db.exists("Role", "Finance Manager"):
+		return
+	for doctype, field in (("Workflow Transition", "allowed"), ("Workflow Document State", "allow_edit")):
+		frappe.db.set_value(doctype, {field: "Finance Manager"}, field, "Accounts Manager")
+
+
+def ensure_roles():
+	for role in ("Quality Unit",):
+		if not frappe.db.exists("Role", role):
+			frappe.get_doc({"doctype": "Role", "role_name": role, "desk_access": 1}).insert(ignore_permissions=True)
+
+
+# --------------------------------------------------------------------------
+# Master data
+# --------------------------------------------------------------------------
+def ensure_uoms():
+	for uom in EXTRA_UOMS:
+		if not frappe.db.exists("UOM", uom):
+			frappe.get_doc({"doctype": "UOM", "uom_name": uom, "enabled": 1}).insert(ignore_permissions=True)
+
+
+def fix_demo_items():
+	"""Give demo pharma items a valid UOM table and shelf life so they can be transacted."""
+	for code in DEMO_ITEMS:
+		if not frappe.db.exists("Item", code):
+			continue
+		item = frappe.get_doc("Item", code)
+		changed = False
+
+		if item.stock_uom and not frappe.db.exists("UOM", item.stock_uom):
+			frappe.get_doc({"doctype": "UOM", "uom_name": item.stock_uom, "enabled": 1}).insert(ignore_permissions=True)
+
+		existing = {row.uom for row in item.get("uoms", [])}
+		wanted = [item.stock_uom, "Box"] if item.stock_uom else ["Box"]
+		for uom in wanted:
+			if uom and uom not in existing:
+				# NOTE: factor 1 is a neutral default; adjust to real pack conversion in the Item master.
+				item.append("uoms", {"uom": uom, "conversion_factor": 1})
+				existing.add(uom)
+				changed = True
+
+		if item.get("has_expiry_date") and not item.get("shelf_life_in_days"):
+			item.shelf_life_in_days = DEFAULT_SHELF_LIFE_DAYS
+			changed = True
+
+		if changed:
+			item.flags.ignore_validate_update_after_submit = True
+			item.save(ignore_permissions=True)
+
+
+def set_demo_credit_limits():
+	for customer, limit in DEMO_CREDIT_LIMITS.items():
+		if not frappe.db.exists("Customer", customer):
+			continue
+		if not frappe.db.get_value("Customer", customer, "custom_credit_limit"):
+			frappe.db.set_value("Customer", customer, "custom_credit_limit", limit)
+
+
+# --------------------------------------------------------------------------
+# Custom fields
+# --------------------------------------------------------------------------
+def _options_of(doctype, fieldname):
+	field = frappe.get_meta(doctype).get_field(fieldname)
+	return field.options if field else None
+
+
+def ensure_custom_fields():
+	fields = {
+		"Batch": [
+			{
+				"fieldname": "custom_recalled",
+				"label": "Recalled",
+				"fieldtype": "Check",
+				"insert_after": "disabled",
+				"description": "Recalled batches cannot be picked, delivered or invoiced.",
+			},
+			{
+				"fieldname": "custom_recall_reason",
+				"label": "Recall Reason",
+				"fieldtype": "Small Text",
+				"insert_after": "custom_recalled",
+				"depends_on": "custom_recalled",
+				"mandatory_depends_on": "custom_recalled",
+			},
+			{
+				"fieldname": "custom_near_expiry",
+				"label": "Near Expiry",
+				"fieldtype": "Check",
+				"insert_after": "custom_recall_reason",
+				"read_only": 1,
+				"no_copy": 1,
+				"description": "Set automatically by the daily near-expiry job.",
+			},
+		],
+		"Supplier": [
+			{
+				"fieldname": "custom_lead_time_days",
+				"label": "Typical Lead Time (Days)",
+				"fieldtype": "Int",
+				"insert_after": "supplier_type",
+			},
+		],
+		"Sales Invoice": [
+			{
+				"fieldname": "custom_credit_note_approved_by",
+				"label": "Credit Note Approved By",
+				"fieldtype": "Link",
+				"options": "User",
+				"insert_after": "return_against",
+				"read_only": 1,
+				"no_copy": 1,
+				"depends_on": "eval:doc.is_return",
+			},
+			{
+				"fieldname": "custom_credit_note_approved_on",
+				"label": "Credit Note Approved On",
+				"fieldtype": "Datetime",
+				"insert_after": "custom_credit_note_approved_by",
+				"read_only": 1,
+				"no_copy": 1,
+				"depends_on": "eval:doc.is_return",
+			},
+		],
+	}
+
+	reason_options = _options_of("Sales Invoice Item", "custom_return_reason")
+	assessment_options = _options_of("Sales Invoice Item", "custom_assessment_status")
+	dn_item_fields = []
+	if reason_options:
+		dn_item_fields.append(
+			{
+				"fieldname": "custom_return_reason",
+				"label": "Return Reason",
+				"fieldtype": "Select",
+				"options": reason_options,
+				"insert_after": "item_name",
+				"depends_on": "eval:parent.is_return",
+				"mandatory_depends_on": "eval:parent.is_return",
+			}
+		)
+	if assessment_options:
+		dn_item_fields.append(
+			{
+				"fieldname": "custom_assessment_status",
+				"label": "QA Assessment Status",
+				"fieldtype": "Select",
+				"options": assessment_options,
+				"insert_after": "custom_return_reason",
+				"depends_on": "eval:parent.is_return",
+				"mandatory_depends_on": "eval:parent.is_return",
+			}
+		)
+	if dn_item_fields:
+		fields["Delivery Note Item"] = dn_item_fields
+
+	create_custom_fields(fields, update=True)
+
+
+def make_return_fields_mandatory():
+	"""Return reason / QA assessment become mandatory on return documents (server-side check also exists)."""
+	for fieldname in ("custom_return_reason", "custom_assessment_status"):
+		name = f"Sales Invoice Item-{fieldname}"
+		if frappe.db.exists("Custom Field", name):
+			frappe.db.set_value(
+				"Custom Field",
+				name,
+				{"mandatory_depends_on": "eval:parent.is_return", "depends_on": "eval:parent.is_return"},
+			)
+	for doctype in ("Sales Invoice Item", "Delivery Note Item"):
+		frappe.clear_cache(doctype=doctype)
+
+
+# --------------------------------------------------------------------------
+# Quality templates
+# --------------------------------------------------------------------------
+def ensure_quality_templates():
+	for parameter in QC_PARAMETERS:
+		if not frappe.db.exists("Quality Inspection Parameter", parameter):
+			frappe.get_doc(
+				{"doctype": "Quality Inspection Parameter", "parameter": parameter, "description": parameter}
+			).insert(ignore_permissions=True)
+
+	template = "Pharma Incoming Inspection"
+	if not frappe.db.exists("Quality Inspection Template", template):
+		frappe.get_doc(
+			{
+				"doctype": "Quality Inspection Template",
+				"quality_inspection_template_name": template,
+				"item_quality_inspection_parameter": [
+					{"specification": p, "numeric": 0, "value": "Acceptable"} for p in QC_PARAMETERS
+				],
+			}
+		).insert(ignore_permissions=True)
+
+
+# --------------------------------------------------------------------------
+# Stock Reconciliation approval workflow
+# --------------------------------------------------------------------------
+def _ensure_state(name, style="Primary"):
+	if not frappe.db.exists("Workflow State", name):
+		frappe.get_doc({"doctype": "Workflow State", "workflow_state_name": name, "style": style}).insert(
+			ignore_permissions=True
+		)
+
+
+def _ensure_action(name):
+	if not frappe.db.exists("Workflow Action Master", name):
+		frappe.get_doc({"doctype": "Workflow Action Master", "workflow_action_name": name}).insert(
+			ignore_permissions=True
+		)
+
+
+def ensure_stock_reconciliation_workflow():
+	name = "Stock Reconciliation Approval"
+	if frappe.db.exists("Workflow", name):
+		return
+
+	for state in ("Draft", "Pending Warehouse Manager Approval", "Approved", "Rejected"):
+		_ensure_state(state)
+	for action in ("Submit for Approval", "Approve", "Reject"):
+		_ensure_action(action)
+
+	frappe.get_doc(
+		{
+			"doctype": "Workflow",
+			"workflow_name": name,
+			"document_type": "Stock Reconciliation",
+			"is_active": 1,
+			"workflow_state_field": "workflow_state",
+			"states": [
+				{"state": "Draft", "doc_status": 0, "allow_edit": "Stock User"},
+				{"state": "Pending Warehouse Manager Approval", "doc_status": 0, "allow_edit": "Stock Manager"},
+				{"state": "Approved", "doc_status": 1, "allow_edit": "Stock Manager"},
+				{"state": "Rejected", "doc_status": 0, "allow_edit": "Stock Manager"},
+			],
+			"transitions": [
+				{
+					"state": "Draft",
+					"action": "Submit for Approval",
+					"next_state": "Pending Warehouse Manager Approval",
+					"allowed": "Stock User",
+				},
+				{
+					"state": "Pending Warehouse Manager Approval",
+					"action": "Approve",
+					"next_state": "Approved",
+					"allowed": "Stock Manager",
+				},
+				{
+					"state": "Pending Warehouse Manager Approval",
+					"action": "Reject",
+					"next_state": "Rejected",
+					"allowed": "Stock Manager",
+				},
+			],
+		}
+	).insert(ignore_permissions=True)

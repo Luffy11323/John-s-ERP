@@ -36,22 +36,45 @@ doc_events = {
             "kodessy_app.controllers.quarantine_control.validate_quarantine_stock"
         ]
     },
+    "Pick List": {
+        "validate": "kodessy_app.controllers.quarantine_control.validate_quarantine_stock"
+    },
     "Delivery Note": {
         "validate": [
             "kodessy_app.controllers.quarantine_control.validate_quarantine_stock",
-            "kodessy_app.controllers.fefo_control.auto_allocate_fefo_batches"
+            "kodessy_app.controllers.fefo_control.auto_allocate_fefo_batches",
+            "kodessy_app.controllers.returns_control.validate_sales_return"
         ]
     },
     "Sales Invoice": {
         "validate": [
             "kodessy_app.controllers.quarantine_control.validate_quarantine_stock",
-            "kodessy_app.controllers.returns_control.validate_sales_return"
-        ]
+            "kodessy_app.controllers.returns_control.validate_sales_return",
+            "kodessy_app.controllers.credit_note_control.reset_approval_if_changed"
+        ],
+        "before_submit": "kodessy_app.controllers.credit_note_control.require_credit_note_approval"
+    },
+    "Purchase Receipt": {
+        "validate": "kodessy_app.controllers.quarantine_control.route_receipt_to_quarantine"
+    },
+    "Stock Entry": {
+        "validate": "kodessy_app.controllers.quarantine_control.validate_quarantine_release"
     }
 }
 
-# Naming series for every document (QTR-2026-0001 style)
-after_migrate = "kodessy_app.setup_naming.after_migrate"
+scheduler_events = {
+    "daily": [
+        "kodessy_app.tasks.flag_near_expiry"
+    ]
+}
+
+doctype_js = {
+    "Sales Invoice": "public/js/sales_invoice.js",
+    "Batch": "public/js/batch.js"
+}
+
+# Naming series, FEFO, roles, demo master data, custom fields, QC templates, workflows
+after_migrate = "kodessy_app.setup_pharma.after_migrate"
 
 # Glassmorphism & UI Optimization Assets
 app_include_css = "/assets/kodessy_app/css/kodessy_glass.css"

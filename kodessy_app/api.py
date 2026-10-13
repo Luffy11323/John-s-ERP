@@ -97,11 +97,13 @@ BUILDERS = {
 # Report shortcuts rendered inside the same big card
 REPORTS = {
 	"stock": [
+		["Batch Recall Traceability", "query-report/Batch Recall Traceability"],
 		["Batch-Wise Stock Balance", "query-report/Batch-Wise Balance History"],
 		["Stock Ledger", "query-report/Stock Ledger"],
 		["Stock Balance", "query-report/Stock Balance"],
 	],
 	"selling": [
+		["Backorder & Inbound Supply", "query-report/Backorder and Inbound Supply"],
 		["Pending Sales Orders", "query-report/Pending SO Items For Purchase Request"],
 		["Sales Analytics", "query-report/Sales Analytics"],
 	],
