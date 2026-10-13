@@ -50,6 +50,9 @@ doc_events = {
     }
 }
 
+# Naming series for every document (QTR-2026-0001 style)
+after_migrate = "kodessy_app.setup_naming.after_migrate"
+
 # Glassmorphism & UI Optimization Assets
 app_include_css = "/assets/kodessy_app/css/kodessy_glass.css"
 app_include_js = "/assets/kodessy_app/js/kodessy_glass.js"

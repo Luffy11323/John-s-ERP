@@ -252,3 +252,43 @@
   font-weight: 600;
   font-size: 11px;
 }
+
+/* 9. Single big KPI card with minor separations */
+.kod-hero {
+  padding: 22px 24px !important;
+  margin-bottom: 18px;
+}
+.kod-hero .kod-head h3 { margin: 0; font-weight: 800; color: #0f172a; }
+.kod-hero .kod-sub { color: #64748b; font-size: 13px; margin-bottom: 16px; }
+[data-theme="dark"] .kod-hero .kod-head h3 { color: #f8fafc; }
+[data-theme="dark"] .kod-hero .kod-sub { color: #94a3b8; }
+.kod-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  border-top: 1px solid rgba(148, 163, 184, 0.35);
+}
+.kod-cell {
+  padding: 16px 18px;
+  cursor: pointer;
+  border-right: 1px solid rgba(148, 163, 184, 0.3);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.3);
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+.kod-cell:hover {
+  background: linear-gradient(135deg, rgba(2, 132, 199, 0.08), rgba(16, 185, 129, 0.08));
+  transform: translateY(-2px);
+}
+.kod-cell .kod-l { font-size: 12px; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: 0.4px; }
+.kod-cell .kod-v { font-size: 26px; font-weight: 800; color: #0f172a; margin-top: 6px; }
+[data-theme="dark"] .kod-cell .kod-v { color: #f8fafc; }
+.kod-reports { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 14px; }
+.kod-reports span { font-size: 12px; font-weight: 700; color: #64748b; text-transform: uppercase; margin-right: 4px; }
+.kod-report {
+  cursor: pointer; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600;
+  border: 1px solid rgba(2, 132, 199, 0.35); color: #0284c7;
+  transition: all 0.2s ease;
+}
+.kod-report:hover {
+  background: linear-gradient(135deg, #0284c7, #10b981); color: #fff;
+  box-shadow: 0 6px 16px -2px rgba(2, 132, 199, 0.4);
+}
