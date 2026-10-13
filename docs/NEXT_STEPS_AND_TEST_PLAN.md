@@ -1,14 +1,14 @@
 # Next Steps and End-to-End Test Plan
 
-Status as of 2026-10-13. Test target: https://pharma-demo-kodessy.frappe.cloud
+Status as of 2026-10-13. Last commit: `00925a2`. Test target: https://pharma-demo-kodessy.frappe.cloud
 
 ## 1. Where we are
 
 | Area | State |
 |---|---|
-| Code in GitHub | Latest commit includes themes, notifications, naming, controllers, setup fixes |
-| Live deploy | Deployment of commits up to `9290da2` was in progress when this was written; `713a80d` (notifications) and `d4ecf1c` (cards) need one more Deploy |
-| Automated scenario run | 53 of 57 checks passed against the live site (run before notifications and cards were deployed) |
+| Code in GitHub | Latest commit `00925a2` — full fixture export (12 fixture files, ~700 records); all workflows, custom fields, property setters, print formats, workspaces, number cards, notifications and email templates are now in the repo |
+| Live deploy | Commits `713a80d` (notifications), `d4ecf1c` (cards) and `00925a2` (fixture export) are in GitHub but **not yet deployed** to Frappe Cloud — deploy and re-run checks |
+| Automated scenario run | 53 of 57 checks passed against the live site (run at commit `9290da2`; notifications and cards not yet live at that point) |
 | Manual / role-based UAT | **Not started** |
 
 ### 1.1 Results by deliverable (demo scenarios 1-14)
@@ -36,23 +36,24 @@ Status as of 2026-10-13. Test target: https://pharma-demo-kodessy.frappe.cloud
 
 | ID | Severity | Finding | Likely cause / action |
 |---|---|---|---|
-| D1 | **High** | A sales return with no `custom_return_reason` / `custom_assessment_status` was saved (SINV-2026-0002, since deleted). Spec requires mandatory reason. | Hook `returns_control.validate_sales_return` is registered on Sales Invoice `validate`; confirm it runs on the live bench (hook load, field population by `make_sales_return`, or DocField mandatory-ness). Reproduce in the UI, then add a server-side test. |
-| D2 | Medium | Submitting a Quotation directly (`frappe.client.submit`) as Administrator skipped the approval workflow and ended Approved. | Check whether this is Administrator-only. Test with a Sales User account. If normal users can bypass, block submit unless `workflow_state == Approved`. |
-| D3 | Medium | The check "credit note cannot be submitted without approval" returned an ERPNext message about credit notes, not our message. | Re-test through the UI with a fresh return and confirm the text from `require_credit_note_approval`. |
-| D4 | Low | Stock Balance report call returned 0 rows although Bin shows stock. | Probably wrong report filters in the test. Re-run with the report's real filter set. |
-| D5 | Info | Packing Slip cannot be made from a submitted Delivery Note. | Standard ERPNext. Document it in the guide (done) or switch to the Pick List-based pack slip print. |
+| D1 | **High** | A sales return with no `custom_return_reason` / `custom_assessment_status` was saved (SINV-2026-0002, since deleted). Spec requires mandatory reason. | Hook `returns_control.validate_sales_return` is registered on Sales Invoice `validate`; confirm it runs on the live bench. Reproduce in the UI; the API test may have bypassed the hook because the return was created via `make_sales_return` before `custom_return_reason` existed. **Must be re-tested after next deploy.** |
+| D2 | Medium | Submitting a Quotation directly (`frappe.client.submit`) as Administrator skipped the approval workflow and ended Approved. | Administrator bypasses workflow by design in Frappe. Test with a Sales User account to confirm normal users cannot bypass. |
+| D3 | Medium | The "credit note cannot be submitted without approval" gate returned an ERPNext system message rather than our custom message. | Re-test through the UI with a fresh credit note (not via API) after next deploy to confirm `require_credit_note_approval` fires correctly. |
+| D4 | Low | Stock Balance report returned 0 rows although Bin shows stock. | Likely wrong report filter in the API test. Re-run via the UI with correct date and warehouse filters. |
+| D5 | Info | Packing Slip cannot be made from a submitted Delivery Note. | Standard ERPNext behaviour. Documented in User Guide. |
 
 ## 3. Risks and clean-up items
 
-| ID | Item | Action |
-|---|---|---|
-| S1 | **Secrets and data in git.** The README previously contained an API key/secret and the admin password, and the repo root holds database and file backup archives. | Rotate the API key/secret and change the Administrator password. Remove the backup archives from the repo and from history (`git filter-repo`/BFG), add them to `.gitignore`. |
-| S2 | Workflows that exist only on the live site (Sales Order V3, Stock Reconciliation, Customer, Supplier, Item) are not in `fixtures/workflow.json`. A fresh install would lack them. | Export them into fixtures and list them in `hooks.py` fixtures filters. |
-| S3 | Credit override field (`custom_credit_override_approved_by`) is a free Link to User. Anyone editing the order can name any approver. | Restrict to users with a Sales Manager / Finance role, or require the field to equal the session user holding that role. |
-| S4 | Test documents left on the live site: PUR-2026-0001, GRN-2026-0001, batches TST-B-EARLY and TST-B-LATE, QTR-2026-0001, SO-2026-0001, DO-2026-0001, SINV-2026-0001, credit note SINV-2026-0003, STE-2026-0001. | Keep as demo trace or cancel in reverse order. Remember stock quantities were created by the receipt. |
-| S5 | Demo-data hot-fixes were applied by API (item UOM/pack size/shelf life, supplier groups, `custom_credit_limit`). | Confirm they persist after the next migrate and that **Error Log** has no `Kodessy setup step failed` entries. |
-| S6 | Default tax template is Malaysia GST 6%. Items have no Item Price in Standard Selling (ERPNext adds one on first order). | Confirm SST/tax treatment and load real price lists with the client. |
-| S7 | `after_migrate` runs in-process; a failing step only logs. | Add a post-deploy checklist query for Error Log. |
+| ID | Item | Status | Action |
+|---|---|---|---|
+| S1 | **Secrets and data in git.** The README previously contained an API key/secret and the admin password. Backup archives at repo root may contain customer data. | **Open** | Rotate the API key/secret and change the Administrator password via the Frappe Cloud dashboard. Remove backup archives from the repo and from history (`git filter-repo` / BFG); add `*.sql.gz`, `*.tar` to `.gitignore`. |
+| S2 | Workflows that existed only on the live site (Sales Order V3, Stock Reconciliation, Customer, Supplier, Item V3, Journal Entry, Payment Entry) were not in fixtures. A fresh install would have lacked them. | **Resolved `00925a2`** | All 9 active workflows exported and registered in `hooks.py`. |
+| S3 | Credit override field (`custom_credit_override_approved_by`) is a free Link to User. Anyone editing the order can name any approver. | **Open** | Restrict to users with a Sales Manager / Finance role, or require the field to equal the session user holding that role. |
+| S4 | Test documents left on the live site: PUR-2026-0001, GRN-2026-0001, batches TST-B-EARLY and TST-B-LATE, QTR-2026-0001, SO-2026-0001, DO-2026-0001, SINV-2026-0001, credit note SINV-2026-0003, STE-2026-0001. | **Open** | Keep as demo trace or cancel in reverse order. Remember stock quantities were created by the receipt. |
+| S5 | Demo-data hot-fixes were applied by API (item UOM/pack size/shelf life, supplier groups, `custom_credit_limit`). | **Open** | Confirm they persist after the next migrate and that **Error Log** has no `Kodessy setup step failed` entries. |
+| S6 | Default tax template is Malaysia GST 6%. Items have no Item Price in Standard Selling. | **Open** | Confirm SST/tax treatment and load real price lists with the client. |
+| S7 | `after_migrate` runs in-process; a failing step only logs. | **Open** | Add a post-deploy checklist query for Error Log. |
+| S8 | Notifications and glowing-card UI changes pushed in `713a80d` / `d4ecf1c` have not been live-tested. | **Open** | Deploy and verify bell notifications fire on each workflow stage, submit and cancel; verify cards render with glow in light and dark mode. |
 
 ---
 
@@ -125,10 +126,13 @@ Recommended: move these into the repository under `tests/live/`, read credential
 
 ## 6. Suggested order of work
 
-1. Rotate secrets and remove backups from git (S1).
-2. Deploy; re-run automated checks.
-3. Fix D1, D2; re-test D3, D4.
-4. Export all workflows to fixtures (S2); restrict credit override (S3).
-5. Create role test users; run UAT 4.2-4.4.
-6. Resolve client open items (4.6); load real master data.
-7. Clean up demo documents (S4); freeze a release tag and write the release note.
+1. **Deploy** `main` on Frappe Cloud (three commits are queued: notifications, cards, fixture export).
+2. **Post-deploy smoke check:** Error Log clean; all 9 workflows present; CSS cards render with glow; bell notifications fire on a stage change.
+3. **Re-test D1** (return without reason) and **D3** (credit-note gate message) through the UI — these are the two highest-risk open items.
+4. **D2 / D4:** test Quotation bypass with a Sales User account; re-run Stock Balance with correct UI filters.
+5. **Role-based UAT** (section 4.2–4.4) — not yet started; needed before client demo.
+6. **S1:** rotate API key/secret and Administrator password; remove backup archives from git history.
+7. **S3:** restrict credit override field to authorised roles.
+8. **S4:** clean up or archive test documents on the live site.
+9. Resolve client open items (4.6); load real master data, price lists and tax configuration.
+10. Freeze a release tag and write the release note.

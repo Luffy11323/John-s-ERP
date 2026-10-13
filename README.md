@@ -3,6 +3,10 @@
 ERPNext v15 / Frappe v15 custom app (`kodessy_app`) for **Kodessy Sdn Bhd**, a pharmaceutical,
 medical device and veterinary importer and distributor (no retail pharmacy).
 
+> **Security notice (open action items):**
+> - Credentials (API key/secret, Administrator password) appear in earlier git history. They must be rotated before the repo becomes public.
+> - Database and file backup archives (`2026*.sql.gz`, `.tar`, site config) are committed at the repo root and may contain customer data. They should be removed from git and its history (`git filter-repo` / BFG), then added to `.gitignore`.
+
 - **Live site:** https://pharma-demo-kodessy.frappe.cloud
 - **Currency / location:** MYR, Airport Logistics Zone, Malaysia
 - **Scope:** sales (incl. quotations), fulfilment (warehouse and stock), procurement, finance
@@ -99,12 +103,19 @@ Each step is isolated: a failure is rolled back and written to **Error Log** (ti
 
 ### 2.6 Workflows
 
+All nine active workflows are now exported to `fixtures/workflow.json` and registered in `hooks.py`. A fresh `bench migrate` loads them automatically.
+
 | DocType | Workflow | Stages | In repo fixtures? |
 |---|---|---|---|
-| Quotation | Quotation Approval Workflow | Draft -> Pending Sales Manager Approval -> Approved / Rejected | Yes |
-| Purchase Order | Purchase Order Two-Tier Approval | Draft -> Pending Purchasing Manager Approval -> Pending Finance Approval -> Approved / Rejected | Yes |
-| Sales Order | Sales Order V3 | Submit for Review -> Review and Forward -> Final Approve | **No - live site only** |
-| Stock Reconciliation, Customer, Supplier, Item, others | Created on the site | - | **No - live site only** |
+| Quotation | Quotation Approval Workflow | Draft → Pending Sales Manager Approval → Approved / Rejected | ✅ Yes |
+| Purchase Order | Purchase Order Two-Tier Approval | Draft → Pending PM Approval → Pending Finance Approval → Approved / Rejected | ✅ Yes |
+| Sales Order | Sales Order V3 | Preparing → Pending Review → Pending Final Approval → Approved | ✅ Yes |
+| Stock Reconciliation | Stock Reconciliation Approval | Draft → Pending Warehouse Manager Approval → Approved / Rejected | ✅ Yes |
+| Customer | Customer | Pending Approval → Changes Required → Approved | ✅ Yes |
+| Supplier | Supplier | Pending Approval → Changes Required → Approved | ✅ Yes |
+| Item | Item V3 | Pending Approval → Changes Required → Approved | ✅ Yes |
+| Journal Entry | Journal Entry | Pending Approval → Approved / Rejected | ✅ Yes |
+| Payment Entry | Payment Entry | Pending Approval → Approved / Rejected | ✅ Yes |
 
 ### 2.7 Scheduler
 
@@ -119,10 +130,12 @@ Each step is isolated: a failure is rolled back and written to **Error Log** (ti
 
 ---
 
-## 3. Demo scenario status (live site test, 2026-10-13)
+## 3. Demo scenario status
 
-Automated run against the live site: **53 of 57 checks passed.** Details, open defects and remaining work are in
-[docs/NEXT_STEPS_AND_TEST_PLAN.md](docs/NEXT_STEPS_AND_TEST_PLAN.md).
+_Last automated run: 2026-10-13 (commit `9290da2`) — **53 of 57 checks passed.**_
+_Commits `713a80d` (notifications), `d4ecf1c` (cards) and `00925a2` (full fixture export) were pushed after that run and have **not yet been verified on live**._
+
+Full details, open defects and remaining work: [docs/NEXT_STEPS_AND_TEST_PLAN.md](docs/NEXT_STEPS_AND_TEST_PLAN.md).
 
 | # | Scenario | Status |
 |---|---|---|
@@ -161,10 +174,12 @@ John-s-ERP/
     controllers/          credit, quarantine, fefo, returns, credit note, workflow notifications
     kodessy_app/report/   batch_recall_traceability, backorder_and_inbound_supply
     public/               css, js, images
-    fixtures/             custom_field, workflow, workflow_state, workflow_action_master, print_format
+    fixtures/             custom_field (66), property_setter (134), workflow (9), workflow_state (40),
+                         workflow_action_master (36), print_format (36), notification (6),
+                         email_template (6), number_card (55), workspace (32), role (2)
 ```
 
-> Housekeeping: the repo root currently contains database / file backup archives (`2026*.sql.gz`, `.tar`, site config). These can hold customer data and secrets and should be removed from version control (see next-steps item S1).
+> **Housekeeping (open):** the repo root contains database / file backup archives (`2026*.sql.gz`, `.tar`, site config). These may hold customer data and secrets. Remove them from version control and history (see next-steps item S1). Credentials in earlier git history also require rotation.
 
 ---
 
@@ -183,9 +198,10 @@ Troubleshooting seen so far:
 | Symptom | Cause | Fix |
 |---|---|---|
 | Backup fails with MariaDB error 1040 "Too many connections" | Site busy / small plan | Retry after a few minutes, stop other activity, restart bench or raise plan |
-| Migrate fails with `Unexpected UTF-8 BOM` on a fixture | File saved with BOM by PowerShell | Re-save as UTF-8 without BOM (fixed in commit 73d2c14) |
+| Migrate fails with `Unexpected UTF-8 BOM` on a fixture | File saved with BOM by PowerShell | Re-save as UTF-8 without BOM (fixed in commit `73d2c14`) |
 | Orders fail with "UOM Box not found in Item" | `fix_demo_items` failed on mandatory Pack Size | Fixed in setup; check Error Log for `setup step failed` |
 | PO creation fails with `cannot unpack non-iterable NoneType` | Supplier references a missing Supplier Group | `ensure_supplier_groups` creates them |
+| Workflow missing on fresh install (Sales Order, Stock Recon, etc.) | Workflow existed only in live DB, not in fixtures | Fixed in commit `00925a2` — all 9 workflows now in `fixtures/workflow.json` |
 
 ---
 
