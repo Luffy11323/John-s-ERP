@@ -33,9 +33,11 @@ fixtures = [
     "Custom Field",
     "Property Setter",
 
-    # Print & notifications
+    # Print formats & email templates
+    # Note: Notification fixture removed — all 6 records fetched are standard
+    # ERPNext/HRMS system notifications (is_standard=1) which Frappe refuses to
+    # overwrite. Workflow notifications are handled in code by workflow_notify.py.
     "Print Format",
-    "Notification",
     "Email Template",
 
     # Dashboards
