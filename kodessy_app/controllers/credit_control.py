@@ -1,4 +1,4 @@
-﻿# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 import frappe
 from frappe import _
 from frappe.utils import flt
