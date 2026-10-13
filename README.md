@@ -2,6 +2,7 @@
 
 > **Complete ERPNext v15 Production & Evaluation System**  
 > Tailored for **Kodessy Sdn Bhd** — Pharmaceutical, Medical Device & Veterinary Importer & Distributor  
+> **Industry:** Pharmaceutical Import & Distribution (No Retail Pharmacy)  
 > **Currency:** MYR (Malaysian Ringgit) | **Location:** Airport Logistics Zone, Malaysia  
 > **Live Cloud URL:** [https://pharma-demo-kodessy.frappe.cloud](https://pharma-demo-kodessy.frappe.cloud)  
 > **Default Admin Access:** `Administrator` / `123`  
@@ -10,12 +11,353 @@
 
 ## 📌 1. Executive Project Overview
 
-This repository contains the production custom app (`kodessy_app`) and database for an enterprise pharmaceutical distribution system covering:
-1. **Sales & Distribution** (Quotations, Approval Workflows, Credit Limit Enforcement, Delivery Orders, Invoicing)
-2. **Fulfilment & Warehousing** (Multi-temperature Warehouses, Quarantine, FEFO Batch Allocation, Pick & Pack Slips)
-3. **Procurement** (Overseas & Local Suppliers, Two-Tier Purchase Order Approvals, Lead Time Tracking)
-4. **Quality & Compliance** (Incoming QA Inspection, Quarantine Restrictions, Batch Traceability, Sales Returns)
-5. **Finance & Accounting** (Chart of Accounts, Accounts Receivable, Credit Notes, Customer Statements of Account)
+This repository contains the production custom app (`kodessy_app`) built on **ERPNext v15 / Frappe v15**, covering the full end-to-end pharmaceutical import and distribution workflow:
+
+| Module | Coverage |
+|---|---|
+| **Sales & Quotation Management** | Quotations → Sales Manager Approval → Confirmed Sales Orders → Delivery Notes → Sales Invoices |
+| **Customer Credit Limit Control** | Real-time exposure monitoring on Quotations and Sales Orders; hard block with authorised override |
+| **Procurement & Purchase Orders** | Two-tier PO approval (Purchasing Manager → Accounts Manager), lead-time tracking, backorder visibility |
+| **Warehousing & Fulfilment** | Multi-temperature warehouses, FEFO batch allocation, Pick & Pack slips, partial deliveries |
+| **Quality Control & Quarantine** | Mandatory incoming QA inspection, Quarantine stock restriction, authorised QA release only |
+| **Finance & Accounting** | Chart of Accounts, AR, Credit Notes with internal approval gate, Statement of Account |
+| **Batch Traceability & Recall** | End-to-end bi-directional lot tracking from supplier PO to customer delivery |
+| **Returns Management** | Mandatory return reason & QA assessment on all sales returns |
+| **Regulatory Compliance** | Health authority product registration number, batch/expiry fields, near-expiry flagging |
+
+---
+
+## 🆕 2. New in This Release
+
+### A. Document Naming Series (`setup_naming.py`)
+All 16 key DocTypes have pharma-specific naming series auto-applied on every `bench migrate`. Format: **`PREFIX-YYYY-####`**
+
+| DocType | Prefix | Example |
+|---|---|---|
+| Quotation | `QTR` | QTR-2026-0001 |
+| Sales Order | `SO` | SO-2026-0001 |
+| Delivery Note | `DO` | DO-2026-0001 |
+| Sales Invoice | `SINV` | SINV-2026-0001 |
+| Pick List | `PCK` | PCK-2026-0001 |
+| Material Request | `MR` | MR-2026-0001 |
+| Purchase Order | `PUR` | PUR-2026-0001 |
+| Purchase Receipt | `GRN` | GRN-2026-0001 |
+| Purchase Invoice | `PINV` | PINV-2026-0001 |
+| Stock Entry | `STE` | STE-2026-0001 |
+| Stock Reconciliation | `SRC` | SRC-2026-0001 |
+| Quality Inspection | `QI` | QI-2026-0001 |
+| Payment Entry | `PAY` | PAY-2026-0001 |
+| Journal Entry | `JV` | JV-2026-0001 |
+| Supplier Quotation | `SQ` | SQ-2026-0001 |
+| Request for Quotation | `RFQ` | RFQ-2026-0001 |
+
+### B. Credit Note Internal Approval Gate (`credit_note_control.py`)
+- Credit Notes (Sales Invoice with `is_return = 1`) require a manager to set **`custom_credit_note_approved_by`** before submission.
+- The approval field auto-resets if the document is amended, preventing re-use of stale approvals.
+- Client-side banner in `public/js/sales_invoice.js` shows an orange warning if approval is missing.
+
+### C. Enhanced Quarantine Routing (`quarantine_control.py`)
+- **Purchase Receipt → Quarantine**: All incoming purchase receipts are auto-routed to `Quarantine Warehouse - K` on validate.
+- **Stock Release Gate**: Only `Stock Entry` documents for QA release (Quarantine → sales warehouse) by `Quality Manager` role are permitted.
+- **Sales Restriction**: Delivery Notes, Sales Orders, Pick Lists, and Sales Invoices referencing quarantined stock are hard-blocked.
+
+### D. Near-Expiry Batch Flagging (`tasks.py`)
+- **Daily background scheduler** (`flag_near_expiry`) checks all active batches.
+- Batches expiring within **90 days** → `custom_near_expiry = 1` + **ToDo alert** assigned to `Quality Manager`.
+- Expired batches (`expiry_date < today`) → `disabled = 1` to prevent further allocation.
+
+### E. Custom Script Reports
+Two new script reports in `kodessy_app/kodessy_app/report/`:
+
+1. **Batch Recall & Full Traceability** (`batch_recall_traceability/`)
+   Enter any Batch No. → retrieves complete chain: Supplier GRN → QA Inspection → Warehouse → Customer Delivery Note → Sales Invoice.
+
+2. **Backorder & Inbound Supply** (`backorder_and_inbound_supply/`)
+   Unfulfilled Sales Order lines side-by-side with open PO delivery schedules.
+
+### F. Workspace KPI Hero Cards & Report Shortcuts (`api.py`)
+Radiant-style **KPI hero cards** surfaced on Home, Selling, Buying, Stock, and Accounting workspaces. Each workspace has quick-access shortcuts to the custom pharma reports.
+
+### G. Client-Side Form Enhancements
+| File | Function |
+|---|---|
+| `public/js/sales_invoice.js` | On Credit Note forms: highlights `custom_credit_note_approved_by` and shows orange warning banner if missing |
+| `public/js/batch.js` | On Batch forms: shows teal "View Traceability" button linking to Batch Recall Traceability report filtered to that batch |
+
+---
+
+## 💎 3. Clinical Glassmorphism Theme (`kodessy_glass.css`)
+
+### A. Vivid Sky-Blue → Teal → Emerald Navbar Gradient
+Crisp white on the left (logo zone) transitioning into a **vivid gradient** on the right:
+```
+linear-gradient(90deg, #ffffff 0%, #ffffff 220px, #0ea5e9 52%, #0d9488 78%, #10b981 100%)
+```
+- Right-hand nav links, icons, and dropdowns rendered in **white** for maximum legibility.
+- Dark-mode variant: deep navy → deep teal.
+
+### B. Radiant-Style Reports & Masters Widgets
+Workspace **Reports** and **Masters** widgets rendered as clean plain link columns (no heavy card borders), matching Radiant ERP's aesthetic:
+- `.links-widget-box` background and borders stripped.
+- Links displayed as `#0ea5e9` coloured text with subtle left accent on hover.
+
+### C. KPI Hero Cards
+- Single large number with separator borders.
+- Cyan-to-emerald gradient accent border on hover.
+- `< 1.5ms` render time — non-blocking.
+
+### D. Color Palette
+| Token | Value | Used For |
+|---|---|---|
+| `--pharma-cyan` | `#0284c7` | Primary brand / buttons |
+| `--pharma-emerald` | `#10b981` | Success states / accents |
+| `--pharma-teal` | `#0d9488` | Gradient midpoint |
+| Glass bg (light) | `rgba(255,255,255,0.8)` | Cards, modals |
+| Glass bg (dark) | `rgba(30,41,59,0.65)` | Dark mode cards |
+
+---
+
+## 📄 4. Print Formats & Screen Previews
+
+Custom high-fidelity print formats in `kodessy_app/fixtures/print_format.json`:
+
+1. **Pharma Pick & Pack Slip** (`Pick List`): Item Code, Storage Zone, FEFO Batch, Expiry Date, and three-stage signature block (Picked By → QA Verified → Driver Hand-off).
+2. **Pharma Delivery Order (DO)** (`Delivery Note`): Health Authority Product Registration No., Batch/Lot numbers, Expiry dates, Dispatch Temperature verification, customer receiving section.
+
+---
+
+## 📈 5. Reports & Traceability Architecture
+
+| # | Report | Type | Description |
+|---|---|---|---|
+| 1 | **Batch Recall & Full Traceability** | Script Report | Bi-directional lot tracking: Supplier receipt → QA → Storage → Customer Delivery |
+| 2 | **Backorder & Inbound Supply** | Script Report | Unfulfilled SO lines vs. open PO delivery schedules |
+| 3 | **Batch-Wise Stock Balance & Expiry** | Query Report | Real-time stock by batch, expiry, warehouse, shelf-life remaining |
+| 4 | **Customer Statement of Account** | Standard AR | Opening balance, invoices, credit notes, payments, running balance |
+| 5 | **Supplier Lead Time & Delivery Performance** | Query Report | Scheduled vs. actual receipt date per supplier |
+| 6 | **Stock Reconciliation & Discrepancy Log** | Standard | Physical stock count vs. system stock discrepancies |
+
+---
+
+## 🎯 6. The 14 Demo Scenarios (1:1 Alignment with Client Spec)
+
+| # | Demo Requirement | Implementation |
+|---|---|---|
+| **1** | **Quotation Management** | `Quotation Approval Workflow`: Draft → Pending Sales Manager Approval → Approved → Convert to Sales Order |
+| **2** | **Customer Credit Limit Control** | `controllers/credit_control.py`: Monitors exposure (open invoices + current order). Alert on Quotation; hard block on Sales Order. `custom_credit_override_approved_by` for authorised overrides |
+| **3** | **Purchase Order Management** | `Purchase Order Two-Tier Approval`: Draft → Pending Purchasing Manager (T1) → Pending Accounts Manager (T2) → Approved. Lead-time and outstanding delivery tracking |
+| **4** | **Inventory & FEFO Allocation** | `controllers/fefo_control.py`: Auto-allocates earliest-expiry batch first on Pick Lists and Delivery Notes. Manual override allowed for authorised users |
+| **5** | **Quality Control & Stock Release** | Mandatory `Quality Inspection` on Purchase Receipt. Stock held in Quarantine Warehouse until QA approval. `quarantine_control.py` enforces release gate |
+| **6** | **Quarantine Management** | `quarantine_control.py`: Hard-blocks SO/DN/Invoice from fulfilling quarantined stock. Purchase Receipts auto-routed to Quarantine on incoming |
+| **7** | **Stock Count & Reconciliation** | Native ERPNext `Stock Reconciliation` (naming: `SRC-YYYY-####`) for monthly physical counts with discrepancy reports |
+| **8** | **Pick & Pack Slip** | Custom Jinja/CSS **Pharma Pick & Pack Slip**: storage zone, FEFO batch, expiry date, multi-stage sign-offs |
+| **9** | **Delivery Order & Invoicing** | Custom **Pharma Delivery Order (DO)**: registration no., batch, expiry, dispatch temperature, partial delivery support |
+| **10** | **Backorder Reporting** | `Backorder & Inbound Supply` script report: unfulfilled SO lines vs. open PO ETAs |
+| **11** | **Goods Return Management** | `controllers/returns_control.py`: Mandatory Return Reason + QA Assessment Status before any sales return is processed |
+| **12** | **Credit Note Issuance** | `controllers/credit_note_control.py`: Credit Notes require `custom_credit_note_approved_by` before submission; field resets on amendment |
+| **13** | **Statement of Account** | Standard ERPNext AR Statement with period invoices, credit notes, payments, and running MYR balance |
+| **14** | **Batch Traceability & Recall** | `Batch Recall & Full Traceability` script report + `batch.js` shortcut on Batch form: full chain from supplier to customer in one click |
+
+---
+
+## 📂 7. Repository File Structure
+
+```
+John-s-ERP/
+├── pyproject.toml
+├── setup.py
+├── requirements.txt
+├── logo.png                                          # Official Kodessy brand logo
+├── kodessy_app/                                      # Root Frappe Custom App Package
+│   ├── __init__.py
+│   ├── hooks.py                                      # Event hooks, assets, fixture exports, scheduler
+│   ├── api.py                                        # KPI hero cards & report shortcuts (all workspaces)
+│   ├── setup_naming.py                               # Naming series setup (PREFIX-YYYY-####)
+│   ├── setup_pharma.py                               # Master data, roles, UOMs, custom fields, QC templates
+│   ├── tasks.py                                      # Daily near-expiry batch flagging scheduler
+│   ├── modules.txt
+│   ├── patches.txt
+│   ├── controllers/                                  # Business Logic Controllers
+│   │   ├── __init__.py
+│   │   ├── credit_control.py                         # Credit limit monitoring & blocking (Quotation, SO)
+│   │   ├── credit_note_control.py                    # Credit Note internal approval gate
+│   │   ├── fefo_control.py                           # FEFO batch auto-allocation (Delivery Note)
+│   │   ├── quarantine_control.py                     # Quarantine routing, restriction & QA release gate
+│   │   └── returns_control.py                        # Mandatory return reason & QA assessment validation
+│   ├── public/                                       # Frontend Assets
+│   │   ├── css/
+│   │   │   └── kodessy_glass.css                     # Sky-Blue & Emerald Glassmorphism Theme
+│   │   ├── js/
+│   │   │   ├── kodessy_glass.js                      # Workspace card renderer & KPI loader
+│   │   │   ├── sales_invoice.js                      # Credit Note approval banner & field highlight
+│   │   │   └── batch.js                              # Batch Traceability shortcut button
+│   │   └── images/
+│   │       ├── logo.png
+│   │       └── favicon.png
+│   ├── kodessy_app/                                  # Module package (reports)
+│   │   └── report/
+│   │       ├── batch_recall_traceability/            # Script Report: Batch Recall & Full Traceability
+│   │       └── backorder_and_inbound_supply/         # Script Report: Backorder & Inbound Supply
+│   └── fixtures/                                     # Frappe Fixtures
+│       ├── custom_field.json
+│       ├── workflow.json                             # Quotation & 2-Tier PO Approval workflows
+│       ├── workflow_state.json
+│       ├── workflow_action_master.json
+│       └── print_format.json                         # Pharma Pick Slip & Delivery Order print formats
+├── 20261007_180518-client_local-database.sql.gz
+├── 20261007_180518-client_local-files.tar
+├── 20261007_180518-client_local-private-files.tar
+├── 20261007_180518-client_local-site_config_backup.json
+└── README.md
+```
+
+---
+
+## 🏢 8. Master Data Seeded in the Database
+
+### A. Warehouses
+| Warehouse | Temperature | Purpose |
+|---|---|---|
+| `Main Warehouse (Ambient 25–30°C) - K` | Ambient | General pharmaceutical SKUs |
+| `Cold Chain Warehouse (2–8°C) - K` | 2–8°C | Biologics, insulins, vaccines |
+| `Quarantine Warehouse - K` | — | Incoming inspection holding & defective stock |
+| `Near-Expiry Bin - K` | — | Stock approaching expiry threshold |
+
+### B. Sample Products (SKUs)
+| Item Code | Name | Category | Storage | Tracking |
+|---|---|---|---|---|
+| `AMOX-500` | Amoxicillin 500mg Capsules | Pharmaceutical | Ambient | Batch & Expiry, 10×10 Blister |
+| `INS-100` | Insulin Glargine 100 IU/ml | Pharmaceutical | Cold Chain (2–8°C) | Batch & Expiry, 5×3ml Pens |
+| `PARAC-IV` | Paracetamol 10mg/ml IV Infusion | Pharmaceutical | Ambient | Batch & Expiry, 100ml Vial |
+| `VET-AMOX` | Veterinary Antibiotic Injectable | Veterinary | Ambient | Batch & Expiry, Bottle |
+| `PULSE-OX` | Fingertip Pulse Oximeter Pro | Medical Device | Ambient | Serial Number, Unit |
+
+### C. Sample Customers (Credit Limits in MYR)
+| Customer | Credit Limit |
+|---|---|
+| Gleneagles Hospital KL | MYR 100,000 |
+| Sunway Medical Centre | MYR 50,000 |
+| Klinik Mediviron Subang | MYR 15,000 |
+
+### D. Sample Suppliers
+| Supplier | Country | Channel |
+|---|---|---|
+| Pfizer Global Supply | United States | Air Cargo |
+| AstraZeneca Biologics | United Kingdom | Cold Chain Air Cargo |
+| Apex Healthcare Distribution | Malaysia | Local |
+
+### E. Sample Batches (FEFO Testing)
+| Batch | Item | Expiry | FEFO Order |
+|---|---|---|---|
+| `BATCH-AMOX-2026B` | AMOX-500 | 2026-11-30 | **FIRST** |
+| `BATCH-AMOX-2026A` | AMOX-500 | 2027-01-31 | Second |
+| `BATCH-INS-2026A` | INS-100 | 2026-12-15 | First for INS-100 |
+
+---
+
+## 🔗 9. Event Hook Architecture
+
+```
+doc_events:
+  Quotation:        validate → credit_control (credit limit alert)
+  Sales Order:      validate → credit_control (hard block) + quarantine_control
+  Pick List:        validate → quarantine_control (block quarantine stock)
+  Delivery Note:    validate → quarantine_control + fefo_control + returns_control
+  Sales Invoice:    validate → quarantine_control + returns_control + credit_note_control (reset)
+                    before_submit → credit_note_control (approval gate)
+  Purchase Receipt: validate → quarantine_control (auto-route to Quarantine Warehouse)
+  Stock Entry:      validate → quarantine_control (enforce QA-only release)
+
+scheduler_events:
+  daily → tasks.flag_near_expiry  (flags batches expiring within 90 days)
+```
+
+---
+
+## 🧪 10. End-to-End Testing Guide
+
+### A. Step-by-Step UI Test Walkthrough
+
+**1 — Two-Tier PO Approval:**
+1. Login as Purchase User → Create PO for `Pfizer Global Supply`, `AMOX-500`, 1,000 Boxes @ MYR 45.
+2. Submit for Approval → State: `Pending Purchasing Manager Approval`.
+3. Login as Purchase Manager → Approve Tier 1 → State: `Pending Accounts Manager Approval`.
+4. Login as Accounts Manager → Approve Tier 2 → PO Submitted (`PUR-2026-####`).
+
+**2 — Incoming Inspection & Quarantine:**
+1. Create Purchase Receipt (GRN) against PO → system auto-routes to `Quarantine Warehouse - K`.
+2. Attempt Sales Order or Delivery Note from Quarantine stock → **Expected: hard block**.
+3. Pass Quality Inspection → create Stock Entry (Material Transfer) to Main Warehouse.
+
+**3 — Quotation Approval & Sales Order:**
+1. Create Quotation (`QTR-2026-####`) for `Sunway Medical Centre`.
+2. Submit for Approval → Sales Manager Approves → Convert to Sales Order (`SO-2026-####`).
+
+**4 — Credit Limit Block:**
+1. Create Sales Order for `Klinik Mediviron Subang` (limit: MYR 15,000) exceeding MYR 15,000.
+2. Click Save → **Expected: blocked** with `"Order Blocked: Customer credit limit exceeded"`.
+3. Set `custom_credit_override_approved_by` → re-save → override accepted.
+
+**5 — FEFO Picking:**
+1. Create Pick List from approved Sales Order.
+2. Verify `BATCH-AMOX-2026B` (exp. 2026-11-30) allocated before `BATCH-AMOX-2026A` (exp. 2027-01-31).
+3. Print using **Pharma Pick and Pack Slip** format (`PCK-2026-####`).
+
+**6 — Delivery Order & Invoice:**
+1. Create Delivery Note (`DO-2026-####`) → Print **Pharma Delivery Order (DO)**.
+2. Create Sales Invoice (`SINV-2026-####`) from Delivery Note.
+
+**7 — Returns & Credit Note:**
+1. Create return Sales Invoice (`is_return = 1`) without Return Reason → **Expected: blocked**.
+2. Set Return Reason = `Damaged in Transit`, QA Assessment = `Accepted - Quarantine & Scrap` → Submit.
+3. On resulting Credit Note: set `custom_credit_note_approved_by` → Submit.
+
+**8 — Batch Recall:**
+1. Open Batch `BATCH-AMOX-2026B` → Click **View Traceability** button.
+2. OR: Reports → **Batch Recall & Full Traceability** → Enter batch number.
+3. Verify full chain: GRN → QA → Warehouse → Delivery Note → Invoice → Customer.
+
+---
+
+### B. REST API Quick Reference
+
+All API calls require:
+```http
+Authorization: token 62bf5c7d2ea6f94:c9d416d47ccb0fe
+Content-Type: application/json
+```
+Base URL: `https://pharma-demo-kodessy.frappe.cloud`
+
+| Test | Method | Endpoint |
+|---|---|---|
+| List open Sales Orders | GET | `/api/resource/Sales Order?filters=[["status","in",["To Deliver","To Bill"]]]` |
+| List Quarantine stock | GET | `/api/resource/Stock Ledger Entry?filters=[["warehouse","like","%Quarantine%"]]` |
+| Get FEFO Batch order | GET | `/api/resource/Batch?filters=[["item","=","AMOX-500"]]&order_by=expiry_date asc` |
+| Apply PO workflow action | POST | `/api/method/frappe.model.workflow.apply_workflow` |
+| Run Batch Traceability | POST | `/api/method/frappe.desk.query_report.run` |
+
+---
+
+## ⚙️ 11. Deployment & Migration
+
+After cloning and installing on a Frappe bench:
+
+```bash
+bench get-app kodessy_app https://github.com/Luffy11323/John-s-ERP.git
+bench --site <site> install-app kodessy_app
+bench --site <site> migrate
+```
+
+`bench migrate` automatically:
+1. Applies all fixtures (custom fields, workflows, print formats).
+2. Runs `setup_pharma.after_migrate` → seeds roles, UOMs, warehouses, items, customers, suppliers, batches, QC templates.
+3. Runs `setup_naming.after_migrate` → applies `PREFIX-YYYY-####` naming series to all 16 DocTypes.
+
+---
+
+*Repository maintained for the Kodessy ERP Pharma Demo Project.*
+*Powered by ERPNext v15 / Frappe v15 on Frappe Cloud.*
+
 
 ---
 

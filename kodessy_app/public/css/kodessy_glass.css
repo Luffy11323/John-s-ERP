@@ -12,39 +12,64 @@
   --pharma-glass-border: rgba(255, 255, 255, 0.85);
 }
 
-/* 1. Navbar — Clinical Pure Glass with Subtle Cyan-Emerald Horizon Fade */
+/* 1. Navbar - Radiant-style: white logo zone, then a vivid sky-blue -> teal -> emerald sweep */
 .navbar {
-  background: rgba(255, 255, 255, 0.85) !important;
-  backdrop-filter: blur(16px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
-  border-bottom: 1px solid rgba(226, 232, 240, 0.8) !important;
-  box-shadow: 0 4px 20px -2px rgba(2, 132, 199, 0.06) !important;
+  background: #ffffff !important;
+  border-bottom: 0 !important;
+  box-shadow: 0 4px 20px rgba(2, 132, 199, 0.28) !important;
   position: relative;
-  overflow: visible;
+  z-index: 1030;
 }
 
-[data-theme="dark"] .navbar {
-  background: rgba(15, 23, 42, 0.85) !important;
-  border-bottom: 1px solid rgba(51, 65, 85, 0.7) !important;
-  box-shadow: 0 4px 25px -2px rgba(0, 0, 0, 0.4) !important;
-}
-
-/* Navbar Fading Horizon Line after Logo */
-.navbar::after {
+.navbar::before {
   content: "";
   position: absolute;
-  top: 0;
-  left: 130px;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(90deg, transparent 0%, rgba(2, 132, 199, 0.08) 25%, rgba(16, 185, 129, 0.06) 65%, transparent 100%);
+  top: 0; bottom: 0; left: 0; right: 0;
+  z-index: -1;
   pointer-events: none;
+  background: linear-gradient(90deg, #ffffff 0%, #ffffff 220px, #0ea5e9 52%, #0d9488 78%, #10b981 100%);
   animation: navbarFadeIn 0.8s ease forwards;
 }
 
+.navbar::after { display: none !important; }
+
+[data-theme="dark"] .navbar {
+  background: #09090b !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5) !important;
+}
+
+[data-theme="dark"] .navbar::before {
+  background: linear-gradient(90deg, #09090b 0%, #09090b 220px, #075985 52%, #0f766e 78%, #047857 100%);
+}
+
 @keyframes navbarFadeIn {
-  0% { opacity: 0; transform: translateX(-15px); }
-  100% { opacity: 1; transform: translateX(0); }
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* Right-hand items sit on the vivid part of the gradient, so they go white */
+.navbar .navbar-collapse .navbar-nav.navbar-right .nav-link,
+.navbar .navbar-collapse .navbar-nav.navbar-right a,
+.navbar .navbar-collapse .navbar-nav.navbar-right .dropdown-toggle {
+  color: #ffffff !important;
+}
+
+.navbar .navbar-collapse .navbar-nav.navbar-right svg,
+.navbar .navbar-collapse .navbar-nav.navbar-right .icon {
+  stroke: #ffffff !important;
+  fill: none;
+}
+
+/* Dropdown menus must stay readable */
+.navbar .dropdown-menu,
+.navbar .dropdown-menu a,
+.navbar .dropdown-menu .dropdown-item,
+.navbar .dropdown-menu .dropdown-item span {
+  color: var(--text-color, #1f2937) !important;
+}
+
+.navbar .dropdown-menu .dropdown-item:hover {
+  background: var(--fg-hover-color, rgba(2, 132, 199, 0.1));
 }
 
 .navbar .navbar-home img.app-logo {
@@ -55,7 +80,6 @@
 .navbar .navbar-home:hover img.app-logo {
   transform: scale(1.05);
 }
-
 /* 2. Professional Sky-Blue to Emerald Hero Workspace Banner */
 .desk-page .widget.widget-custom,
 .desk-page .widget-quick-list:first-child,
@@ -292,3 +316,68 @@
   background: linear-gradient(135deg, #0284c7, #10b981); color: #fff;
   box-shadow: 0 6px 16px -2px rgba(2, 132, 199, 0.4);
 }
+
+/* 10. Reports & Masters - Radiant-style: plain columns of link lists, no boxes */
+.desk-page .widget.links-widget-box,
+.desk-page .links-widget-box,
+[data-theme="dark"] .desk-page .links-widget-box {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border-radius: 0 !important;
+  padding: 8px 4px !important;
+  transform: none !important;
+}
+
+.desk-page .links-widget-box:hover {
+  transform: none !important;
+  box-shadow: none !important;
+  border-color: transparent !important;
+}
+
+.desk-page .links-widget-box .widget-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-color, #1f2937);
+}
+
+.desk-page .links-widget-box .link-item {
+  font-size: 13.5px;
+  font-weight: 400;
+  color: var(--text-muted, #4b5563);
+  border-radius: 6px;
+  padding: 4px 6px;
+  margin-left: -6px;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.desk-page .links-widget-box .link-item:hover {
+  color: #0284c7;
+  background: rgba(2, 132, 199, 0.07);
+  text-decoration: none;
+}
+
+/* Shortcuts - Radiant-style slim pills, quiet hover (no big glow) */
+.desk-page .widget.shortcut-widget-box {
+  background: var(--card-bg, #ffffff) !important;
+  border: 1px solid rgba(2, 132, 199, 0.18) !important;
+  border-radius: 20px !important;
+  padding: 6px 14px !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+.desk-page .widget.shortcut-widget-box:hover {
+  background: rgba(2, 132, 199, 0.06) !important;
+  border-color: rgba(2, 132, 199, 0.45) !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+.desk-page .shortcut-widget-box .widget-head { padding: 0 !important; }
+.desk-page .shortcut-widget-box .widget-title { font-size: 13px !important; font-weight: 500; }
+
+/* Hide empty divider stripes left over between sections */
+.desk-page .ce-block:has(.ce-divider) + .ce-block:has(.ce-divider) { display: none !important; }
