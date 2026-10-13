@@ -34,6 +34,7 @@ def after_migrate():
 		fix_workflow_roles,
 		ensure_roles,
 		ensure_uoms,
+		ensure_supplier_groups,
 		fix_demo_items,
 		set_demo_credit_limits,
 		ensure_custom_fields,
@@ -82,6 +83,16 @@ def ensure_uoms():
 			frappe.get_doc({"doctype": "UOM", "uom_name": uom, "enabled": 1}).insert(ignore_permissions=True)
 
 
+def ensure_supplier_groups():
+	"""Supplier Groups referenced by suppliers must exist, otherwise PO tax-rule lookup crashes."""
+	groups = {s.supplier_group for s in frappe.get_all("Supplier", fields=["supplier_group"]) if s.supplier_group}
+	for group in groups | {"Pharmaceutical Supplier", "Local Distributor"}:
+		if not frappe.db.exists("Supplier Group", group):
+			frappe.get_doc(
+				{"doctype": "Supplier Group", "supplier_group_name": group, "parent_supplier_group": "All Supplier Groups"}
+			).insert(ignore_permissions=True)
+
+
 def fix_demo_items():
 	"""Give demo pharma items a valid UOM table and shelf life so they can be transacted."""
 	for code in DEMO_ITEMS:
@@ -104,6 +115,11 @@ def fix_demo_items():
 
 		if item.get("has_expiry_date") and not item.get("shelf_life_in_days"):
 			item.shelf_life_in_days = DEFAULT_SHELF_LIFE_DAYS
+			changed = True
+
+		# custom_pack_size is mandatory on Item; backfill so the save below can succeed
+		if frappe.get_meta("Item").has_field("custom_pack_size") and not item.get("custom_pack_size"):
+			item.custom_pack_size = "1 {0}".format(item.stock_uom or "Unit")
 			changed = True
 
 		if changed:
