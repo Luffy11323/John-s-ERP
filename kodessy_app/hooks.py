@@ -62,6 +62,21 @@ doc_events = {
     }
 }
 
+# Workflow / submit / cancel notifications (role + owner) with timeline activity entries
+from kodessy_app.controllers.workflow_notify import build_doc_events
+
+for _dt, _events in build_doc_events().items():
+    _existing = doc_events.setdefault(_dt, {})
+    for _event, _handler in _events.items():
+        _current = _existing.get(_event)
+        if _current is None:
+            _existing[_event] = _handler
+        elif isinstance(_current, list):
+            _current.append(_handler)
+        else:
+            _existing[_event] = [_current, _handler]
+
+
 scheduler_events = {
     "daily": [
         "kodessy_app.tasks.flag_near_expiry"
