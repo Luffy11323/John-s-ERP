@@ -10,7 +10,7 @@ Failures here never block the underlying transaction.
 """
 import frappe
 from frappe import _
-from frappe.utils import get_url_to_form
+from frappe.utils import escape_html, fmt_money, get_url_to_form
 
 # Doctypes that carry a workflow in this deployment plus the key transactional documents.
 TRACKED_DOCTYPES = [
@@ -68,15 +68,73 @@ def _users_with_role(role):
 	return frappe.get_all("User", filters={"name": ["in", users], "enabled": 1}, pluck="name")
 
 
+def _detail_rows(doc):
+	"""(label, value) pairs for whichever of these fields the document has."""
+	rows = []
+	party = (
+		doc.get("customer_name") or doc.get("customer") or doc.get("supplier_name")
+		or doc.get("supplier") or doc.get("party_name") or doc.get("party")
+	)
+	if party:
+		label = _("Supplier") if (doc.get("supplier") or doc.get("supplier_name")) else _("Customer")
+		rows.append((label, party))
+	if doc.get("project"):
+		rows.append((_("Project"), doc.get("project")))
+	currency = doc.get("currency") or doc.get("company_currency")
+	if currency:
+		rows.append((_("Currency"), currency))
+	total = doc.get("grand_total") or doc.get("rounded_total") or doc.get("total_amount") or doc.get("paid_amount")
+	if total:
+		try:
+			rows.append((_("Total"), fmt_money(total, currency=currency), True))
+		except Exception:
+			rows.append((_("Total"), str(total), True))
+	return rows
+
+
+def _card_html(doc, event_label, detail, actor, link):
+	"""Styled notification card: heading, summary, detail table, Open button."""
+	dt = escape_html(_(doc.doctype))
+	cell = "padding:8px 0;border-bottom:1px solid #e5e7eb;"
+	rows_html = ""
+	for row in _detail_rows(doc):
+		bold = len(row) > 2
+		rows_html += (
+			"<tr><td style='{c}color:#6b7280;'>{k}</td>"
+			"<td style='{c}text-align:right;{b}'>{v}</td></tr>"
+		).format(
+			c=cell, k=escape_html(row[0]), v=escape_html(str(row[1])),
+			b="font-weight:700;" if bold else "",
+		)
+	table = (
+		"<table style='width:100%;border-collapse:collapse;font-size:13px;margin:12px 0;'>{0}</table>".format(rows_html)
+		if rows_html else ""
+	)
+	stage = ("<div style='color:#6b7280;font-size:12px;'>{0}</div>".format(escape_html(detail))) if detail else ""
+	return (
+		"<div style='border-left:4px solid #10b981;background:#fff;border-radius:8px;"
+		"padding:14px 16px;max-width:520px;font-family:inherit;'>"
+		"<div style='font-size:12px;font-weight:700;letter-spacing:.5px;color:#065f46;"
+		"text-transform:uppercase;'>{dt} {ev}</div>"
+		"<div style='margin-top:8px;font-size:14px;'>{dt} <b>{name}</b> {ev}.</div>"
+		"{stage}{table}"
+		"<div style='color:#6b7280;font-size:12px;margin-bottom:10px;'>{by}: {actor}</div>"
+		"<a href='{link}' style='display:inline-block;background:#10b981;color:#fff;"
+		"padding:8px 16px;border-radius:6px;text-decoration:none;font-weight:600;'>{open} {dt}</a>"
+		"</div>"
+	).format(
+		dt=dt, ev=escape_html(event_label), name=escape_html(doc.name), stage=stage, table=table,
+		by=escape_html(_("By")), actor=escape_html(actor), link=escape_html(link), open=escape_html(_("Open")),
+	)
+
+
 def _notify(doc, event_label, roles, detail=None):
 	actor = frappe.session.user
 	link = get_url_to_form(doc.doctype, doc.name)
 	title = doc.get("title") or doc.name
 	headline = _("{0} {1} - {2}").format(_(doc.doctype), doc.name, event_label)
 	body = detail or ""
-	content = "{0}{1}<br>{2}: {3}".format(
-		headline, ("<br>" + body) if body else "", _("By"), actor
-	)
+	content = _card_html(doc, event_label, body, actor, link)
 
 	seen = set()
 
@@ -102,7 +160,7 @@ def _notify(doc, event_label, roles, detail=None):
 		doc.add_comment(
 			"Info",
 			"Notification sent to <b>{0}</b> ({1} user{2})<br>{3}".format(
-				role, len(users), "" if len(users) == 1 else "s", headline + (" - " + body if body else "")
+				role, len(users), "" if len(users) == 1 else "s", content
 			),
 		)
 
@@ -110,9 +168,7 @@ def _notify(doc, event_label, roles, detail=None):
 		_send(doc.owner, _("Owner"))
 		doc.add_comment(
 			"Info",
-			"Notification sent to <b>Owner</b> ({0})<br>{1}".format(
-				doc.owner, headline + (" - " + body if body else "")
-			),
+			"Notification sent to <b>Owner</b> ({0})<br>{1}".format(doc.owner, content),
 		)
 
 
