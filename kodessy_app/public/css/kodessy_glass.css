@@ -180,6 +180,49 @@ body.kod-premium .widget-number-card .number-card-number {
   letter-spacing: -0.5px !important;
 }
 
+/* Link cards (Reports & Masters, Stock, Buying ... link groups) */
+body.kod-premium .links-widget-box,
+body.kod-premium .widget.links-widget-box,
+body.kod-premium .link-widget-box {
+  background: var(--card-bg, #ffffff) !important;
+  border: 1px solid var(--border-color, #e5e7eb) !important;
+  border-radius: 14px !important;
+  padding: 14px 16px !important;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06) !important;
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.22s ease !important;
+}
+
+body.kod-premium .links-widget-box:hover,
+body.kod-premium .widget.links-widget-box:hover,
+body.kod-premium .link-widget-box:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: var(--kod-shadow-hover) !important;
+  border-color: rgba(2, 132, 199, 0.45) !important;
+}
+
+/* Individual links inside a card */
+body.kod-premium .links-widget-box .link-item,
+body.kod-premium .link-widget-box .link-item {
+  border-radius: 6px !important;
+  padding: 3px 6px !important;
+  transition: background 0.15s ease, color 0.15s ease, padding-left 0.15s ease !important;
+}
+
+body.kod-premium .links-widget-box .link-item:hover,
+body.kod-premium .link-widget-box .link-item:hover {
+  background: rgba(2, 132, 199, 0.08) !important;
+  color: #0284c7 !important;
+  padding-left: 10px !important;
+}
+
+[data-theme="dark"] body.kod-premium .links-widget-box,
+[data-theme="dark"] body.kod-premium .link-widget-box {
+  border-color: rgba(71, 85, 105, 0.45) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.30) !important;
+}
+
 /* ======================================================================
    4. SHORTCUTS — slim pills, quiet hover (no shadow at all)
    ====================================================================== */
