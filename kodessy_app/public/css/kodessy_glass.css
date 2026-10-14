@@ -1,353 +1,260 @@
 /* ==========================================================================
-   Kodessy Pharma ERP — Clean Cyan/Sky-Blue & Emerald Glassmorphism Theme
-   Designed for clinical clarity, executive confidence & high performance in Light & Dark modes
+   Kodessy Pharma ERP — Clean Sky-Blue & Emerald Theme (Radiant-style, calm)
+   Scoped under body.kod-premium (set by kodessy_glass.js on load).
+   No aggressive glow. Hover = lift + border accent only.
+   Light & Dark mode ready.
    ========================================================================== */
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+/* ---------- Design tokens ---------- */
 :root {
-  --pharma-cyan: #0284c7;
-  --pharma-emerald: #10b981;
-  --pharma-teal: #0d9488;
-  --pharma-sky-glow: 0 10px 30px -4px rgba(2, 132, 199, 0.28), 0 0 16px 2px rgba(16, 185, 129, 0.2);
-  --pharma-glass-bg: rgba(255, 255, 255, 0.8);
-  --pharma-glass-border: rgba(255, 255, 255, 0.85);
+  --kod-cyan:    #0284c7;
+  --kod-teal:    #0d9488;
+  --kod-emerald: #10b981;
+  --kod-shadow:  0 8px 24px rgba(15, 23, 42, 0.10);
+  --kod-shadow-hover: 0 14px 32px rgba(15, 23, 42, 0.16);
 }
 
-/* 1. Navbar - Radiant-style: white logo zone, then a vivid sky-blue -> teal -> emerald sweep */
-.navbar {
+/* ======================================================================
+   1. NAVBAR — white logo zone → sky-blue → teal gradient (no big glow)
+   ====================================================================== */
+body.kod-premium .navbar {
   background: #ffffff !important;
   border-bottom: 0 !important;
-  box-shadow: 0 4px 20px rgba(2, 132, 199, 0.28) !important;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.10) !important;
   position: relative;
   z-index: 1030;
 }
 
-.navbar::before {
+body.kod-premium .navbar::before {
   content: "";
   position: absolute;
   top: 0; bottom: 0; left: 0; right: 0;
   z-index: -1;
   pointer-events: none;
   background: linear-gradient(90deg, #ffffff 0%, #ffffff 220px, #0ea5e9 52%, #0d9488 78%, #10b981 100%);
-  animation: navbarFadeIn 0.8s ease forwards;
+  animation: kodNavIn 0.7s ease forwards;
 }
 
-.navbar::after { display: none !important; }
+body.kod-premium .navbar::after { display: none !important; }
 
-[data-theme="dark"] .navbar {
+[data-theme="dark"] body.kod-premium .navbar {
   background: #09090b !important;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.40) !important;
 }
 
-[data-theme="dark"] .navbar::before {
+[data-theme="dark"] body.kod-premium .navbar::before {
   background: linear-gradient(90deg, #09090b 0%, #09090b 220px, #075985 52%, #0f766e 78%, #047857 100%);
 }
 
-@keyframes navbarFadeIn {
-  0% { opacity: 0; }
-  100% { opacity: 1; }
+@keyframes kodNavIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
-/* Right-hand items sit on the vivid part of the gradient, so they go white */
-.navbar .navbar-collapse .navbar-nav.navbar-right .nav-link,
-.navbar .navbar-collapse .navbar-nav.navbar-right a,
-.navbar .navbar-collapse .navbar-nav.navbar-right .dropdown-toggle {
+/* Right-hand nav items sit on the vivid gradient → white */
+body.kod-premium .navbar .navbar-collapse .navbar-nav.navbar-right .nav-link,
+body.kod-premium .navbar .navbar-collapse .navbar-nav.navbar-right a,
+body.kod-premium .navbar .navbar-collapse .navbar-nav.navbar-right .dropdown-toggle {
   color: #ffffff !important;
 }
 
-.navbar .navbar-collapse .navbar-nav.navbar-right svg,
-.navbar .navbar-collapse .navbar-nav.navbar-right .icon {
+body.kod-premium .navbar .navbar-collapse .navbar-nav.navbar-right svg,
+body.kod-premium .navbar .navbar-collapse .navbar-nav.navbar-right .icon {
   stroke: #ffffff !important;
   fill: none;
 }
 
 /* Dropdown menus must stay readable */
-.navbar .dropdown-menu,
-.navbar .dropdown-menu a,
-.navbar .dropdown-menu .dropdown-item,
-.navbar .dropdown-menu .dropdown-item span {
+body.kod-premium .navbar .dropdown-menu,
+body.kod-premium .navbar .dropdown-menu a,
+body.kod-premium .navbar .dropdown-menu .dropdown-item,
+body.kod-premium .navbar .dropdown-menu .dropdown-item span {
   color: var(--text-color, #1f2937) !important;
 }
 
-.navbar .dropdown-menu .dropdown-item:hover {
-  background: var(--fg-hover-color, rgba(2, 132, 199, 0.1));
+body.kod-premium .navbar .dropdown-menu .dropdown-item:hover {
+  background: var(--fg-hover-color, rgba(2, 132, 199, 0.08));
 }
 
-.navbar .navbar-home img.app-logo {
+body.kod-premium .navbar .navbar-home img.app-logo {
   max-height: 28px !important;
   transition: transform 0.2s ease;
 }
 
-.navbar .navbar-home:hover img.app-logo {
+body.kod-premium .navbar .navbar-home:hover img.app-logo {
   transform: scale(1.05);
 }
-/* 2. Professional Sky-Blue to Emerald Hero Workspace Banner */
-.desk-page .widget.widget-custom,
-.desk-page .widget-quick-list:first-child,
-.kodessy-hero-banner {
-  background: linear-gradient(135deg, #0369a1 0%, #0284c7 35%, #0d9488 70%, #059669 100%) !important;
-  backdrop-filter: blur(20px) !important;
-  -webkit-backdrop-filter: blur(20px) !important;
-  border-radius: 18px !important;
-  padding: 24px !important;
-  box-shadow: 0 12px 35px -8px rgba(2, 132, 199, 0.35) !important;
-  color: #ffffff !important;
-  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+
+/* ======================================================================
+   2. LEFT SIDEBAR — Frappe v15 scoped selectors
+   Targets: .desk-sidebar .sidebar-item-container  and  .item-anchor
+   ====================================================================== */
+
+/* Base state — smooth transitions */
+body.kod-premium .desk-sidebar .sidebar-item-container .item-anchor {
+  border-radius: 8px !important;
+  transition: background 0.18s ease, color 0.18s ease !important;
+  padding-left: 8px;
 }
 
-/* 3. Pure Frosted Glass UI Components (Light & Dark Ready) */
-.desk-page .widget-number-card,
-.desk-page .widget-quick-list,
-.desk-page .widget-dashboard-chart,
-.desk-page .widget-custom,
-.kodessy-glass-card {
-  background: rgba(255, 255, 255, 0.78) !important;
-  backdrop-filter: blur(14px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(14px) saturate(180%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.85) !important;
+/* Hover */
+body.kod-premium .desk-sidebar .sidebar-item-container .item-anchor:hover {
+  background: linear-gradient(90deg, rgba(2, 132, 199, 0.10), rgba(16, 185, 129, 0.07)) !important;
+  color: #0284c7 !important;
+}
+
+body.kod-premium .desk-sidebar .sidebar-item-container .item-anchor:hover .sidebar-item-icon svg,
+body.kod-premium .desk-sidebar .sidebar-item-container .item-anchor:hover .sidebar-item-label {
+  color: #0284c7 !important;
+  stroke: #0284c7 !important;
+}
+
+/* Active / selected */
+body.kod-premium .desk-sidebar .sidebar-item-container.selected .item-anchor {
+  background: linear-gradient(90deg, rgba(2, 132, 199, 0.14), rgba(16, 185, 129, 0.09)) !important;
+  border-left: 3px solid #0ea5e9 !important;
+  color: #0284c7 !important;
+  font-weight: 600 !important;
+}
+
+/* Dark mode sidebar */
+[data-theme="dark"] body.kod-premium .desk-sidebar .sidebar-item-container .item-anchor:hover {
+  background: rgba(56, 189, 248, 0.12) !important;
+  color: #38bdf8 !important;
+}
+
+[data-theme="dark"] body.kod-premium .desk-sidebar .sidebar-item-container.selected .item-anchor {
+  background: rgba(56, 189, 248, 0.16) !important;
+  border-left-color: #38bdf8 !important;
+  color: #38bdf8 !important;
+}
+
+/* Sidebar icon stroke */
+body.kod-premium .desk-sidebar .sidebar-item-container .item-anchor svg {
+  transition: stroke 0.18s ease !important;
+}
+
+body.kod-premium .desk-sidebar .sidebar-item-container .item-anchor:hover svg {
+  stroke: #0284c7 !important;
+}
+
+/* ======================================================================
+   3. WORKSPACE CARDS — calm lift, no glow
+   Frappe v15 widget classes
+   ====================================================================== */
+
+/* Base card */
+body.kod-premium .widget:not(.shortcut-widget-box) {
   border-radius: 14px !important;
-  box-shadow: 0 4px 18px -2px rgba(15, 23, 42, 0.05) !important;
-  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  border: 1px solid var(--border-color, #e5e7eb) !important;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06) !important;
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.22s ease !important;
 }
 
-[data-theme="dark"] .desk-page .widget-number-card,
-[data-theme="dark"] .desk-page .widget-quick-list,
-[data-theme="dark"] .desk-page .widget-dashboard-chart {
-  background: rgba(30, 41, 59, 0.65) !important;
-  border: 1px solid rgba(71, 85, 105, 0.4) !important;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3) !important;
-}
-
-/* 4. Elegant Sky-Blue & Emerald Glowing Hover Effect on EVERY Component */
-.desk-page .widget-number-card:hover,
-.desk-page .widget-quick-list:hover,
-.desk-page .widget-dashboard-chart:hover,
-.kodessy-glass-card:hover {
-  transform: translateY(-3px) scale(1.008) !important;
-  box-shadow: 0 12px 30px -4px rgba(2, 132, 199, 0.28), 0 0 16px 2px rgba(16, 185, 129, 0.2) !important;
+/* Hover — lift + border accent, NO glow spread */
+body.kod-premium .widget:not(.shortcut-widget-box):hover {
+  transform: translateY(-3px) !important;
+  box-shadow: var(--kod-shadow-hover) !important;
   border-color: rgba(2, 132, 199, 0.45) !important;
 }
 
-[data-theme="dark"] .desk-page .widget-number-card:hover,
-[data-theme="dark"] .desk-page .widget-quick-list:hover {
-  box-shadow: 0 14px 35px -4px rgba(2, 132, 199, 0.4), 0 0 18px 2px rgba(16, 185, 129, 0.25) !important;
-  border-color: rgba(56, 189, 248, 0.5) !important;
+[data-theme="dark"] body.kod-premium .widget:not(.shortcut-widget-box) {
+  border-color: rgba(71, 85, 105, 0.45) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.30) !important;
 }
 
-/* Card Numbers */
-.desk-page .widget-number-card .number-card-number {
+[data-theme="dark"] body.kod-premium .widget:not(.shortcut-widget-box):hover {
+  border-color: rgba(56, 189, 248, 0.45) !important;
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.35) !important;
+}
+
+/* Number Card numbers */
+body.kod-premium .widget-number-card .number-card-number {
   font-size: 26px !important;
   font-weight: 800 !important;
-  color: #0f172a !important;
+  color: var(--text-color, #0f172a) !important;
   letter-spacing: -0.5px !important;
 }
 
-[data-theme="dark"] .desk-page .widget-number-card .number-card-number {
-  color: #f8fafc !important;
+/* ======================================================================
+   4. SHORTCUTS — slim pills, quiet hover (no shadow at all)
+   ====================================================================== */
+body.kod-premium .widget.shortcut-widget-box {
+  background: var(--card-bg, #ffffff) !important;
+  border: 1px solid rgba(2, 132, 199, 0.18) !important;
+  border-radius: 20px !important;
+  padding: 6px 14px !important;
+  box-shadow: none !important;
+  transform: none !important;
+  transition: background 0.18s ease, border-color 0.18s ease !important;
 }
 
-/* 5. Shortcuts — Frosted Glass Pills with Subtle Teal Hover */
-.desk-page .widget-shortcut,
-.desk-page .shortcut-widget-box {
-  background: rgba(255, 255, 255, 0.75) !important;
-  backdrop-filter: blur(12px) !important;
-  -webkit-backdrop-filter: blur(12px) !important;
-  border: 1px solid rgba(226, 232, 240, 0.8) !important;
-  border-radius: 24px !important;
-  padding: 8px 18px !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03) !important;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+body.kod-premium .widget.shortcut-widget-box:hover {
+  background: rgba(2, 132, 199, 0.06) !important;
+  border-color: rgba(2, 132, 199, 0.40) !important;
+  box-shadow: none !important;
+  transform: none !important;
 }
 
-[data-theme="dark"] .desk-page .widget-shortcut,
-[data-theme="dark"] .desk-page .shortcut-widget-box {
-  background: rgba(30, 41, 59, 0.6) !important;
-  border-color: rgba(71, 85, 105, 0.5) !important;
-  color: #e2e8f0 !important;
+[data-theme="dark"] body.kod-premium .widget.shortcut-widget-box {
+  background: #0f172a !important;
+  border-color: rgba(255, 255, 255, 0.07) !important;
 }
 
-.desk-page .widget-shortcut:hover,
-.desk-page .shortcut-widget-box:hover {
-  background: linear-gradient(135deg, rgba(240, 249, 255, 0.95), rgba(236, 253, 245, 0.95)) !important;
-  border-color: rgba(2, 132, 199, 0.4) !important;
-  box-shadow: 0 6px 18px -2px rgba(2, 132, 199, 0.25), 0 0 12px rgba(16, 185, 129, 0.15) !important;
-  transform: translateY(-2px) !important;
+[data-theme="dark"] body.kod-premium .widget.shortcut-widget-box:hover {
+  background: rgba(56, 189, 248, 0.08) !important;
+  border-color: rgba(56, 189, 248, 0.35) !important;
 }
 
-[data-theme="dark"] .desk-page .widget-shortcut:hover,
-[data-theme="dark"] .desk-page .shortcut-widget-box:hover {
-  background: linear-gradient(135deg, rgba(12, 74, 110, 0.5), rgba(6, 78, 59, 0.5)) !important;
-  border-color: rgba(56, 189, 248, 0.5) !important;
+body.kod-premium .shortcut-widget-box .widget-head { padding: 0 !important; }
+body.kod-premium .shortcut-widget-box .widget-title {
+  font-size: 13px !important;
+  font-weight: 500;
+  color: var(--text-muted, #4b5563);
 }
 
-/* 6. Professional Sky-Blue & Emerald Action Buttons */
-.btn-primary {
-  background: linear-gradient(135deg, #0284c7 0%, #0d9488 55%, #10b981 100%) !important;
-  border: none !important;
-  color: #ffffff !important;
-  box-shadow: 0 4px 14px -2px rgba(2, 132, 199, 0.35) !important;
-  border-radius: 8px !important;
-  font-weight: 600 !important;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+[data-theme="dark"] body.kod-premium .shortcut-widget-box .widget-title {
+  color: #cbd5e1;
 }
 
-.btn-primary:hover,
-.btn-primary:focus {
-  background: linear-gradient(135deg, #0369a1 0%, #0f766e 55%, #059669 100%) !important;
-  box-shadow: 0 8px 24px -2px rgba(2, 132, 199, 0.45), 0 0 16px rgba(16, 185, 129, 0.3) !important;
-  transform: translateY(-1.5px) !important;
-}
+/* Hide duplicate dividers */
+body.kod-premium .ce-block:has(.ce-divider) + .ce-block:has(.ce-divider) { display: none !important; }
 
-.btn-default,
-.btn-secondary {
-  background: rgba(255, 255, 255, 0.8) !important;
-  backdrop-filter: blur(8px) !important;
-  border: 1px solid #cbd5e1 !important;
-  border-radius: 8px !important;
-  color: #334155 !important;
-  transition: all 0.2s ease !important;
-}
-
-[data-theme="dark"] .btn-default,
-[data-theme="dark"] .btn-secondary {
-  background: rgba(30, 41, 59, 0.7) !important;
-  border-color: #475569 !important;
-  color: #e2e8f0 !important;
-}
-
-.btn-default:hover,
-.btn-secondary:hover {
-  background: #ffffff !important;
-  border-color: rgba(2, 132, 199, 0.5) !important;
-  color: #0284c7 !important;
-  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.18) !important;
-  transform: translateY(-1px) !important;
-}
-
-/* 7. Input Fields & Dropdowns */
-.form-control,
-.frappe-control input,
-.frappe-control select {
-  background: rgba(255, 255, 255, 0.85) !important;
-  border: 1px solid #cbd5e1 !important;
-  border-radius: 8px !important;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
-}
-
-[data-theme="dark"] .form-control,
-[data-theme="dark"] .frappe-control input {
-  background: rgba(15, 23, 42, 0.7) !important;
-  border-color: #475569 !important;
-  color: #f8fafc !important;
-}
-
-.form-control:focus,
-.frappe-control input:focus {
-  border-color: #0284c7 !important;
-  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.18) !important;
-}
-
-/* 8. Storage Badges */
-.badge-cold-chain {
-  background: rgba(2, 132, 199, 0.12) !important;
-  color: #0284c7 !important;
-  border: 1px solid rgba(2, 132, 199, 0.35) !important;
-  padding: 3px 10px;
-  border-radius: 16px;
-  font-weight: 600;
-  font-size: 11px;
-}
-
-.badge-ambient {
-  background: rgba(16, 185, 129, 0.12) !important;
-  color: #059669 !important;
-  border: 1px solid rgba(16, 185, 129, 0.35) !important;
-  padding: 3px 10px;
-  border-radius: 16px;
-  font-weight: 600;
-  font-size: 11px;
-}
-
-.badge-quarantine {
-  background: rgba(239, 68, 68, 0.12) !important;
-  color: #dc2626 !important;
-  border: 1px solid rgba(239, 68, 68, 0.35) !important;
-  padding: 3px 10px;
-  border-radius: 16px;
-  font-weight: 600;
-  font-size: 11px;
-}
-
-/* 9. Single big KPI card with minor separations */
-.kod-hero {
-  padding: 22px 24px !important;
-  margin-bottom: 18px;
-}
-.kod-hero .kod-head h3 { margin: 0; font-weight: 800; color: #0f172a; }
-.kod-hero .kod-sub { color: #64748b; font-size: 13px; margin-bottom: 16px; }
-[data-theme="dark"] .kod-hero .kod-head h3 { color: #f8fafc; }
-[data-theme="dark"] .kod-hero .kod-sub { color: #94a3b8; }
-.kod-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-  border-top: 1px solid rgba(148, 163, 184, 0.35);
-}
-.kod-cell {
-  padding: 16px 18px;
-  cursor: pointer;
-  border-right: 1px solid rgba(148, 163, 184, 0.3);
-  border-bottom: 1px solid rgba(148, 163, 184, 0.3);
-  transition: background 0.2s ease, transform 0.2s ease;
-}
-.kod-cell:hover {
-  background: linear-gradient(135deg, rgba(2, 132, 199, 0.08), rgba(16, 185, 129, 0.08));
-  transform: translateY(-2px);
-}
-.kod-cell .kod-l { font-size: 12px; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: 0.4px; }
-.kod-cell .kod-v { font-size: 26px; font-weight: 800; color: #0f172a; margin-top: 6px; }
-[data-theme="dark"] .kod-cell .kod-v { color: #f8fafc; }
-.kod-reports { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 14px; }
-.kod-reports span { font-size: 12px; font-weight: 700; color: #64748b; text-transform: uppercase; margin-right: 4px; }
-.kod-report {
-  cursor: pointer; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600;
-  border: 1px solid rgba(2, 132, 199, 0.35); color: #0284c7;
-  transition: all 0.2s ease;
-}
-.kod-report:hover {
-  background: linear-gradient(135deg, #0284c7, #10b981); color: #fff;
-  box-shadow: 0 6px 16px -2px rgba(2, 132, 199, 0.4);
-}
-
-/* 10. Reports & Masters - every link group is its own card with a glowing hover */
-.desk-page .widget.links-widget-box,
-.desk-page .links-widget-box {
+/* ======================================================================
+   5. LINKS WIDGET (Reports & Masters sections)
+   ====================================================================== */
+body.kod-premium .widget.links-widget-box {
   background: var(--card-bg, #ffffff) !important;
   border: 1px solid rgba(2, 132, 199, 0.14) !important;
   border-radius: 14px !important;
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06) !important;
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.05) !important;
   padding: 18px 18px 12px !important;
   margin-bottom: 16px !important;
-  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease !important;
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease !important;
 }
 
-[data-theme="dark"] .desk-page .links-widget-box {
-  background: rgba(30, 41, 59, 0.7) !important;
-  border-color: rgba(56, 189, 248, 0.2) !important;
+[data-theme="dark"] body.kod-premium .widget.links-widget-box {
+  background: rgba(30, 41, 59, 0.70) !important;
+  border-color: rgba(56, 189, 248, 0.18) !important;
 }
 
-.desk-page .widget.links-widget-box:hover,
-.desk-page .links-widget-box:hover {
-  transform: translateY(-4px) !important;
-  border-color: rgba(2, 132, 199, 0.55) !important;
-  box-shadow: var(--pharma-sky-glow) !important;
+body.kod-premium .widget.links-widget-box:hover {
+  transform: translateY(-3px) !important;
+  border-color: rgba(2, 132, 199, 0.50) !important;
+  box-shadow: var(--kod-shadow-hover) !important;
 }
 
-.desk-page .links-widget-box .widget-title {
+body.kod-premium .widget.links-widget-box .widget-title {
   font-size: 15px;
   font-weight: 600;
   color: var(--text-color, #1f2937);
 }
 
-.desk-page .links-widget-box .link-item {
+body.kod-premium .widget.links-widget-box .link-item {
   font-size: 13.5px;
   font-weight: 400;
   color: var(--text-muted, #4b5563);
@@ -357,177 +264,295 @@
   transition: color 0.15s ease, background 0.15s ease;
 }
 
-.desk-page .links-widget-box .link-item:hover {
+body.kod-premium .widget.links-widget-box .link-item:hover {
   color: #0284c7;
   background: rgba(2, 132, 199, 0.07);
   text-decoration: none;
 }
 
-/* Shortcuts - Radiant-style slim pills, quiet hover (no big glow) */
-.desk-page .widget.shortcut-widget-box {
-  background: var(--card-bg, #ffffff) !important;
-  border: 1px solid rgba(2, 132, 199, 0.18) !important;
-  border-radius: 20px !important;
-  padding: 6px 14px !important;
-  box-shadow: none !important;
-  transform: none !important;
-}
-
-.desk-page .widget.shortcut-widget-box:hover {
-  background: rgba(2, 132, 199, 0.06) !important;
-  border-color: rgba(2, 132, 199, 0.45) !important;
-  box-shadow: none !important;
-  transform: none !important;
-}
-
-.desk-page .shortcut-widget-box .widget-head { padding: 0 !important; }
-.desk-page .shortcut-widget-box .widget-title { font-size: 13px !important; font-weight: 500; }
-
-/* Hide empty divider stripes left over between sections */
-.desk-page .ce-block:has(.ce-divider) + .ce-block:has(.ce-divider) { display: none !important; }
-
 /* ======================================================================
-   11. LEFT SIDEBAR — Workspace buttons & nav items
+   6. BUTTONS
    ====================================================================== */
-.standard-sidebar-item,
-.sidebar-item,
-.list-sidebar-button,
-.sidebar-section .standard-sidebar-item a,
-.sidebar-section .sidebar-item a {
+body.kod-premium .btn-primary {
+  background: linear-gradient(135deg, #0284c7 0%, #0d9488 55%, #10b981 100%) !important;
+  border: none !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.25) !important;
   border-radius: 8px !important;
-  transition: background 0.18s ease, color 0.18s ease, padding-left 0.18s ease !important;
-}
-
-.standard-sidebar-item:hover,
-.sidebar-item:hover,
-.list-sidebar-button:hover {
-  background: linear-gradient(90deg, rgba(2,132,199,0.1), rgba(16,185,129,0.07)) !important;
-  color: #0284c7 !important;
-  padding-left: 10px !important;
-}
-
-.standard-sidebar-item.selected,
-.standard-sidebar-item.active,
-.sidebar-item.active {
-  background: linear-gradient(90deg, rgba(2,132,199,0.15), rgba(16,185,129,0.1)) !important;
-  border-left: 3px solid #0ea5e9 !important;
-  color: #0284c7 !important;
   font-weight: 600 !important;
+  transition: transform 0.15s ease, box-shadow 0.15s ease !important;
 }
 
-[data-theme="dark"] .standard-sidebar-item:hover,
-[data-theme="dark"] .sidebar-item:hover {
-  background: rgba(56,189,248,0.12) !important;
-  color: #38bdf8 !important;
+body.kod-premium .btn-primary:hover,
+body.kod-premium .btn-primary:focus {
+  background: linear-gradient(135deg, #0369a1 0%, #0f766e 55%, #059669 100%) !important;
+  box-shadow: 0 6px 16px rgba(2, 132, 199, 0.35) !important;
+  transform: translateY(-1px) !important;
 }
 
-/* Sidebar icons */
-.standard-sidebar-item svg,
-.sidebar-item svg {
-  transition: stroke 0.18s ease !important;
+body.kod-premium .btn-default,
+body.kod-premium .btn-secondary {
+  background: var(--card-bg, #ffffff) !important;
+  border: 1px solid var(--border-color, #cbd5e1) !important;
+  border-radius: 8px !important;
+  color: var(--text-color, #334155) !important;
+  transition: border-color 0.15s ease, color 0.15s ease !important;
 }
-.standard-sidebar-item:hover svg,
-.sidebar-item:hover svg {
-  stroke: #0284c7 !important;
+
+body.kod-premium .btn-default:hover,
+body.kod-premium .btn-secondary:hover {
+  border-color: rgba(2, 132, 199, 0.50) !important;
+  color: #0284c7 !important;
+  background: var(--card-bg, #ffffff) !important;
 }
 
 /* ======================================================================
-   12. DIALOG / MODAL BUTTONS — Yes, No, OK, Cancel, primary, danger
+   7. FORM INPUTS
    ====================================================================== */
+body.kod-premium .form-control,
+body.kod-premium .frappe-control input,
+body.kod-premium .frappe-control select {
+  background: var(--control-bg, rgba(255, 255, 255, 0.90)) !important;
+  border: 1px solid var(--border-color, #cbd5e1) !important;
+  border-radius: 8px !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
 
-/* Yes / Confirm / primary modal button */
+[data-theme="dark"] body.kod-premium .form-control,
+[data-theme="dark"] body.kod-premium .frappe-control input {
+  background: rgba(15, 23, 42, 0.70) !important;
+  border-color: #475569 !important;
+  color: #f8fafc !important;
+}
+
+body.kod-premium .form-control:focus,
+body.kod-premium .frappe-control input:focus {
+  border-color: #0284c7 !important;
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15) !important;
+}
+
+/* ======================================================================
+   8. STORAGE BADGES
+   ====================================================================== */
+.badge-cold-chain {
+  background: rgba(2, 132, 199, 0.10) !important;
+  color: #0284c7 !important;
+  border: 1px solid rgba(2, 132, 199, 0.30) !important;
+  padding: 3px 10px; border-radius: 16px;
+  font-weight: 600; font-size: 11px;
+}
+
+.badge-ambient {
+  background: rgba(16, 185, 129, 0.10) !important;
+  color: #059669 !important;
+  border: 1px solid rgba(16, 185, 129, 0.30) !important;
+  padding: 3px 10px; border-radius: 16px;
+  font-weight: 600; font-size: 11px;
+}
+
+.badge-quarantine {
+  background: rgba(239, 68, 68, 0.10) !important;
+  color: #dc2626 !important;
+  border: 1px solid rgba(239, 68, 68, 0.30) !important;
+  padding: 3px 10px; border-radius: 16px;
+  font-weight: 600; font-size: 11px;
+}
+
+/* ======================================================================
+   9. KOD HERO CARD (custom workspace KPI widget)
+   ====================================================================== */
+.kod-hero {
+  margin: 0 0 22px;
+  padding: 26px 28px;
+  border-radius: 20px;
+  color: #ffffff;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(120deg, #0c4a6e, #0284c7, #0d9488, #059669);
+  box-shadow: 0 12px 30px rgba(2, 132, 199, 0.25);
+  animation: kodIn 0.5s ease both;
+}
+
+.kod-hero::before {
+  content: "";
+  position: absolute;
+  left: -60px; bottom: -80px;
+  width: 240px; height: 240px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.kod-hero::after {
+  content: "";
+  position: absolute;
+  right: -50px; top: -60px;
+  width: 220px; height: 220px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.09);
+}
+
+.kod-hero .kod-head h3 { margin: 0; font-weight: 800; font-size: 22px; color: #fff; letter-spacing: -0.01em; }
+.kod-hero .kod-sub { opacity: .88; font-size: 13px; margin-top: 4px; margin-bottom: 20px; }
+
+[data-theme="dark"] .kod-hero {
+  background: linear-gradient(120deg, #082f49, #0369a1, #0f766e, #047857);
+}
+
+/* KPI grid inside hero — divider-separated cells */
+.kod-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  border-top: 1px solid rgba(255, 255, 255, 0.25);
+  position: relative;
+  z-index: 1;
+}
+
+.kod-cell {
+  padding: 16px 18px;
+  cursor: pointer;
+  border-right: 1px solid rgba(255, 255, 255, 0.18);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+  transition: background 0.2s ease;
+  border-radius: 0;
+}
+
+.kod-cell:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.kod-cell .kod-l {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.75);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.kod-cell .kod-v {
+  font-size: 24px;
+  font-weight: 800;
+  color: #ffffff;
+  margin-top: 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Report links below the grid */
+.kod-reports {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-top: 14px;
+  position: relative;
+  z-index: 1;
+}
+
+.kod-reports span {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.70);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  margin-right: 4px;
+}
+
+.kod-report {
+  cursor: pointer;
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.12);
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.kod-report:hover {
+  background: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.70);
+}
+
+@keyframes kodIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ======================================================================
+   10. DIALOG / MODAL BUTTONS
+   ====================================================================== */
 .modal-footer .btn-primary,
-.modal .btn-primary,
-.modal-body .btn-primary,
-.frappe-confirm-message ~ * .btn-primary,
-[data-button-primary] {
+.modal .btn-primary {
   background: linear-gradient(135deg, #0284c7 0%, #0d9488 60%, #10b981 100%) !important;
   border: none !important;
   color: #ffffff !important;
   border-radius: 8px !important;
   font-weight: 600 !important;
-  box-shadow: 0 4px 12px -2px rgba(2,132,199,0.35) !important;
-  transition: all 0.2s cubic-bezier(0.16,1,0.3,1) !important;
+  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.25) !important;
+  transition: transform 0.15s ease, box-shadow 0.15s ease !important;
 }
 
 .modal-footer .btn-primary:hover,
 .modal .btn-primary:hover {
   background: linear-gradient(135deg, #0369a1 0%, #0f766e 60%, #059669 100%) !important;
-  box-shadow: 0 8px 24px -2px rgba(2,132,199,0.5), 0 0 16px rgba(16,185,129,0.3) !important;
-  transform: translateY(-1.5px) scale(1.02) !important;
+  box-shadow: 0 6px 18px rgba(2, 132, 199, 0.38) !important;
+  transform: translateY(-1px) !important;
 }
 
-/* No / Cancel / secondary modal button */
 .modal-footer .btn-default,
 .modal-footer .btn-secondary,
 .modal .btn-default,
 .modal .btn-secondary {
-  background: rgba(255,255,255,0.9) !important;
-  border: 1.5px solid #cbd5e1 !important;
-  color: #334155 !important;
+  background: var(--card-bg, #ffffff) !important;
+  border: 1.5px solid var(--border-color, #cbd5e1) !important;
+  color: var(--text-color, #334155) !important;
   border-radius: 8px !important;
   font-weight: 500 !important;
-  transition: all 0.2s ease !important;
+  transition: border-color 0.15s ease, color 0.15s ease !important;
 }
 
 .modal-footer .btn-default:hover,
 .modal-footer .btn-secondary:hover,
 .modal .btn-default:hover,
 .modal .btn-secondary:hover {
-  background: #f8fafc !important;
-  border-color: rgba(2,132,199,0.5) !important;
+  border-color: rgba(2, 132, 199, 0.50) !important;
   color: #0284c7 !important;
-  box-shadow: 0 4px 12px rgba(2,132,199,0.15) !important;
-  transform: translateY(-1px) !important;
 }
 
-[data-theme="dark"] .modal-footer .btn-default,
-[data-theme="dark"] .modal .btn-default {
-  background: rgba(30,41,59,0.8) !important;
-  border-color: #475569 !important;
-  color: #e2e8f0 !important;
-}
-
-[data-theme="dark"] .modal-footer .btn-default:hover,
-[data-theme="dark"] .modal .btn-default:hover {
-  border-color: #38bdf8 !important;
-  color: #38bdf8 !important;
-}
-
-/* Danger / Delete button in dialogs */
 .modal-footer .btn-danger,
 .modal .btn-danger {
   background: linear-gradient(135deg, #dc2626, #b91c1c) !important;
   border: none !important;
   color: #fff !important;
   border-radius: 8px !important;
-  transition: all 0.2s ease !important;
+  transition: transform 0.15s ease, box-shadow 0.15s ease !important;
 }
 
 .modal-footer .btn-danger:hover,
 .modal .btn-danger:hover {
-  background: linear-gradient(135deg, #b91c1c, #991b1b) !important;
-  box-shadow: 0 6px 18px rgba(220,38,38,0.4) !important;
+  box-shadow: 0 6px 16px rgba(220, 38, 38, 0.35) !important;
   transform: translateY(-1px) !important;
 }
 
 /* ======================================================================
-   13. LIST VIEW ROW HOVER
+   11. LIST VIEW ROW HOVER
    ====================================================================== */
 .list-row-container .list-row,
 .result-list .list-row {
-  transition: background 0.15s ease, box-shadow 0.15s ease !important;
+  transition: background 0.15s ease !important;
   border-radius: 6px !important;
 }
 
 .list-row-container .list-row:hover,
 .result-list .list-row:hover {
-  background: linear-gradient(90deg, rgba(2,132,199,0.05), rgba(16,185,129,0.04)) !important;
+  background: rgba(2, 132, 199, 0.05) !important;
   box-shadow: inset 3px 0 0 #0ea5e9 !important;
 }
 
 /* ======================================================================
-   14. FORM TABS
+   12. FORM TABS
    ====================================================================== */
 .form-tabs .nav-link {
   border-radius: 8px 8px 0 0 !important;
@@ -537,7 +562,7 @@
 
 .form-tabs .nav-link:hover {
   color: #0284c7 !important;
-  background: rgba(2,132,199,0.06) !important;
+  background: rgba(2, 132, 199, 0.06) !important;
 }
 
 .form-tabs .nav-link.active {
