@@ -33,7 +33,7 @@ body.kod-premium .navbar::before {
   top: 0; bottom: 0; left: 0; right: 0;
   z-index: -1;
   pointer-events: none;
-  background: linear-gradient(90deg, #ffffff 0%, #ffffff 220px, #0ea5e9 52%, #0d9488 78%, #10b981 100%);
+  background: linear-gradient(90deg, #ffffff 0%, #ffffff 220px, #6f9fb5 52%, #628f93 78%, #6b9a88 100%);
   animation: kodNavIn 0.7s ease forwards;
 }
 
@@ -45,7 +45,7 @@ body.kod-premium .navbar::after { display: none !important; }
 }
 
 [data-theme="dark"] body.kod-premium .navbar::before {
-  background: linear-gradient(90deg, #09090b 0%, #09090b 220px, #075985 52%, #0f766e 78%, #047857 100%);
+  background: linear-gradient(90deg, #09090b 0%, #09090b 220px, #1e3a4a 52%, #1f4147 78%, #21463d 100%);
 }
 
 @keyframes kodNavIn {
@@ -317,10 +317,10 @@ body.kod-premium .widget.links-widget-box .link-item:hover {
    6. BUTTONS
    ====================================================================== */
 body.kod-premium .btn-primary {
-  background: linear-gradient(135deg, #0284c7 0%, #0d9488 55%, #10b981 100%) !important;
+  background: linear-gradient(135deg, #5a8fab 0%, #5a8f93 55%, #639a85 100%) !important;
   border: none !important;
   color: #ffffff !important;
-  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.25) !important;
+  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.12) !important;
   border-radius: 8px !important;
   font-weight: 600 !important;
   transition: transform 0.15s ease, box-shadow 0.15s ease !important;
@@ -328,8 +328,8 @@ body.kod-premium .btn-primary {
 
 body.kod-premium .btn-primary:hover,
 body.kod-premium .btn-primary:focus {
-  background: linear-gradient(135deg, #0369a1 0%, #0f766e 55%, #059669 100%) !important;
-  box-shadow: 0 6px 16px rgba(2, 132, 199, 0.35) !important;
+  background: linear-gradient(135deg, #4d7f9a 0%, #4e8084 55%, #568a76 100%) !important;
+  box-shadow: 0 6px 16px rgba(2, 132, 199, 0.18) !important;
   transform: translateY(-1px) !important;
 }
 
@@ -411,8 +411,8 @@ body.kod-premium .frappe-control input:focus {
   color: #ffffff;
   position: relative;
   overflow: hidden;
-  background: linear-gradient(120deg, #0c4a6e, #0284c7, #0d9488, #059669);
-  box-shadow: 0 12px 30px rgba(2, 132, 199, 0.25);
+  background: linear-gradient(120deg, #3f6176, #4f7f98, #4f8084, #577f70);
+  box-shadow: 0 12px 30px rgba(2, 132, 199, 0.12);
   animation: kodIn 0.5s ease both;
 }
 
@@ -438,7 +438,7 @@ body.kod-premium .frappe-control input:focus {
 .kod-hero .kod-sub { opacity: .88; font-size: 13px; margin-top: 4px; margin-bottom: 20px; }
 
 [data-theme="dark"] .kod-hero {
-  background: linear-gradient(120deg, #082f49, #0369a1, #0f766e, #047857);
+  background: linear-gradient(120deg, #1d3340, #2b4d60, #2c4f54, #30503f);
 }
 
 /* KPI grid inside hero — divider-separated cells */
@@ -528,7 +528,7 @@ body.kod-premium .frappe-control input:focus {
    ====================================================================== */
 .modal-footer .btn-primary,
 .modal .btn-primary {
-  background: linear-gradient(135deg, #0284c7 0%, #0d9488 60%, #10b981 100%) !important;
+  background: linear-gradient(135deg, #5a8fab 0%, #5a8f93 60%, #639a85 100%) !important;
   border: none !important;
   color: #ffffff !important;
   border-radius: 8px !important;
@@ -539,8 +539,8 @@ body.kod-premium .frappe-control input:focus {
 
 .modal-footer .btn-primary:hover,
 .modal .btn-primary:hover {
-  background: linear-gradient(135deg, #0369a1 0%, #0f766e 60%, #059669 100%) !important;
-  box-shadow: 0 6px 18px rgba(2, 132, 199, 0.38) !important;
+  background: linear-gradient(135deg, #4d7f9a 0%, #4e8084 60%, #568a76 100%) !important;
+  box-shadow: 0 6px 18px rgba(2, 132, 199, 0.20) !important;
   transform: translateY(-1px) !important;
 }
 
