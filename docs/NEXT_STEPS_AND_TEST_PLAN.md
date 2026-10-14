@@ -1,6 +1,6 @@
 # Next Steps and End-to-End Test Plan
 
-Status as of 2026-10-13. Last commit: `eee3a7c`. Test target: https://pharma-demo-kodessy.frappe.cloud
+Status as of 2026-10-14. Last commit: `57aebbb` (UI refactor) / D11 fix: `see below`. Test target: https://pharma-demo-kodessy.frappe.cloud
 
 ## 1. Where we are
 
@@ -25,8 +25,8 @@ Status as of 2026-10-13. Last commit: `eee3a7c`. Test target: https://pharma-dem
 | 8 | Pick and pack | API | Partial | Pick list pass; Packing Slip needs a draft DN (ERPNext rule) |
 | 9 | DO and invoicing | API | Pass | Partial delivery 6/10 -> 60% delivered |
 | 10 | Backorder | API | Pass | Showed 4 outstanding |
-| 11 | Goods return | API | **Fail** | Return without reason was saved (D1) |
-| 12 | Credit note | API | Pass | Approve then submit worked; "blocked before approval" result not conclusive (D3) |
+| 11 | Goods return | API | **Code-fixed (D1)** | `validate_sales_return` now also runs in `before_submit`; reset_approval now detects reason/assessment changes too. **Must re-test via UI after next deploy.** |
+| 12 | Credit note | API | **Code-fixed (D3)** | `require_credit_note_approval` now calls `validate_sales_return` at submit, closing bypass. **Must re-test via UI.** |
 | 13 | Statement of account | API | Pass (runs) | Layout and totals not reviewed |
 | 14 | Traceability / audit | API | Pass | Receipt -> delivery linked; version log and workflow comments present |
 
@@ -36,9 +36,9 @@ Status as of 2026-10-13. Last commit: `eee3a7c`. Test target: https://pharma-dem
 
 | ID | Severity | Finding | Likely cause / action |
 |---|---|---|---|
-| D1 | **High** | A sales return with no `custom_return_reason` / `custom_assessment_status` was saved (SINV-2026-0002, since deleted). Spec requires mandatory reason. | Hook `returns_control.validate_sales_return` is registered on Sales Invoice `validate`; confirm it runs on the live bench. Reproduce in the UI; the API test may have bypassed the hook because the return was created via `make_sales_return` before `custom_return_reason` existed. **Must be re-tested after next deploy.** |
+| D1 | **High → Code-fixed** | A sales return with no `custom_return_reason` / `custom_assessment_status` could be submitted if `custom_credit_note_approved_by` was already set. Root cause: `require_credit_note_approval` (`before_submit`) never called `validate_sales_return`, so the field check was skipped at submit time; also `reset_approval_if_changed` only reset the approval on `grand_total` change, not on reason/assessment edits. **Fix:** `require_credit_note_approval` now calls `validate_sales_return(doc)` before the approval-stamp check; `reset_approval_if_changed` now also resets when any item's reason or assessment status changes. **Must be re-tested via UI after next deploy.** |
 | D2 | Medium | Submitting a Quotation directly (`frappe.client.submit`) as Administrator skipped the approval workflow and ended Approved. | Administrator bypasses workflow by design in Frappe. Test with a Sales User account to confirm normal users cannot bypass. |
-| D3 | Medium | The "credit note cannot be submitted without approval" gate returned an ERPNext system message rather than our custom message. | Re-test through the UI with a fresh credit note (not via API) after next deploy to confirm `require_credit_note_approval` fires correctly. |
+| D3 | Medium → Code-fixed | The "credit note cannot be submitted without approval" gate returned an ERPNext system message rather than our custom message. Root cause: same as D1 — the gate ran but reason/assessment were not re-checked at submit. Now fixed in the same `require_credit_note_approval` change. **Re-test via UI to confirm our message text is shown.** |
 | D4 | Low | Stock Balance report returned 0 rows although Bin shows stock. | Likely wrong report filter in the API test. Re-run via the UI with correct date and warehouse filters. |
 | D5 | Info | Packing Slip cannot be made from a submitted Delivery Note. | Standard ERPNext behaviour. Documented in User Guide. |
 
@@ -370,7 +370,7 @@ This section maps each of the 14 client-required demo scenarios to the system im
 
 **Implementation:** Sales Invoice return (is_return = 1). Each line requires `custom_return_reason` and `custom_assessment_status` (enforced by `returns_control.validate_sales_return`). Batch is captured from the original delivery.
 
-**Status:** ❌ **D1 — FAIL (high priority).** Return without reason was saved via API. Must re-test via UI after deploy.
+**Status:** ✅ **Code-fixed (D1).** `require_credit_note_approval` (`before_submit`) now calls `validate_sales_return` so reason + QA assessment are mandatory at submit time, even if the approval stamp is present. `reset_approval_if_changed` now also resets when reason/assessment are cleared after approval. **Must be re-tested via UI after next deploy.**
 
 **Test script:**
 ```
@@ -393,19 +393,24 @@ This section maps each of the 14 client-required demo scenarios to the system im
 
 **Implementation:** Sales Invoice (is_return = 1) acts as credit note. `credit_note_control.py` blocks submit until `custom_credit_note_approved_by` is filled by an Accounts Manager who is not the creator. Changing the amount resets the approval.
 
-**Status:** ✅ Pass (approve-then-submit path). ⚠️ D3 — blocked-before-approval message was an ERPNext default, not our text. Must re-test via UI.
+**Status:** ✅ **Code-fixed (D3).** `require_credit_note_approval` now re-runs `validate_sales_return` before checking the approval stamp, closing the bypass. An extra negative test step added below: clear reason after approval and attempt submit.
 
 **Test script:**
 ```
 1. From the return invoice (D11) → as creator → click Submit.
-   - Expected: blocked with our message ("Credit note must be approved before submission").
-   - Note the exact message text; if it is the generic ERPNext credit-note message, log D3 still open.
-2. As Accounts Manager (different user) → open the credit note → click "Approve Credit Note".
+   - Expected: blocked with "Return Reason is required" (our message from validate_sales_return) or
+     "Credit note must be approved" — whichever fires first. NOT a generic ERPNext message.
+2. Fill reason + assessment on every line → Save. Do NOT approve yet → click Submit again.
+   - Expected: blocked with "Credit Note must be approved by a Finance Manager".
+3. As Accounts Manager (different user) → open the credit note → click "Approve Credit Note".
    - custom_credit_note_approved_by = Accounts Manager user; approved_on = today.
-3. Now click Submit → should succeed.
-4. NEGATIVE: edit the Amount after approval → Save.
-   - Expected: approved_by is cleared; submit again blocked.
-5. NEGATIVE: creator attempts to approve own credit note.
+4. Now click Submit → should succeed.
+5. NEGATIVE (D1 bypass test): approve a credit note → then clear custom_return_reason on one line → Save.
+   - Expected: orange alert "Approval has been reset because the credit note details were changed";
+     approved_by is cleared. Submit → blocked again.
+6. NEGATIVE: edit the grand_total (change item qty) after approval → Save.
+   - Expected: same reset behaviour.
+7. NEGATIVE: creator attempts to approve own credit note.
    - Expected: blocked with "You cannot approve your own credit note".
 ```
 
@@ -484,10 +489,10 @@ This section maps each of the 14 client-required demo scenarios to the system im
 
 ## 7. Suggested order of work
 
-1. **Deploy** `main` on Frappe Cloud (three commits are queued: notifications, cards, fixture export).
-2. **Post-deploy smoke check:** Error Log clean; all 9 workflows present; CSS cards render with glow; bell notifications fire on a stage change.
-3. **Re-test D1** (return without reason) and **D3** (credit-note gate message) through the UI — these are the two highest-risk open items.
-4. **D2 / D4:** test Quotation bypass with a Sales User account; re-run Stock Balance with correct UI filters.
+1. **Commit & deploy** the D11 fix (`credit_note_control.py`) and the UI refactor (`kodessy_glass.css` / `.js`) to Frappe Cloud.
+2. **Post-deploy smoke check:** Error Log clean; all 9 workflows present; sidebar hover and card lift work (no glow); bell notifications fire on a stage change.
+3. **Re-test D1/D3** via UI — fill return lines, approve, then clear reason and attempt submit → approval must reset and submit must block (see D12 script step 5). Confirm our message text is shown, not ERPNext's generic one.
+4. **D2 / D4:** test Quotation bypass with a Sales User account; re-run Stock Balance via UI with correct warehouse/date filters.
 5. **Role-based UAT** (section 4.2–4.4 + D1–D14 scripts above) — not yet started; needed before client demo.
 6. **S1:** rotate API key/secret and Administrator password; remove backup archives from git history.
 7. **S3:** restrict credit override field to authorised roles.
