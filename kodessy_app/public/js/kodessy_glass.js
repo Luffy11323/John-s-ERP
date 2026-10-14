@@ -127,8 +127,16 @@
 
   // ── Boot ─────────────────────────────────────────────────────────────────────
   $(document).ready(() => {
-    // Apply the scoping class that activates all CSS rules
-    $('body').addClass('kod-premium');
+    // Apply the scoping class that activates all CSS rules.
+    // Frappe rewrites body.className on route changes, so keep it applied.
+    const ensureClass = () => {
+      if (!document.body.classList.contains('kod-premium')) {
+        document.body.classList.add('kod-premium');
+      }
+    };
+    ensureClass();
+    new MutationObserver(ensureClass)
+      .observe(document.body, { attributes: true, attributeFilter: ['class'] });
 
     // Wait for frappe.router to be available
     let tries = 0;
