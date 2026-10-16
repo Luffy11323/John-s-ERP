@@ -157,14 +157,22 @@ def _notify(doc, event_label, roles, detail=None):
 		users = _users_with_role(role)
 		for user in users:
 			_send(user, role)
+		
+		# Show the actual usernames formatted nicely: e.g. Director (john, mary)
+		users_display = ", ".join(users) if users else "no users"
 		doc.add_comment(
 			"Info",
-			"Notification sent to <b>{0}</b> ({1} user{2})<br>{3}".format(
-				role, len(users), "" if len(users) == 1 else "s", content
+			"Notification sent to <b>{0}</b> ({1})<br>{2}".format(
+				role, users_display, content
 			),
 		)
 
-	if doc.owner:
+	# Only send and add Owner comment if owner wasn't already covered in the role users
+	all_role_users = set()
+	for r in dict.fromkeys(roles):
+		all_role_users.update(_users_with_role(r))
+
+	if doc.owner and doc.owner not in all_role_users:
 		_send(doc.owner, _("Owner"))
 		doc.add_comment(
 			"Info",
