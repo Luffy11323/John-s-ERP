@@ -397,26 +397,132 @@
 /* ======================================================================
    7. FORM INPUTS
    ====================================================================== */
-.form-control,
-.frappe-control input,
-.frappe-control select {
+.form-control:not([type="checkbox"]):not([type="radio"]),
+.frappe-control input:not([type="checkbox"]):not([type="radio"]),
+.frappe-control select,
+.frappe-control textarea {
   background: var(--control-bg, rgba(255, 255, 255, 0.90)) !important;
   border: 1px solid var(--border-color, #cbd5e1) !important;
   border-radius: 8px !important;
   transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
 }
 
-[data-theme="dark"] .form-control,
-[data-theme="dark"] .frappe-control input {
+[data-theme="dark"] .form-control:not([type="checkbox"]):not([type="radio"]),
+[data-theme="dark"] .frappe-control input:not([type="checkbox"]):not([type="radio"]),
+[data-theme="dark"] .frappe-control select,
+[data-theme="dark"] .frappe-control textarea {
   background: rgba(15, 23, 42, 0.70) !important;
   border-color: #475569 !important;
   color: #f8fafc !important;
 }
 
-.form-control:focus,
-.frappe-control input:focus {
+.form-control:not([type="checkbox"]):not([type="radio"]):focus,
+.frappe-control input:not([type="checkbox"]):not([type="radio"]):focus,
+.frappe-control select:focus,
+.frappe-control textarea:focus {
   border-color: #0284c7 !important;
   box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15) !important;
+}
+
+/* ======================================================================
+   7b. CHECKBOXES & RADIOS — Crisp, Visible, High-Contrast Ticks
+   ====================================================================== */
+input[type="checkbox"],
+.frappe-control input[type="checkbox"],
+.form-check-input[type="checkbox"],
+.checkbox input[type="checkbox"],
+.grid-row-check,
+.list-row-checkbox {
+  width: 16px !important;
+  height: 16px !important;
+  border-radius: 4px !important;
+  border: 1.5px solid #94a3b8 !important;
+  background-color: var(--card-bg, #ffffff) !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  cursor: pointer !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  display: inline-block !important;
+  vertical-align: middle !important;
+  box-sizing: border-box !important;
+  transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease !important;
+}
+
+[data-theme="dark"] input[type="checkbox"],
+[data-theme="dark"] .frappe-control input[type="checkbox"],
+[data-theme="dark"] .form-check-input[type="checkbox"],
+[data-theme="dark"] .checkbox input[type="checkbox"],
+[data-theme="dark"] .grid-row-check,
+[data-theme="dark"] .list-row-checkbox {
+  border-color: #64748b !important;
+  background-color: #1e293b !important;
+}
+
+/* Checked State — Vibrant Sky Blue / Primary with Bright White Checkmark */
+input[type="checkbox"]:checked,
+.frappe-control input[type="checkbox"]:checked,
+.form-check-input[type="checkbox"]:checked,
+.checkbox input[type="checkbox"]:checked,
+.grid-row-check:checked,
+.list-row-checkbox:checked {
+  background-color: #0284c7 !important;
+  border-color: #0284c7 !important;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2.5' d='M3.5 8.5l3 3 6-6'/%3e%3c/svg%3e") !important;
+  background-size: 75% 75% !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+}
+
+[data-theme="dark"] input[type="checkbox"]:checked,
+[data-theme="dark"] .frappe-control input[type="checkbox"]:checked,
+[data-theme="dark"] .form-check-input[type="checkbox"]:checked,
+[data-theme="dark"] .checkbox input[type="checkbox"]:checked,
+[data-theme="dark"] .grid-row-check:checked,
+[data-theme="dark"] .list-row-checkbox:checked {
+  background-color: #0284c7 !important;
+  border-color: #38bdf8 !important;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2.5' d='M3.5 8.5l3 3 6-6'/%3e%3c/svg%3e") !important;
+}
+
+/* Hover state */
+input[type="checkbox"]:hover:not(:checked) {
+  border-color: #0284c7 !important;
+  box-shadow: 0 0 0 2px rgba(2, 132, 199, 0.15) !important;
+}
+
+/* Radio Buttons */
+input[type="radio"],
+.frappe-control input[type="radio"] {
+  width: 16px !important;
+  height: 16px !important;
+  border-radius: 50% !important;
+  border: 1.5px solid #94a3b8 !important;
+  background-color: var(--card-bg, #ffffff) !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  cursor: pointer !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  display: inline-block !important;
+  vertical-align: middle !important;
+  box-sizing: border-box !important;
+}
+
+[data-theme="dark"] input[type="radio"],
+[data-theme="dark"] .frappe-control input[type="radio"] {
+  border-color: #64748b !important;
+  background-color: #1e293b !important;
+}
+
+input[type="radio"]:checked,
+.frappe-control input[type="radio"]:checked {
+  background-color: #0284c7 !important;
+  border-color: #0284c7 !important;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3ccircle cx='8' cy='8' r='3.5' fill='%23ffffff'/%3e%3c/svg%3e") !important;
+  background-size: 100% !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
 }
 
 /* ======================================================================
