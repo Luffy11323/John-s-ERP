@@ -41,6 +41,7 @@ def after_migrate():
 		make_return_fields_mandatory,
 		ensure_quality_templates,
 		ensure_stock_reconciliation_workflow,
+		ensure_workflow_state_colors,
 	]
 	for step in steps:
 		try:
@@ -72,6 +73,39 @@ def ensure_roles():
 	for role in ("Quality Unit",):
 		if not frappe.db.exists("Role", role):
 			frappe.get_doc({"doctype": "Role", "role_name": role, "desk_access": 1}).insert(ignore_permissions=True)
+
+
+def ensure_workflow_state_colors():
+	"""Assign standard Frappe styles (Green, Red, Blue, Grey) to Workflow States."""
+	color_map = {
+		# Approved / Completed -> Green (Success)
+		"Approved": "Success",
+		"Approved and Paid": "Success",
+		"Finalized": "Success",
+		"Active": "Success",
+		# Cancelled / Rejected -> Red (Danger)
+		"Cancelled": "Danger",
+		"Rejected": "Danger",
+		# Pending / In Review -> Blue (Primary/Info)
+		"Pending": "Primary",
+		"Pending Approval": "Primary",
+		"Pending Purchasing Manager Approval": "Primary",
+		"Pending PM Approval": "Primary",
+		"Pending Finance Approval": "Primary",
+		"Pending Review": "Primary",
+		"Pending Final Approval": "Primary",
+		"Pending Warehouse Manager Approval": "Primary",
+		"In Review": "Primary",
+		"Changes Required": "Warning",
+		"On Hold": "Warning",
+		# Draft / Initial -> Grey (Inverse / Info)
+		"Draft": "Inverse",
+		"Initiated": "Inverse",
+	}
+
+	for state_name, style in color_map.items():
+		if frappe.db.exists("Workflow State", state_name):
+			frappe.db.set_value("Workflow State", state_name, "style", style)
 
 
 # --------------------------------------------------------------------------

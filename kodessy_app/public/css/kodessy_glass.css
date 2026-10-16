@@ -658,3 +658,93 @@
   border-bottom: 2.5px solid #0ea5e9 !important;
   font-weight: 700 !important;
 }
+
+/* ======================================================================
+   13. WORKFLOW STATUS BADGE COLORS (Vibrant & High-Contrast)
+   ====================================================================== */
+/* Approved / Submitted (DocStatus 1) -> Emerald Green */
+.indicator-pill.green,
+.indicator-pill[data-state*="Approved"],
+.indicator-pill[data-state*="Submitted"],
+.indicator-pill:has([title*="Approved"]),
+span.indicator[data-state*="Approved"],
+span.indicator.green {
+  background: rgba(16, 185, 129, 0.15) !important;
+  color: #059669 !important;
+  border: 1px solid rgba(16, 185, 129, 0.35) !important;
+  font-weight: 700 !important;
+}
+[data-theme="dark"] .indicator-pill.green,
+[data-theme="dark"] .indicator-pill[data-state*="Approved"],
+[data-theme="dark"] .indicator-pill:has([title*="Approved"]),
+[data-theme="dark"] span.indicator[data-state*="Approved"] {
+  background: rgba(16, 185, 129, 0.22) !important;
+  color: #34d399 !important;
+  border-color: rgba(52, 211, 153, 0.40) !important;
+}
+
+/* Rejected / Cancelled (DocStatus 2) -> Vibrant Red */
+.indicator-pill.red,
+.indicator-pill[data-state*="Rejected"],
+.indicator-pill[data-state*="Cancelled"],
+.indicator-pill:has([title*="Rejected"]),
+.indicator-pill:has([title*="Cancelled"]),
+span.indicator[data-state*="Rejected"],
+span.indicator[data-state*="Cancelled"],
+span.indicator.red {
+  background: rgba(239, 68, 68, 0.15) !important;
+  color: #dc2626 !important;
+  border: 1px solid rgba(239, 68, 68, 0.35) !important;
+  font-weight: 700 !important;
+}
+[data-theme="dark"] .indicator-pill.red,
+[data-theme="dark"] .indicator-pill[data-state*="Rejected"],
+[data-theme="dark"] .indicator-pill[data-state*="Cancelled"],
+[data-theme="dark"] span.indicator[data-state*="Rejected"],
+[data-theme="dark"] span.indicator[data-state*="Cancelled"] {
+  background: rgba(239, 68, 68, 0.22) !important;
+  color: #f87171 !important;
+  border-color: rgba(248, 113, 113, 0.40) !important;
+}
+
+/* Pending Approval / In Review -> Sky Blue */
+.indicator-pill.blue,
+.indicator-pill[data-state*="Pending"],
+.indicator-pill[data-state*="Review"],
+.indicator-pill:has([title*="Pending"]),
+span.indicator[data-state*="Pending"],
+span.indicator.blue {
+  background: rgba(2, 132, 199, 0.15) !important;
+  color: #0284c7 !important;
+  border: 1px solid rgba(2, 132, 199, 0.35) !important;
+  font-weight: 700 !important;
+}
+[data-theme="dark"] .indicator-pill.blue,
+[data-theme="dark"] .indicator-pill[data-state*="Pending"],
+[data-theme="dark"] span.indicator[data-state*="Pending"] {
+  background: rgba(2, 132, 199, 0.22) !important;
+  color: #38bdf8 !important;
+  border-color: rgba(56, 189, 248, 0.40) !important;
+}
+
+/* Draft -> Neutral Slate / Grey */
+.indicator-pill.gray,
+.indicator-pill.grey,
+.indicator-pill[data-state*="Draft"],
+.indicator-pill:has([title*="Draft"]),
+span.indicator[data-state*="Draft"],
+span.indicator.gray,
+span.indicator.grey {
+  background: rgba(100, 116, 139, 0.12) !important;
+  color: #64748b !important;
+  border: 1px solid rgba(100, 116, 139, 0.25) !important;
+  font-weight: 600 !important;
+}
+[data-theme="dark"] .indicator-pill.gray,
+[data-theme="dark"] .indicator-pill.grey,
+[data-theme="dark"] .indicator-pill[data-state*="Draft"],
+[data-theme="dark"] span.indicator[data-state*="Draft"] {
+  background: rgba(148, 163, 184, 0.16) !important;
+  color: #94a3b8 !important;
+  border-color: rgba(148, 163, 184, 0.25) !important;
+}
