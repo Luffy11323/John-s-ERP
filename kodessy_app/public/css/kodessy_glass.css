@@ -833,24 +833,29 @@ span.indicator.blue {
   border-color: rgba(56, 189, 248, 0.40) !important;
 }
 
-/* Draft -> Neutral Slate / Grey */
-.indicator-pill.gray,
-.indicator-pill.grey,
+/* Draft / Info / Initiated -> Info (Sky Blue / Cyan) */
+.indicator-pill.cyan,
+.indicator-pill.light-blue,
 .indicator-pill[data-state*="Draft"],
+.indicator-pill[data-state*="Initiated"],
 .indicator-pill:has([title*="Draft"]),
+.indicator-pill:has([title*="Initiated"]),
 span.indicator[data-state*="Draft"],
-span.indicator.gray,
-span.indicator.grey {
-  background: rgba(100, 116, 139, 0.12) !important;
-  color: #64748b !important;
-  border: 1px solid rgba(100, 116, 139, 0.25) !important;
-  font-weight: 600 !important;
+span.indicator[data-state*="Initiated"],
+span.indicator.cyan,
+span.indicator.light-blue {
+  background: rgba(2, 132, 199, 0.15) !important;
+  color: #0284c7 !important;
+  border: 1px solid rgba(2, 132, 199, 0.35) !important;
+  font-weight: 700 !important;
 }
-[data-theme="dark"] .indicator-pill.gray,
-[data-theme="dark"] .indicator-pill.grey,
+[data-theme="dark"] .indicator-pill.cyan,
+[data-theme="dark"] .indicator-pill.light-blue,
 [data-theme="dark"] .indicator-pill[data-state*="Draft"],
-[data-theme="dark"] span.indicator[data-state*="Draft"] {
-  background: rgba(148, 163, 184, 0.16) !important;
-  color: #94a3b8 !important;
-  border-color: rgba(148, 163, 184, 0.25) !important;
+[data-theme="dark"] .indicator-pill[data-state*="Initiated"],
+[data-theme="dark"] span.indicator[data-state*="Draft"],
+[data-theme="dark"] span.indicator[data-state*="Initiated"] {
+  background: rgba(2, 132, 199, 0.22) !important;
+  color: #38bdf8 !important;
+  border-color: rgba(56, 189, 248, 0.40) !important;
 }

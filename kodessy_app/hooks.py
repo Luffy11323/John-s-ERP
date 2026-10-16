@@ -110,6 +110,6 @@ doctype_js = {
 # Naming series, FEFO, roles, demo master data, custom fields, QC templates, workflows
 after_migrate = "kodessy_app.setup_pharma.after_migrate"
 
-# Glassmorphism & UI Optimization Assets (cache-busting v=20261016)
-app_include_css = "/assets/kodessy_app/css/kodessy_glass.css?v=20261016_v4"
-app_include_js = "/assets/kodessy_app/js/kodessy_glass.js?v=20261016_v4"
+# Glassmorphism & UI Optimization Assets (cache-busting v=20261017)
+app_include_css = "/assets/kodessy_app/css/kodessy_glass.css?v=20261017_v1"
+app_include_js = "/assets/kodessy_app/js/kodessy_glass.js?v=20261017_v1"

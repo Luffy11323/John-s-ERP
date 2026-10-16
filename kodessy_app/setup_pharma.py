@@ -98,9 +98,9 @@ def ensure_workflow_state_colors():
 		"In Review": "Primary",
 		"Changes Required": "Warning",
 		"On Hold": "Warning",
-		# Draft / Initial -> Grey (Inverse / Info)
-		"Draft": "Inverse",
-		"Initiated": "Inverse",
+		# Draft / Initial -> Info (Sky Blue)
+		"Draft": "Info",
+		"Initiated": "Info",
 	}
 
 	for state_name, style in color_map.items():
