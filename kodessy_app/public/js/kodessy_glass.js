@@ -8,9 +8,17 @@
  *   - Number card accent via data-attr guard
  */
 (function () {
-  'use strict';
-
-  // ── helpers ─────────────────────────────────────────────────────────────────
+  // ── Auto Cache-Buster & Immediate Style Enforcement ────────────────────────
+  (function ensureFreshStyles() {
+    const cssId = 'kod-live-active-css';
+    if (!document.getElementById(cssId)) {
+      const link = document.createElement('link');
+      link.id = cssId;
+      link.rel = 'stylesheet';
+      link.href = '/assets/kodessy_app/css/kodessy_glass.css?_v=' + Date.now();
+      document.head.appendChild(link);
+    }
+  })();
   const esc  = (s) => frappe.utils.escape_html(String(s == null ? '' : s));
   const API  = 'kodessy_app.api.';
 
