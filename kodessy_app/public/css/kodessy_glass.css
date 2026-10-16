@@ -181,44 +181,62 @@ body.kod-premium .widget-number-card .number-card-number {
 }
 
 /* Link cards (Reports & Masters, Stock, Buying ... link groups) */
-body.kod-premium .links-widget-box,
-body.kod-premium .widget.links-widget-box,
-body.kod-premium .link-widget-box {
+.links-widget-box,
+.widget.links-widget-box,
+.link-widget-box,
+.links-section,
+[data-widget-type="links"],
+.ce-block:has(a[href*="/app/"]) {
   background: var(--card-bg, #ffffff) !important;
   border: 1px solid var(--border-color, #e5e7eb) !important;
   border-radius: 14px !important;
   padding: 14px 16px !important;
   box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06) !important;
+  margin-bottom: 16px !important;
   transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
               box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1),
               border-color 0.22s ease !important;
 }
 
-body.kod-premium .links-widget-box:hover,
-body.kod-premium .widget.links-widget-box:hover,
-body.kod-premium .link-widget-box:hover {
+.links-widget-box:hover,
+.widget.links-widget-box:hover,
+.link-widget-box:hover,
+.links-section:hover,
+[data-widget-type="links"]:hover,
+.ce-block:has(a[href*="/app/"]):hover {
   transform: translateY(-3px) !important;
   box-shadow: var(--kod-shadow-hover) !important;
   border-color: rgba(2, 132, 199, 0.45) !important;
 }
 
 /* Individual links inside a card */
-body.kod-premium .links-widget-box .link-item,
-body.kod-premium .link-widget-box .link-item {
+.links-widget-box .link-item,
+.link-widget-box .link-item,
+.links-section .link-item,
+.layout-main-section a[href*="/app/"]:not(.btn):not(.navbar-brand):not(.nav-link) {
+  display: inline-flex !important;
+  align-items: center !important;
   border-radius: 6px !important;
-  padding: 3px 6px !important;
+  padding: 4px 8px !important;
+  margin: 2px 0 !important;
+  color: #334155 !important;
+  text-decoration: none !important;
   transition: background 0.15s ease, color 0.15s ease, padding-left 0.15s ease !important;
 }
 
-body.kod-premium .links-widget-box .link-item:hover,
-body.kod-premium .link-widget-box .link-item:hover {
+.links-widget-box .link-item:hover,
+.link-widget-box .link-item:hover,
+.links-section .link-item:hover,
+.layout-main-section a[href*="/app/"]:not(.btn):not(.navbar-brand):not(.nav-link):hover {
   background: rgba(2, 132, 199, 0.08) !important;
   color: #0284c7 !important;
-  padding-left: 10px !important;
+  padding-left: 12px !important;
 }
 
-[data-theme="dark"] body.kod-premium .links-widget-box,
-[data-theme="dark"] body.kod-premium .link-widget-box {
+[data-theme="dark"] .links-widget-box,
+[data-theme="dark"] .link-widget-box,
+[data-theme="dark"] .links-section,
+[data-theme="dark"] .ce-block:has(a[href*="/app/"]) {
   border-color: rgba(71, 85, 105, 0.45) !important;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.30) !important;
 }

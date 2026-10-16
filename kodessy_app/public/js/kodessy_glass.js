@@ -125,31 +125,48 @@
     }, 200);
   }
 
-  // ── Boot ─────────────────────────────────────────────────────────────────────
-  $(document).ready(() => {
-    // Apply the scoping class that activates all CSS rules.
-    // Frappe rewrites body.className on route changes, so keep it applied.
+  // ── Robust Boot & Initialization ───────────────────────────────────────────
+  function init() {
     const ensureClass = () => {
-      if (!document.body.classList.contains('kod-premium')) {
+      if (document.body && !document.body.classList.contains('kod-premium')) {
         document.body.classList.add('kod-premium');
       }
     };
     ensureClass();
-    new MutationObserver(ensureClass)
-      .observe(document.body, { attributes: true, attributeFilter: ['class'] });
 
-    // Wait for frappe.router to be available
+    if (window.MutationObserver && document.body) {
+      new MutationObserver(ensureClass).observe(document.body, {
+        attributes: true,
+        attributeFilter: ['class']
+      });
+    }
+
+    load(true);
+    accentNumberCards();
+
+    $(document).on('page-change', () => {
+      setTimeout(() => { load(false); accentNumberCards(); }, 150);
+    });
+
     let tries = 0;
     const t = setInterval(() => {
-      if (window.frappe && frappe.router && frappe.router.on) {
+      if (window.frappe && frappe.router) {
         clearInterval(t);
-        frappe.router.on('change', () => {
-          setTimeout(() => { load(false); accentNumberCards(); }, 150);
-        });
-        setTimeout(() => { load(false); accentNumberCards(); }, 600);
+        if (frappe.router.on) {
+          frappe.router.on('change', () => {
+            setTimeout(() => { load(false); accentNumberCards(); }, 150);
+          });
+        }
+        setTimeout(() => { load(false); accentNumberCards(); }, 500);
       } else if (++tries > 100) {
         clearInterval(t);
       }
     }, 200);
-  });
+  }
+
+  if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    init();
+  } else {
+    document.addEventListener('DOMContentLoaded', init);
+  }
 })();
