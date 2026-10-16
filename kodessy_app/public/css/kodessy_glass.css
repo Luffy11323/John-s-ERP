@@ -33,7 +33,7 @@
   top: 0; bottom: 0; left: 0; right: 0;
   z-index: -1;
   pointer-events: none;
-  background: linear-gradient(90deg, #ffffff 0%, #ffffff 220px, #6f9fb5 52%, #628f93 78%, #6b9a88 100%);
+  background: linear-gradient(90deg, #ffffff 0%, #ffffff 220px, #0284c7 55%, #0d9488 78%, #10b981 100%) !important;
   animation: kodNavIn 0.7s ease forwards;
 }
 
@@ -429,8 +429,8 @@
   color: #ffffff;
   position: relative;
   overflow: hidden;
-  background: linear-gradient(120deg, #3f6176, #4f7f98, #4f8084, #577f70);
-  box-shadow: 0 12px 30px rgba(2, 132, 199, 0.12);
+  background: linear-gradient(120deg, #0284c7 0%, #0d9488 50%, #10b981 100%) !important;
+  box-shadow: 0 16px 36px rgba(2, 132, 199, 0.28) !important;
   animation: kodIn 0.5s ease both;
 }
 
