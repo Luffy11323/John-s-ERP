@@ -1,6 +1,6 @@
 /* ==========================================================================
    Kodessy Pharma ERP — Clean Sky-Blue & Emerald Theme (Radiant-style, calm)
-   Scoped under body.kod-premium (set by kodessy_glass.js on load).
+   Scoped under (set by kodessy_glass.js on load).
    No aggressive glow. Hover = lift + border accent only.
    Light & Dark mode ready.
    ========================================================================== */
@@ -19,7 +19,7 @@
 /* ======================================================================
    1. NAVBAR — white logo zone → sky-blue → teal gradient (no big glow)
    ====================================================================== */
-body.kod-premium .navbar {
+.navbar {
   background: #ffffff !important;
   border-bottom: 0 !important;
   box-shadow: 0 2px 8px rgba(15, 23, 42, 0.10) !important;
@@ -27,7 +27,7 @@ body.kod-premium .navbar {
   z-index: 1030;
 }
 
-body.kod-premium .navbar::before {
+.navbar::before {
   content: "";
   position: absolute;
   top: 0; bottom: 0; left: 0; right: 0;
@@ -37,14 +37,14 @@ body.kod-premium .navbar::before {
   animation: kodNavIn 0.7s ease forwards;
 }
 
-body.kod-premium .navbar::after { display: none !important; }
+.navbar::after { display: none !important; }
 
-[data-theme="dark"] body.kod-premium .navbar {
+[data-theme="dark"] .navbar {
   background: #09090b !important;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.40) !important;
 }
 
-[data-theme="dark"] body.kod-premium .navbar::before {
+[data-theme="dark"] .navbar::before {
   background: linear-gradient(90deg, #09090b 0%, #09090b 220px, #1e3a4a 52%, #1f4147 78%, #21463d 100%);
 }
 
@@ -54,36 +54,36 @@ body.kod-premium .navbar::after { display: none !important; }
 }
 
 /* Right-hand nav items sit on the vivid gradient → white */
-body.kod-premium .navbar .navbar-collapse .navbar-nav.navbar-right .nav-link,
-body.kod-premium .navbar .navbar-collapse .navbar-nav.navbar-right a,
-body.kod-premium .navbar .navbar-collapse .navbar-nav.navbar-right .dropdown-toggle {
+.navbar .navbar-collapse .navbar-nav.navbar-right .nav-link,
+.navbar .navbar-collapse .navbar-nav.navbar-right a,
+.navbar .navbar-collapse .navbar-nav.navbar-right .dropdown-toggle {
   color: #ffffff !important;
 }
 
-body.kod-premium .navbar .navbar-collapse .navbar-nav.navbar-right svg,
-body.kod-premium .navbar .navbar-collapse .navbar-nav.navbar-right .icon {
+.navbar .navbar-collapse .navbar-nav.navbar-right svg,
+.navbar .navbar-collapse .navbar-nav.navbar-right .icon {
   stroke: #ffffff !important;
   fill: none;
 }
 
 /* Dropdown menus must stay readable */
-body.kod-premium .navbar .dropdown-menu,
-body.kod-premium .navbar .dropdown-menu a,
-body.kod-premium .navbar .dropdown-menu .dropdown-item,
-body.kod-premium .navbar .dropdown-menu .dropdown-item span {
+.navbar .dropdown-menu,
+.navbar .dropdown-menu a,
+.navbar .dropdown-menu .dropdown-item,
+.navbar .dropdown-menu .dropdown-item span {
   color: var(--text-color, #1f2937) !important;
 }
 
-body.kod-premium .navbar .dropdown-menu .dropdown-item:hover {
+.navbar .dropdown-menu .dropdown-item:hover {
   background: var(--fg-hover-color, rgba(2, 132, 199, 0.08));
 }
 
-body.kod-premium .navbar .navbar-home img.app-logo {
+.navbar .navbar-home img.app-logo {
   max-height: 28px !important;
   transition: transform 0.2s ease;
 }
 
-body.kod-premium .navbar .navbar-home:hover img.app-logo {
+.navbar .navbar-home:hover img.app-logo {
   transform: scale(1.05);
 }
 
@@ -93,26 +93,26 @@ body.kod-premium .navbar .navbar-home:hover img.app-logo {
    ====================================================================== */
 
 /* Base state — smooth transitions */
-body.kod-premium .desk-sidebar .sidebar-item-container .item-anchor {
+.desk-sidebar .sidebar-item-container .item-anchor {
   border-radius: 8px !important;
   transition: background 0.18s ease, color 0.18s ease !important;
   padding-left: 8px;
 }
 
 /* Hover */
-body.kod-premium .desk-sidebar .sidebar-item-container .item-anchor:hover {
+.desk-sidebar .sidebar-item-container .item-anchor:hover {
   background: linear-gradient(90deg, rgba(2, 132, 199, 0.10), rgba(16, 185, 129, 0.07)) !important;
   color: #0284c7 !important;
 }
 
-body.kod-premium .desk-sidebar .sidebar-item-container .item-anchor:hover .sidebar-item-icon svg,
-body.kod-premium .desk-sidebar .sidebar-item-container .item-anchor:hover .sidebar-item-label {
+.desk-sidebar .sidebar-item-container .item-anchor:hover .sidebar-item-icon svg,
+.desk-sidebar .sidebar-item-container .item-anchor:hover .sidebar-item-label {
   color: #0284c7 !important;
   stroke: #0284c7 !important;
 }
 
 /* Active / selected */
-body.kod-premium .desk-sidebar .sidebar-item-container.selected .item-anchor {
+.desk-sidebar .sidebar-item-container.selected .item-anchor {
   background: linear-gradient(90deg, rgba(2, 132, 199, 0.14), rgba(16, 185, 129, 0.09)) !important;
   border-left: 3px solid #0ea5e9 !important;
   color: #0284c7 !important;
@@ -120,23 +120,23 @@ body.kod-premium .desk-sidebar .sidebar-item-container.selected .item-anchor {
 }
 
 /* Dark mode sidebar */
-[data-theme="dark"] body.kod-premium .desk-sidebar .sidebar-item-container .item-anchor:hover {
+[data-theme="dark"] .desk-sidebar .sidebar-item-container .item-anchor:hover {
   background: rgba(56, 189, 248, 0.12) !important;
   color: #38bdf8 !important;
 }
 
-[data-theme="dark"] body.kod-premium .desk-sidebar .sidebar-item-container.selected .item-anchor {
+[data-theme="dark"] .desk-sidebar .sidebar-item-container.selected .item-anchor {
   background: rgba(56, 189, 248, 0.16) !important;
   border-left-color: #38bdf8 !important;
   color: #38bdf8 !important;
 }
 
 /* Sidebar icon stroke */
-body.kod-premium .desk-sidebar .sidebar-item-container .item-anchor svg {
+.desk-sidebar .sidebar-item-container .item-anchor svg {
   transition: stroke 0.18s ease !important;
 }
 
-body.kod-premium .desk-sidebar .sidebar-item-container .item-anchor:hover svg {
+.desk-sidebar .sidebar-item-container .item-anchor:hover svg {
   stroke: #0284c7 !important;
 }
 
@@ -146,7 +146,7 @@ body.kod-premium .desk-sidebar .sidebar-item-container .item-anchor:hover svg {
    ====================================================================== */
 
 /* Base card */
-body.kod-premium .widget:not(.shortcut-widget-box) {
+.widget:not(.shortcut-widget-box) {
   border-radius: 14px !important;
   border: 1px solid var(--border-color, #e5e7eb) !important;
   box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06) !important;
@@ -156,24 +156,24 @@ body.kod-premium .widget:not(.shortcut-widget-box) {
 }
 
 /* Hover — lift + border accent, NO glow spread */
-body.kod-premium .widget:not(.shortcut-widget-box):hover {
+.widget:not(.shortcut-widget-box):hover {
   transform: translateY(-3px) !important;
   box-shadow: var(--kod-shadow-hover) !important;
   border-color: rgba(2, 132, 199, 0.45) !important;
 }
 
-[data-theme="dark"] body.kod-premium .widget:not(.shortcut-widget-box) {
+[data-theme="dark"] .widget:not(.shortcut-widget-box) {
   border-color: rgba(71, 85, 105, 0.45) !important;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.30) !important;
 }
 
-[data-theme="dark"] body.kod-premium .widget:not(.shortcut-widget-box):hover {
+[data-theme="dark"] .widget:not(.shortcut-widget-box):hover {
   border-color: rgba(56, 189, 248, 0.45) !important;
   box-shadow: 0 14px 32px rgba(0, 0, 0, 0.35) !important;
 }
 
 /* Number Card numbers */
-body.kod-premium .widget-number-card .number-card-number {
+.widget-number-card .number-card-number {
   font-size: 26px !important;
   font-weight: 800 !important;
   color: var(--text-color, #0f172a) !important;
@@ -244,7 +244,7 @@ body.kod-premium .widget-number-card .number-card-number {
 /* ======================================================================
    4. SHORTCUTS — slim pills, quiet hover (no shadow at all)
    ====================================================================== */
-body.kod-premium .widget.shortcut-widget-box {
+.widget.shortcut-widget-box {
   background: var(--card-bg, #ffffff) !important;
   border: 1px solid rgba(2, 132, 199, 0.18) !important;
   border-radius: 20px !important;
@@ -254,41 +254,41 @@ body.kod-premium .widget.shortcut-widget-box {
   transition: background 0.18s ease, border-color 0.18s ease !important;
 }
 
-body.kod-premium .widget.shortcut-widget-box:hover {
+.widget.shortcut-widget-box:hover {
   background: rgba(2, 132, 199, 0.06) !important;
   border-color: rgba(2, 132, 199, 0.40) !important;
   box-shadow: none !important;
   transform: none !important;
 }
 
-[data-theme="dark"] body.kod-premium .widget.shortcut-widget-box {
+[data-theme="dark"] .widget.shortcut-widget-box {
   background: #0f172a !important;
   border-color: rgba(255, 255, 255, 0.07) !important;
 }
 
-[data-theme="dark"] body.kod-premium .widget.shortcut-widget-box:hover {
+[data-theme="dark"] .widget.shortcut-widget-box:hover {
   background: rgba(56, 189, 248, 0.08) !important;
   border-color: rgba(56, 189, 248, 0.35) !important;
 }
 
-body.kod-premium .shortcut-widget-box .widget-head { padding: 0 !important; }
-body.kod-premium .shortcut-widget-box .widget-title {
+.shortcut-widget-box .widget-head { padding: 0 !important; }
+.shortcut-widget-box .widget-title {
   font-size: 13px !important;
   font-weight: 500;
   color: var(--text-muted, #4b5563);
 }
 
-[data-theme="dark"] body.kod-premium .shortcut-widget-box .widget-title {
+[data-theme="dark"] .shortcut-widget-box .widget-title {
   color: #cbd5e1;
 }
 
 /* Hide duplicate dividers */
-body.kod-premium .ce-block:has(.ce-divider) + .ce-block:has(.ce-divider) { display: none !important; }
+.ce-block:has(.ce-divider) + .ce-block:has(.ce-divider) { display: none !important; }
 
 /* ======================================================================
    5. LINKS WIDGET (Reports & Masters sections)
    ====================================================================== */
-body.kod-premium .widget.links-widget-box {
+.widget.links-widget-box {
   background: var(--card-bg, #ffffff) !important;
   border: 1px solid rgba(2, 132, 199, 0.14) !important;
   border-radius: 14px !important;
@@ -298,24 +298,24 @@ body.kod-premium .widget.links-widget-box {
   transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease !important;
 }
 
-[data-theme="dark"] body.kod-premium .widget.links-widget-box {
+[data-theme="dark"] .widget.links-widget-box {
   background: rgba(30, 41, 59, 0.70) !important;
   border-color: rgba(56, 189, 248, 0.18) !important;
 }
 
-body.kod-premium .widget.links-widget-box:hover {
+.widget.links-widget-box:hover {
   transform: translateY(-3px) !important;
   border-color: rgba(2, 132, 199, 0.50) !important;
   box-shadow: var(--kod-shadow-hover) !important;
 }
 
-body.kod-premium .widget.links-widget-box .widget-title {
+.widget.links-widget-box .widget-title {
   font-size: 15px;
   font-weight: 600;
   color: var(--text-color, #1f2937);
 }
 
-body.kod-premium .widget.links-widget-box .link-item {
+.widget.links-widget-box .link-item {
   font-size: 13.5px;
   font-weight: 400;
   color: var(--text-muted, #4b5563);
@@ -325,7 +325,7 @@ body.kod-premium .widget.links-widget-box .link-item {
   transition: color 0.15s ease, background 0.15s ease;
 }
 
-body.kod-premium .widget.links-widget-box .link-item:hover {
+.widget.links-widget-box .link-item:hover {
   color: #0284c7;
   background: rgba(2, 132, 199, 0.07);
   text-decoration: none;
@@ -334,7 +334,7 @@ body.kod-premium .widget.links-widget-box .link-item:hover {
 /* ======================================================================
    6. BUTTONS
    ====================================================================== */
-body.kod-premium .btn-primary {
+.btn-primary {
   background: linear-gradient(135deg, #5a8fab 0%, #5a8f93 55%, #639a85 100%) !important;
   border: none !important;
   color: #ffffff !important;
@@ -344,15 +344,15 @@ body.kod-premium .btn-primary {
   transition: transform 0.15s ease, box-shadow 0.15s ease !important;
 }
 
-body.kod-premium .btn-primary:hover,
-body.kod-premium .btn-primary:focus {
+.btn-primary:hover,
+.btn-primary:focus {
   background: linear-gradient(135deg, #4d7f9a 0%, #4e8084 55%, #568a76 100%) !important;
   box-shadow: 0 6px 16px rgba(2, 132, 199, 0.18) !important;
   transform: translateY(-1px) !important;
 }
 
-body.kod-premium .btn-default,
-body.kod-premium .btn-secondary {
+.btn-default,
+.btn-secondary {
   background: var(--card-bg, #ffffff) !important;
   border: 1px solid var(--border-color, #cbd5e1) !important;
   border-radius: 8px !important;
@@ -360,8 +360,8 @@ body.kod-premium .btn-secondary {
   transition: border-color 0.15s ease, color 0.15s ease !important;
 }
 
-body.kod-premium .btn-default:hover,
-body.kod-premium .btn-secondary:hover {
+.btn-default:hover,
+.btn-secondary:hover {
   border-color: rgba(2, 132, 199, 0.50) !important;
   color: #0284c7 !important;
   background: var(--card-bg, #ffffff) !important;
@@ -370,24 +370,24 @@ body.kod-premium .btn-secondary:hover {
 /* ======================================================================
    7. FORM INPUTS
    ====================================================================== */
-body.kod-premium .form-control,
-body.kod-premium .frappe-control input,
-body.kod-premium .frappe-control select {
+.form-control,
+.frappe-control input,
+.frappe-control select {
   background: var(--control-bg, rgba(255, 255, 255, 0.90)) !important;
   border: 1px solid var(--border-color, #cbd5e1) !important;
   border-radius: 8px !important;
   transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
 }
 
-[data-theme="dark"] body.kod-premium .form-control,
-[data-theme="dark"] body.kod-premium .frappe-control input {
+[data-theme="dark"] .form-control,
+[data-theme="dark"] .frappe-control input {
   background: rgba(15, 23, 42, 0.70) !important;
   border-color: #475569 !important;
   color: #f8fafc !important;
 }
 
-body.kod-premium .form-control:focus,
-body.kod-premium .frappe-control input:focus {
+.form-control:focus,
+.frappe-control input:focus {
   border-color: #0284c7 !important;
   box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15) !important;
 }
