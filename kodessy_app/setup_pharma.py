@@ -42,6 +42,7 @@ def after_migrate():
 		ensure_quality_templates,
 		ensure_stock_reconciliation_workflow,
 		ensure_workflow_state_colors,
+		ensure_print_formats,
 	]
 	for step in steps:
 		try:
@@ -109,6 +110,23 @@ def ensure_workflow_state_colors():
 
 	# Clean legacy/invalid icons that trigger Frappe's glyphicon validation error
 	frappe.db.sql("UPDATE `tabWorkflow State` SET icon = '' WHERE icon LIKE 'octicon%'")
+
+
+def ensure_print_formats():
+	"""Ensure custom pharma print formats are marked standard='No' so operators can edit them in UI."""
+	import os
+	frappe.db.sql("UPDATE `tabPrint Format` SET standard = 'No' WHERE module = 'Kodessy App'")
+
+	# Ensure Pharma Pick and Pack Slip has the latest template if present on disk
+	template_path = os.path.join(os.path.dirname(__file__), "templates", "pharma_pick_and_pack_slip.html")
+	if os.path.exists(template_path) and frappe.db.exists("Print Format", "Pharma Pick and Pack Slip"):
+		with open(template_path, "r", encoding="utf-8") as f:
+			html_content = f.read()
+		frappe.db.set_value("Print Format", "Pharma Pick and Pack Slip", {
+			"html": html_content,
+			"standard": "No",
+			"custom_format": 1
+		})
 
 
 # --------------------------------------------------------------------------
