@@ -130,6 +130,15 @@ def ensure_print_formats():
 			"custom_format": 1
 		})
 
+	# Ensure Pick List defaults to Pharma Pick and Pack Slip
+	if frappe.db.exists("DocType", "Pick List"):
+		frappe.db.set_value("DocType", "Pick List", "default_print_format", "Pharma Pick and Pack Slip")
+	ps_name = "Pick List-main-default_print_format"
+	if not frappe.db.exists("Property Setter", ps_name):
+		from frappe.custom.doctype.property_setter.property_setter import make_property_setter
+		make_property_setter("Pick List", None, "default_print_format", "Pharma Pick and Pack Slip", "Data", for_doctype=True)
+
+
 
 def ensure_warehouse_mandatory():
 	"""Set target warehouse on PO and source warehouse on SO as mandatory via Property Setter.
@@ -322,15 +331,21 @@ def ensure_custom_fields():
 
 
 def make_return_fields_mandatory():
-	"""Return reason / QA assessment become mandatory on return documents (server-side check also exists)."""
+	"""Return reason / QA assessment become mandatory on return documents and visible in grid row view."""
 	for fieldname in ("custom_return_reason", "custom_assessment_status"):
-		name = f"Sales Invoice Item-{fieldname}"
-		if frappe.db.exists("Custom Field", name):
-			frappe.db.set_value(
-				"Custom Field",
-				name,
-				{"mandatory_depends_on": "eval:parent.is_return", "depends_on": "eval:parent.is_return"},
-			)
+		for dt in ("Sales Invoice Item", "Delivery Note Item"):
+			name = f"{dt}-{fieldname}"
+			if frappe.db.exists("Custom Field", name):
+				frappe.db.set_value(
+					"Custom Field",
+					name,
+					{
+						"mandatory_depends_on": "eval:parent.is_return",
+						"depends_on": "eval:parent.is_return",
+						"in_list_view": 1,
+						"columns": 2,
+					},
+				)
 	for doctype in ("Sales Invoice Item", "Delivery Note Item"):
 		frappe.clear_cache(doctype=doctype)
 

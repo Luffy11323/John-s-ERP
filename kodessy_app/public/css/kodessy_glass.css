@@ -859,3 +859,76 @@ span.indicator.light-blue {
   color: #38bdf8 !important;
   border-color: rgba(56, 189, 248, 0.40) !important;
 }
+
+/* ======================================================================
+   Print Format & Report Typography & Grid Polish
+   Enhances standard reports (Statement of Account, General Ledger, Invoices)
+   with crisp typography, proper tabular alignment, and clean borders.
+   ====================================================================== */
+.print-format,
+.print-format-gutter,
+.report-print-format,
+div[data-doctype="General Ledger"] .print-format,
+.print-view {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+  color: #1e293b !important;
+}
+
+.print-format h1, .print-format h2, .print-format h3, .print-format h4,
+.report-print-format h1, .report-print-format h2, .report-print-format h3 {
+  color: #0f172a !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.02em !important;
+}
+
+.print-format table,
+.report-print-format table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  margin-top: 12px !important;
+  margin-bottom: 16px !important;
+}
+
+.print-format th,
+.report-print-format th {
+  background-color: #f8fafc !important;
+  color: #475569 !important;
+  font-weight: 600 !important;
+  font-size: 11px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  border-bottom: 2px solid #cbd5e1 !important;
+  padding: 8px 10px !important;
+  vertical-align: middle !important;
+}
+
+.print-format td,
+.report-print-format td {
+  padding: 8px 10px !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+  font-size: 11.5px !important;
+  color: #334155 !important;
+  vertical-align: middle !important;
+}
+
+/* Numeric columns right alignment */
+.print-format td.text-right,
+.print-format th.text-right,
+.report-print-format td.text-right,
+.report-print-format th.text-right,
+.print-format td[style*="text-align: right"],
+.print-format th[style*="text-align: right"],
+.report-print-format td[style*="text-align: right"],
+.report-print-format th[style*="text-align: right"],
+.print-format .table-bordered td:nth-child(n+3):has-text("RM"),
+.print-format .table-bordered th:nth-child(n+3):has-text("Debit"),
+.print-format .table-bordered th:nth-child(n+3):has-text("Credit"),
+.print-format .table-bordered th:nth-child(n+3):has-text("Balance") {
+  text-align: right !important;
+  font-variant-numeric: tabular-nums !important;
+}
+
+.print-format tr:hover td,
+.report-print-format tr:hover td {
+  background-color: #f1f5f9 !important;
+}
