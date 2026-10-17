@@ -136,12 +136,14 @@ def _notify(doc, event_label, roles, detail=None):
 	body = detail or ""
 	content = _card_html(doc, event_label, body, actor, link)
 
-	seen = set()
+	seen_users = set()
+	role_list = [r for r in dict.fromkeys(roles) if r]
 
+	# 1. Send individual Notification Log (bell icon) to each actual recipient
 	def _send(user, who):
-		if not user or user in SKIP_USERS or user == actor or user in seen:
+		if not user or user in SKIP_USERS or user == actor or user in seen_users:
 			return
-		seen.add(user)
+		seen_users.add(user)
 		frappe.get_doc({
 			"doctype": "Notification Log",
 			"subject": "{0}: {1}".format(who, headline),
@@ -153,31 +155,49 @@ def _notify(doc, event_label, roles, detail=None):
 			"document_name": doc.name,
 		}).insert(ignore_permissions=True)
 
-	for role in dict.fromkeys(roles):
+	# 2. Collect unique emails across all roles
+	all_emails = []
+	seen_emails = set()
+
+	for role in role_list:
 		users = _users_with_role(role)
-		for user in users:
-			_send(user, role)
-		
-		# Show the actual usernames formatted nicely: e.g. Director (john, mary)
-		users_display = ", ".join(users) if users else "no users"
-		doc.add_comment(
-			"Info",
-			"Notification sent to <b>{0}</b> ({1})<br>{2}".format(
-				role, users_display, content
-			),
-		)
+		for u in users:
+			_send(u, role)
+			# Only emails, skipping internal system accounts like Administrator / Guest
+			if u not in SKIP_USERS:
+				email = frappe.db.get_value("User", u, "email") or u
+				if "@" in email and email not in seen_emails:
+					seen_emails.add(email)
+					all_emails.append(email)
 
-	# Only send and add Owner comment if owner wasn't already covered in the role users
-	all_role_users = set()
-	for r in dict.fromkeys(roles):
-		all_role_users.update(_users_with_role(r))
-
-	if doc.owner and doc.owner not in all_role_users:
+	# Also notify owner if owner not in seen_users
+	if doc.owner and doc.owner not in seen_users:
 		_send(doc.owner, _("Owner"))
-		doc.add_comment(
-			"Info",
-			"Notification sent to <b>Owner</b> ({0})<br>{1}".format(doc.owner, content),
-		)
+		if doc.owner not in SKIP_USERS:
+			owner_email = frappe.db.get_value("User", doc.owner, "email") or doc.owner
+			if "@" in owner_email and owner_email not in seen_emails:
+				seen_emails.add(owner_email)
+				all_emails.append(owner_email)
+
+	# Fallback if testing solely as Administrator
+	if not all_emails:
+		for role in role_list:
+			for u in _users_with_role(role):
+				email = frappe.db.get_value("User", u, "email") or u
+				if "@" in email and email not in seen_emails:
+					seen_emails.add(email)
+					all_emails.append(email)
+
+	# 3. Post a SINGLE combined activity comment box rather than individual duplicates
+	target_roles = ", ".join(role_list) if role_list else _("Recipients")
+	emails_display = ", ".join(all_emails) if all_emails else "no emails"
+
+	doc.add_comment(
+		"Info",
+		"Notification sent to <b>{0}</b> ({1})<br>{2}".format(
+			target_roles, emails_display, content
+		),
+	)
 
 
 def _safe(fn):
