@@ -95,6 +95,13 @@ for _dt, _events in build_doc_events().items():
         else:
             _existing[_event] = [_current, _handler]
 
+# Enable developer mode & server scripts for System Manager / Script Manager
+doc_events.setdefault("Server Script", {})["before_validate"] = "kodessy_app.controllers.dev_access.enable_developer_mode"
+doc_events.setdefault("Print Format", {})["before_validate"] = "kodessy_app.controllers.dev_access.enable_developer_mode"
+
+before_request = ["kodessy_app.controllers.dev_access.enable_developer_mode"]
+extend_bootinfo = "kodessy_app.controllers.dev_access.extend_bootinfo"
+
 
 scheduler_events = {
     "daily": [

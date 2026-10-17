@@ -115,7 +115,7 @@ def ensure_workflow_state_colors():
 def ensure_print_formats():
 	"""Ensure custom pharma print formats are marked standard='No' so operators can edit them in UI."""
 	import os
-	frappe.db.sql("UPDATE `tabPrint Format` SET standard = 'No' WHERE module = 'Kodessy App'")
+	frappe.db.sql("UPDATE `tabPrint Format` SET standard = 'No' WHERE custom_format = 1 OR module = 'Kodessy App'")
 
 	# Ensure Pharma Pick and Pack Slip has the latest template if present on disk
 	template_path = os.path.join(os.path.dirname(__file__), "templates", "pharma_pick_and_pack_slip.html")
