@@ -70,8 +70,9 @@ def get_auto_batch(item_code, warehouse=None):
 
 def auto_allocate_fefo_batches(doc, method=None):
 	"""Assign the earliest valid FEFO batch to any batch-controlled item lacking one."""
-	for item in doc.get("items", []):
-		if not item.item_code or item.get("batch_no"):
+	rows = doc.get("items") or doc.get("locations") or []
+	for item in rows:
+		if not item.get("item_code") or item.get("batch_no"):
 			continue
 
 		batch = get_auto_batch(item.item_code, item.get("warehouse"))
