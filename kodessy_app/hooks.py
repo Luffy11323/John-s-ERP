@@ -122,5 +122,5 @@ doctype_js = {
 after_migrate = "kodessy_app.setup_pharma.after_migrate"
 
 # Glassmorphism & UI Optimization Assets (cache-busting v=20261017)
-app_include_css = "/assets/kodessy_app/css/kodessy_glass.css?v=20261017_v2"
-app_include_js = "/assets/kodessy_app/js/kodessy_glass.js?v=20261017_v2"
+app_include_css = "/assets/kodessy_app/css/kodessy_glass.css?v=20261017_v3"
+app_include_js = "/assets/kodessy_app/js/kodessy_glass.js?v=20261017_v3"
