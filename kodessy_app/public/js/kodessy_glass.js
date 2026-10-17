@@ -177,4 +177,40 @@
   } else {
     document.addEventListener('DOMContentLoaded', init);
   }
+
+  // ── Real-Time Batch Auto-Allocation on Form Rows ───────────────────────────
+  function setupBatchAutoSelector(childTable) {
+    if (!window.frappe || !frappe.ui || !frappe.ui.form) return;
+    frappe.ui.form.on(childTable, {
+      item_code: function(frm, cdt, cdn) {
+        assignBatchIfMissing(frm, cdt, cdn);
+      },
+      warehouse: function(frm, cdt, cdn) {
+        assignBatchIfMissing(frm, cdt, cdn);
+      }
+    });
+  }
+
+  function assignBatchIfMissing(frm, cdt, cdn) {
+    const row = locals[cdt] && locals[cdt][cdn];
+    if (!row || !row.item_code || row.batch_no) return;
+
+    frappe.call({
+      method: 'kodessy_app.controllers.fefo_control.get_auto_batch',
+      args: {
+        item_code: row.item_code,
+        warehouse: row.warehouse || ''
+      },
+      callback: function(r) {
+        if (r && r.message && !row.batch_no) {
+          frappe.model.set_value(cdt, cdn, 'batch_no', r.message);
+        }
+      }
+    });
+  }
+
+  setTimeout(() => {
+    ['Sales Order Item', 'Delivery Note Item', 'Sales Invoice Item', 'Pick List Item'].forEach(setupBatchAutoSelector);
+  }, 1000);
 })();
+
