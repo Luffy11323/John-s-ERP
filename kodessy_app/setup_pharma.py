@@ -107,6 +107,9 @@ def ensure_workflow_state_colors():
 		if frappe.db.exists("Workflow State", state_name):
 			frappe.db.set_value("Workflow State", state_name, "style", style)
 
+	# Clean legacy/invalid icons that trigger Frappe's glyphicon validation error
+	frappe.db.sql("UPDATE `tabWorkflow State` SET icon = '' WHERE icon LIKE 'octicon%'")
+
 
 # --------------------------------------------------------------------------
 # Master data
