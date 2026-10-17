@@ -43,6 +43,8 @@ def after_migrate():
 		ensure_stock_reconciliation_workflow,
 		ensure_workflow_state_colors,
 		ensure_print_formats,
+		ensure_warehouse_mandatory,
+		ensure_workflow_avoid_status_override,
 	]
 	for step in steps:
 		try:
@@ -129,8 +131,37 @@ def ensure_print_formats():
 		})
 
 
+def ensure_warehouse_mandatory():
+	"""Set target warehouse on PO and source warehouse on SO as mandatory via Property Setter.
+	Using Property Setter allows users to disable or customize it from Customize Form UI at any time.
+	"""
+	from frappe.custom.doctype.property_setter.property_setter import make_property_setter
+
+	for doctype in ("Purchase Order Item", "Sales Order Item"):
+		ps_name = f"{doctype}-warehouse-reqd"
+		if not frappe.db.exists("Property Setter", ps_name):
+			make_property_setter(
+				doctype,
+				"warehouse",
+				"reqd",
+				1,
+				"Check",
+				for_doctype=False,
+				validate_fields_for_doctype=False,
+			)
+
+
+def ensure_workflow_avoid_status_override():
+	"""Ensure 'Don't Override Status' (avoid_status_override) is checked on approved states (doc_status=1)
+	so ERPNext shows native status (e.g. 'To Deliver and Bill', 'To Receive and Bill').
+	Operators can uncheck this from the Workflow UI anytime.
+	"""
+	frappe.db.sql("UPDATE `tabWorkflow Document State` SET avoid_status_override = 1 WHERE doc_status = '1'")
+
+
 # --------------------------------------------------------------------------
 # Master data
+
 # --------------------------------------------------------------------------
 def ensure_uoms():
 	for uom in EXTRA_UOMS:
