@@ -9,9 +9,11 @@ from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
 from kodessy_app.setup_naming import apply_naming_series
 
 DEMO_CREDIT_LIMITS = {
-	"Gleneagles Hospital KL": 100000,
-	"Sunway Medical Centre": 50000,
-	"Klinik Mediviron Subang": 15000,
+	"Raja Isteri Pengiran Anak Saleha (RIPAS) Hospital": 100000,
+	"Jerudong Park Medical Centre (JPMC)": 75000,
+	"Suri Seri Begawan Hospital": 50000,
+	"Pengiran Muda Mahkota Pengiran Muda Haji Al-Muhtadee Billah Hospital": 30000,
+	"Pengiran Isteri Hajah Mariam Hospital": 20000,
 }
 
 DEMO_ITEMS = ["AMOX-500", "INS-100", "PARAC-IV", "PULSE-OX", "VET-AMOX"]
@@ -45,6 +47,7 @@ def after_migrate():
 		ensure_print_formats,
 		ensure_warehouse_mandatory,
 		ensure_workflow_avoid_status_override,
+		ensure_brunei_masters_and_currency,
 	]
 	for step in steps:
 		try:
@@ -225,9 +228,66 @@ def fix_demo_items():
 def set_demo_credit_limits():
 	for customer, limit in DEMO_CREDIT_LIMITS.items():
 		if not frappe.db.exists("Customer", customer):
-			continue
-		if not frappe.db.get_value("Customer", customer, "custom_credit_limit"):
+			frappe.get_doc({
+				"doctype": "Customer",
+				"customer_name": customer,
+				"customer_group": "Commercial Hospital",
+				"territory": "Brunei",
+				"custom_credit_limit": limit,
+			}).insert(ignore_permissions=True)
+		else:
 			frappe.db.set_value("Customer", customer, "custom_credit_limit", limit)
+
+
+def ensure_brunei_masters_and_currency():
+	"""Configure Currency, Country, and Demo Suppliers & Customers as per Brunei (BND)."""
+	# 1. Currency BND
+	if frappe.db.exists("Currency", "BND"):
+		frappe.db.set_value("Currency", "BND", {
+			"enabled": 1,
+			"symbol": "B$",
+			"fraction": "Sen",
+			"fraction_units": 100
+		})
+
+	# 2. Global Defaults & Company
+	for comp in frappe.get_all("Company", pluck="name"):
+		frappe.db.set_value("Company", comp, {
+			"default_currency": "BND",
+			"country": "Brunei"
+		})
+	frappe.db.set_default("currency", "BND")
+	frappe.db.set_default("country", "Brunei")
+
+	# 3. Territory
+	if not frappe.db.exists("Territory", "Brunei"):
+		frappe.get_doc({
+			"doctype": "Territory",
+			"territory_name": "Brunei",
+			"parent_territory": "All Territories"
+		}).insert(ignore_permissions=True)
+
+	# 4. Suppliers from guideline image
+	suppliers = [
+		("B. Braun", "Pharmaceutical Supplier"),
+		("BD (Becton Dickinson)", "Pharmaceutical Supplier"),
+		("Siemens Healthineers", "Pharmaceutical Supplier"),
+		("Fresenius Kabi", "Pharmaceutical Supplier"),
+		("Local medical supply distributors in Brunei", "Local Distributor"),
+	]
+	for supp_name, grp in suppliers:
+		if not frappe.db.exists("Supplier", supp_name):
+			frappe.get_doc({
+				"doctype": "Supplier",
+				"supplier_name": supp_name,
+				"supplier_group": grp,
+				"country": "Brunei"
+			}).insert(ignore_permissions=True)
+
+	# 5. Hide Manufacturing workspace
+	if frappe.db.exists("Workspace", "Manufacturing"):
+		frappe.db.set_value("Workspace", "Manufacturing", "is_hidden", 1)
+
 
 
 # --------------------------------------------------------------------------

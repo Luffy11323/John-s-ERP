@@ -1,28 +1,35 @@
 /* ==========================================================================
-   Kodessy Pharma ERP — Clean Sky-Blue & Emerald Theme (Radiant-style, calm)
-   Scoped under (set by kodessy_glass.js on load).
-   No aggressive glow. Hover = lift + border accent only.
-   Light & Dark mode ready.
+   FIRMAI ERP — Deep Blue & Modern Glass Theme
+   Branded as per FIRMAI Brand Guidelines (#181A71 Deep Blue, Arimo / Roboto)
+   Scoped under .kod-premium (set by kodessy_glass.js on load).
    ========================================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Arimo:wght@400;500;600;700&family=Roboto:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap');
 
-/* ---------- Design tokens ---------- */
+/* ---------- FIRMAI Design tokens ---------- */
 :root {
-  --kod-cyan:    #0284c7;
-  --kod-teal:    #0d9488;
+  --kod-primary: #181A71;
+  --kod-blue:    #181A71;
+  --kod-accent:  #2B2ECF;
+  --kod-cyan:    #2B2ECF;
+  --kod-teal:    #181A71;
   --kod-emerald: #10b981;
-  --kod-shadow:  0 8px 24px rgba(15, 23, 42, 0.10);
-  --kod-shadow-hover: 0 14px 32px rgba(15, 23, 42, 0.16);
+  --kod-shadow:  0 8px 24px rgba(24, 26, 113, 0.08);
+  --kod-shadow-hover: 0 14px 32px rgba(24, 26, 113, 0.16);
+}
+
+/* Base typography */
+body, .desk-sidebar, .form-control, .btn, .widget-title, .navbar {
+  font-family: 'Arimo', 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
 }
 
 /* ======================================================================
-   1. NAVBAR — white logo zone → sky-blue → teal gradient (no big glow)
+   1. NAVBAR — white logo zone → FIRMAI deep blue gradient
    ====================================================================== */
 .navbar {
   background: #ffffff !important;
   border-bottom: 0 !important;
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.10) !important;
+  box-shadow: 0 2px 8px rgba(24, 26, 113, 0.10) !important;
   position: relative;
   z-index: 1030;
 }
@@ -33,7 +40,7 @@
   top: 0; bottom: 0; left: 0; right: 0;
   z-index: -1;
   pointer-events: none;
-  background: linear-gradient(90deg, #ffffff 0%, #ffffff 220px, #0284c7 55%, #0d9488 78%, #10b981 100%) !important;
+  background: linear-gradient(90deg, #ffffff 0%, #ffffff 240px, #181A71 60%, #1f228a 85%, #2B2ECF 100%) !important;
   animation: kodNavIn 0.7s ease forwards;
 }
 
@@ -45,7 +52,7 @@
 }
 
 [data-theme="dark"] .navbar::before {
-  background: linear-gradient(90deg, #09090b 0%, #09090b 220px, #1e3a4a 52%, #1f4147 78%, #21463d 100%);
+  background: linear-gradient(90deg, #09090b 0%, #09090b 240px, #10114a 60%, #181A71 85%, #1f228a 100%);
 }
 
 @keyframes kodNavIn {
@@ -162,6 +169,14 @@
 .desk-sidebar .sidebar-item-container .item-anchor svg {
   transition: stroke 0.18s ease !important;
 }
+
+/* Hide Manufacturing module from desk sidebar */
+.desk-sidebar .sidebar-item-container[item-name="Manufacturing"],
+.desk-sidebar .sidebar-item-container:has(a[href*="/app/manufacturing"]),
+.desk-sidebar .sidebar-item-container:has(.sidebar-item-label:is(:contains("Manufacturing"))) {
+  display: none !important;
+}
+
 
 .desk-sidebar .sidebar-item-container .item-anchor:hover svg {
   stroke: #0284c7 !important;
@@ -362,10 +377,10 @@
    6. BUTTONS
    ====================================================================== */
 .btn-primary {
-  background: linear-gradient(135deg, #5a8fab 0%, #5a8f93 55%, #639a85 100%) !important;
+  background: linear-gradient(135deg, #181A71 0%, #1f228a 55%, #2B2ECF 100%) !important;
   border: none !important;
   color: #ffffff !important;
-  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.12) !important;
+  box-shadow: 0 2px 8px rgba(24, 26, 113, 0.20) !important;
   border-radius: 8px !important;
   font-weight: 600 !important;
   transition: transform 0.15s ease, box-shadow 0.15s ease !important;
@@ -373,8 +388,8 @@
 
 .btn-primary:hover,
 .btn-primary:focus {
-  background: linear-gradient(135deg, #4d7f9a 0%, #4e8084 55%, #568a76 100%) !important;
-  box-shadow: 0 6px 16px rgba(2, 132, 199, 0.18) !important;
+  background: linear-gradient(135deg, #121356 0%, #181A71 55%, #2325a8 100%) !important;
+  box-shadow: 0 6px 16px rgba(24, 26, 113, 0.28) !important;
   transform: translateY(-1px) !important;
 }
 
@@ -562,8 +577,8 @@ input[type="radio"]:checked,
   color: #ffffff;
   position: relative;
   overflow: hidden;
-  background: linear-gradient(120deg, #0284c7 0%, #0d9488 50%, #10b981 100%) !important;
-  box-shadow: 0 16px 36px rgba(2, 132, 199, 0.28) !important;
+  background: linear-gradient(120deg, #181A71 0%, #1f228a 50%, #2B2ECF 100%) !important;
+  box-shadow: 0 16px 36px rgba(24, 26, 113, 0.28) !important;
   animation: kodIn 0.5s ease both;
 }
 

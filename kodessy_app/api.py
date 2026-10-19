@@ -3,7 +3,7 @@ from frappe.utils import flt, nowdate, add_days, getdate
 
 # slug -> (title, subtitle, builder key)
 SECTIONS = {
-	"home": ("Kodessy Overview", "Pharma distribution at a glance"),
+	"home": ("FIRMAI Overview", "Pharma distribution at a glance"),
 	"selling": ("Sales & Distribution", "Quotations, orders and deliveries"),
 	"buying": ("Procurement", "Purchase orders and supplier receipts"),
 	"stock": ("Warehouse & Quality", "FEFO, quarantine and stock health"),
@@ -35,7 +35,7 @@ def _selling():
 		_kpi("Open Sales Orders", _count("Sales Order", {"docstatus": 1, "status": ["in", ["To Deliver and Bill", "To Deliver", "To Bill"]]}), "sales-order?docstatus=1"),
 		_kpi("Pending Deliveries", _count("Delivery Note", {"docstatus": 0}), "delivery-note?docstatus=0"),
 		_kpi("Unpaid Sales Invoices", _count("Sales Invoice", {"docstatus": 1, "outstanding_amount": [">", 0]}), "sales-invoice?outstanding_amount=%5B%22%3E%22%2C0%5D"),
-		_kpi("Outstanding Receivable (MYR)", _sum("Sales Invoice", "outstanding_amount", {"docstatus": 1}), "sales-invoice", "money"),
+		_kpi("Outstanding Receivable (BND)", _sum("Sales Invoice", "outstanding_amount", {"docstatus": 1}), "sales-invoice", "money"),
 	]
 
 
@@ -46,7 +46,7 @@ def _buying():
 		_kpi("Pending Finance Approval", _count("Purchase Order", {"workflow_state": "Pending Finance Approval"}), "purchase-order?workflow_state=Pending%20Finance%20Approval"),
 		_kpi("To Receive", _count("Purchase Order", {"docstatus": 1, "status": ["in", ["To Receive and Bill", "To Receive"]]}), "purchase-order?docstatus=1"),
 		_kpi("Open Material Requests", _count("Material Request", {"docstatus": 1, "status": ["in", ["Pending", "Partially Ordered"]]}), "material-request"),
-		_kpi("Unpaid Purchase Invoices (MYR)", _sum("Purchase Invoice", "outstanding_amount", {"docstatus": 1}), "purchase-invoice", "money"),
+		_kpi("Unpaid Purchase Invoices (BND)", _sum("Purchase Invoice", "outstanding_amount", {"docstatus": 1}), "purchase-invoice", "money"),
 	]
 
 
@@ -66,8 +66,8 @@ def _stock():
 
 def _accounting():
 	return [
-		_kpi("Receivable (MYR)", _sum("Sales Invoice", "outstanding_amount", {"docstatus": 1}), "sales-invoice", "money"),
-		_kpi("Payable (MYR)", _sum("Purchase Invoice", "outstanding_amount", {"docstatus": 1}), "purchase-invoice", "money"),
+		_kpi("Receivable (BND)", _sum("Sales Invoice", "outstanding_amount", {"docstatus": 1}), "sales-invoice", "money"),
+		_kpi("Payable (BND)", _sum("Purchase Invoice", "outstanding_amount", {"docstatus": 1}), "purchase-invoice", "money"),
 		_kpi("Overdue Sales Invoices", _count("Sales Invoice", {"docstatus": 1, "outstanding_amount": [">", 0], "due_date": ["<", nowdate()]}), "sales-invoice"),
 		_kpi("Credit Notes (Returns)", _count("Sales Invoice", {"docstatus": 1, "is_return": 1}), "sales-invoice?is_return=1"),
 		_kpi("Draft Payments", _count("Payment Entry", {"docstatus": 0}), "payment-entry?docstatus=0"),
@@ -80,7 +80,7 @@ def _home():
 		_kpi("Pending Approvals", _count("Quotation", {"workflow_state": "Pending Sales Manager Approval"}) + _count("Purchase Order", {"workflow_state": ["in", ["Pending Purchasing Manager Approval", "Pending Finance Approval"]]}), "quotation"),
 		_kpi("Open Sales Orders", _count("Sales Order", {"docstatus": 1, "status": ["in", ["To Deliver and Bill", "To Deliver", "To Bill"]]}), "sales-order"),
 		_kpi("Open Purchase Orders", _count("Purchase Order", {"docstatus": 1, "status": ["in", ["To Receive and Bill", "To Receive"]]}), "purchase-order"),
-		_kpi("Receivable (MYR)", _sum("Sales Invoice", "outstanding_amount", {"docstatus": 1}), "sales-invoice", "money"),
+		_kpi("Receivable (BND)", _sum("Sales Invoice", "outstanding_amount", {"docstatus": 1}), "sales-invoice", "money"),
 		_kpi("Expired Batches", _count("Batch", {"disabled": 0, "expiry_date": ["<", nowdate()]}), "batch"),
 		_kpi("Quality Inspections Pending", _count("Quality Inspection", {"docstatus": 0}), "quality-inspection"),
 	]

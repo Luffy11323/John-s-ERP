@@ -54,7 +54,7 @@
   // ── KPI cell template ───────────────────────────────────────────────────────
   function kpiHtml(k) {
     const val = k.fmt === 'money'
-      ? 'RM ' + compact(k.value)
+      ? 'B$ ' + compact(k.value)
       : (k.value || 0).toLocaleString();
     return `<div class="kod-cell" data-route="${esc(k.route || '')}" title="${esc(k.value)}">
       <div class="kod-l">${esc(k.label)}</div>
