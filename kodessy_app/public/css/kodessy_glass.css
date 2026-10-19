@@ -60,17 +60,40 @@ body, .desk-sidebar, .form-control, .btn, .widget-title, .navbar {
   to   { opacity: 1; }
 }
 
-/* Right-hand nav items sit on the vivid gradient → white */
+/* Right-hand nav items sit on the vivid gradient → crisp white */
 .navbar .navbar-collapse .navbar-nav.navbar-right .nav-link,
 .navbar .navbar-collapse .navbar-nav.navbar-right a,
-.navbar .navbar-collapse .navbar-nav.navbar-right .dropdown-toggle {
+.navbar .navbar-collapse .navbar-nav.navbar-right .dropdown-toggle,
+.navbar .navbar-collapse .navbar-nav.navbar-right button,
+.navbar .navbar-collapse .navbar-nav.navbar-right span,
+.navbar .navbar-nav.navbar-right > li > a,
+.navbar .navbar-nav.navbar-right > li > button,
+.navbar .nav-item .nav-link,
+.navbar .dropdown-help .dropdown-toggle,
+.navbar .notifications-icon,
+.navbar .btn-notification,
+.navbar li.vertical-bar {
   color: #ffffff !important;
+  fill: #ffffff !important;
+  opacity: 1 !important;
 }
 
 .navbar .navbar-collapse .navbar-nav.navbar-right svg,
-.navbar .navbar-collapse .navbar-nav.navbar-right .icon {
+.navbar .navbar-collapse .navbar-nav.navbar-right .icon,
+.navbar .navbar-nav.navbar-right svg,
+.navbar .navbar-nav.navbar-right use,
+.navbar .notifications-icon svg,
+.navbar .btn-notification svg,
+.navbar .dropdown-help svg {
   stroke: #ffffff !important;
-  fill: none;
+  fill: none !important;
+  color: #ffffff !important;
+}
+
+.navbar .vertical-bar,
+.navbar .divider {
+  border-left: 1px solid rgba(255, 255, 255, 0.40) !important;
+  background-color: rgba(255, 255, 255, 0.40) !important;
 }
 
 /* Dropdown menus must stay readable in both light and dark mode */
@@ -278,9 +301,47 @@ body, .desk-sidebar, .form-control, .btn, .widget-title, .navbar {
 [data-theme="dark"] .links-widget-box,
 [data-theme="dark"] .link-widget-box,
 [data-theme="dark"] .links-section,
-[data-theme="dark"] .ce-block:has(a[href*="/app/"]) {
-  border-color: rgba(71, 85, 105, 0.45) !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.30) !important;
+[data-theme="dark"] .ce-block:has(a[href*="/app/"]),
+[data-theme="dark"] .widget.links-widget-box {
+  background: #182234 !important;
+  border-color: rgba(99, 102, 241, 0.25) !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.40) !important;
+}
+
+[data-theme="dark"] .links-widget-box .link-item,
+[data-theme="dark"] .link-widget-box .link-item,
+[data-theme="dark"] .links-section .link-item,
+[data-theme="dark"] .layout-main-section a[href*="/app/"]:not(.btn):not(.navbar-brand):not(.nav-link),
+[data-theme="dark"] .widget.links-widget-box .link-item {
+  color: #93c5fd !important;
+  font-weight: 500 !important;
+}
+
+[data-theme="dark"] .links-widget-box .link-item svg,
+[data-theme="dark"] .link-widget-box .link-item svg,
+[data-theme="dark"] .widget.links-widget-box .link-item svg {
+  stroke: #93c5fd !important;
+}
+
+[data-theme="dark"] .links-widget-box .link-item:hover,
+[data-theme="dark"] .link-widget-box .link-item:hover,
+[data-theme="dark"] .links-section .link-item:hover,
+[data-theme="dark"] .layout-main-section a[href*="/app/"]:not(.btn):not(.navbar-brand):not(.nav-link):hover,
+[data-theme="dark"] .widget.links-widget-box .link-item:hover {
+  background: rgba(59, 130, 246, 0.18) !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .links-widget-box .link-item:hover svg,
+[data-theme="dark"] .link-widget-box .link-item:hover svg,
+[data-theme="dark"] .widget.links-widget-box .link-item:hover svg {
+  stroke: #ffffff !important;
+}
+
+[data-theme="dark"] .links-widget-box .widget-title,
+[data-theme="dark"] .widget.links-widget-box .widget-title {
+  color: #ffffff !important;
+  font-weight: 700 !important;
 }
 
 /* ======================================================================
@@ -987,4 +1048,131 @@ svg[data-icon="erpnext"],
   background-position: center !important;
   background-size: 180px auto !important;
 }
+
+/* ======================================================================
+   UNIVERSAL CONTRAST ENGINE (Dark Mode, Child Tables, Inputs, Grids)
+   Resolves all dark-on-dark, invisible text, and low-contrast child rows.
+   ====================================================================== */
+
+/* 1. Global Navbar Icons, Bell, Help, and Badges — Pure White */
+.navbar [class*="notification"],
+.navbar [class*="help"],
+.navbar .notifications-icon,
+.navbar .btn-notification,
+.navbar .notifications-icon svg,
+.navbar .btn-notification svg,
+.navbar .nav-link svg,
+.navbar .dropdown-toggle svg,
+.navbar .vertical-bar {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.45) !important;
+}
+
+.navbar .badge,
+.navbar .notifications-icon .badge {
+  background-color: #ef4444 !important;
+  color: #ffffff !important;
+}
+
+/* 2. Dark Mode Form Inputs & Selects — High Contrast */
+[data-theme="dark"] .form-control,
+[data-theme="dark"] .frappe-control input,
+[data-theme="dark"] .frappe-control select,
+[data-theme="dark"] .frappe-control textarea,
+[data-theme="dark"] select.form-control {
+  background-color: #1e293b !important;
+  color: #f8fafc !important;
+  border-color: #475569 !important;
+}
+
+[data-theme="dark"] .form-control::placeholder,
+[data-theme="dark"] .frappe-control input::placeholder {
+  color: #94a3b8 !important;
+  opacity: 1 !important;
+}
+
+[data-theme="dark"] .frappe-control .control-label,
+[data-theme="dark"] .form-group label,
+[data-theme="dark"] .section-head {
+  color: #f1f5f9 !important;
+  font-weight: 600 !important;
+}
+
+/* 3. Dark Mode Child Tables & Grid Rows */
+[data-theme="dark"] .form-grid,
+[data-theme="dark"] .grid-header,
+[data-theme="dark"] .grid-body,
+[data-theme="dark"] .grid-row,
+[data-theme="dark"] .data-row {
+  background-color: #111827 !important;
+  color: #f9fafb !important;
+  border-color: #374151 !important;
+}
+
+[data-theme="dark"] .grid-row:hover,
+[data-theme="dark"] .data-row:hover,
+[data-theme="dark"] .grid-row.grid-row-open {
+  background-color: #1f2937 !important;
+}
+
+[data-theme="dark"] .grid-static-col,
+[data-theme="dark"] .grid-header-row .grid-static-col {
+  color: #e5e7eb !important;
+}
+
+[data-theme="dark"] .grid-header-row {
+  background-color: #1f2937 !important;
+  border-bottom: 2px solid #374151 !important;
+}
+
+[data-theme="dark"] .grid-header-row .grid-title {
+  color: #93c5fd !important;
+  font-weight: 700 !important;
+}
+
+/* 4. Child Table Open Form / Modal on Grid Row Edit */
+[data-theme="dark"] .grid-row-open,
+[data-theme="dark"] .form-in-grid {
+  background-color: #182234 !important;
+  border: 1px solid #3b82f6 !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .form-in-grid .form-section {
+  background-color: transparent !important;
+}
+
+/* 5. Dark Mode Cards, Popups, and Modals */
+[data-theme="dark"] .modal-content,
+[data-theme="dark"] .modal-header,
+[data-theme="dark"] .modal-body,
+[data-theme="dark"] .modal-footer {
+  background-color: #111827 !important;
+  color: #f9fafb !important;
+  border-color: #374151 !important;
+}
+
+[data-theme="dark"] .modal-title {
+  color: #ffffff !important;
+}
+
+/* 6. List View in Dark Mode */
+[data-theme="dark"] .list-row-container .list-row,
+[data-theme="dark"] .result-list .list-row {
+  background-color: #111827 !important;
+  color: #f3f4f6 !important;
+  border-bottom: 1px solid #1f2937 !important;
+}
+
+[data-theme="dark"] .list-row-container .list-row:hover,
+[data-theme="dark"] .result-list .list-row:hover {
+  background-color: #1e293b !important;
+}
+
+[data-theme="dark"] .list-row-col a,
+[data-theme="dark"] .list-row-col span {
+  color: #e5e7eb !important;
+}
+
 
