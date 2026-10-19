@@ -95,11 +95,78 @@
     $main.prepend($hero);
     $hero.data('slug', card.slug);
 
-    $hero.on('click', '[data-route]', function () {
+    $hero.on('click', '[data-route]', function (e) {
+      e.preventDefault();
       const r = $(this).data('route');
       if (!r) return;
-      if (r.indexOf('?') !== -1) window.location.href = '/app/' + r;
-      else frappe.set_route(r.split('/'));
+
+      if (r.startsWith('query-report/')) {
+        frappe.set_route('query-report', r.replace('query-report/', ''));
+        return;
+      }
+
+      if (r.indexOf('?') !== -1) {
+        const parts = r.split('?');
+        const slug = parts[0];
+        const queryString = parts[1];
+
+        // Map URL slug to Frappe DocType
+        const SLUG_TO_DOCTYPE = {
+          'quotation': 'Quotation',
+          'sales-order': 'Sales Order',
+          'delivery-note': 'Delivery Note',
+          'sales-invoice': 'Sales Invoice',
+          'purchase-order': 'Purchase Order',
+          'material-request': 'Material Request',
+          'purchase-invoice': 'Purchase Invoice',
+          'batch': 'Batch',
+          'purchase-receipt': 'Purchase Receipt',
+          'quality-inspection': 'Quality Inspection',
+          'pick-list': 'Pick List',
+          'stock-reconciliation': 'Stock Reconciliation',
+          'payment-entry': 'Payment Entry',
+          'journal-entry': 'Journal Entry'
+        };
+
+        const doctype = SLUG_TO_DOCTYPE[slug] || (frappe.router && frappe.router.slug_to_title ? frappe.router.slug_to_title(slug) : slug);
+
+        // Parse query params into frappe.route_options
+        frappe.route_options = {};
+        const params = new URLSearchParams(queryString);
+        params.forEach((val, key) => {
+          try {
+            frappe.route_options[key] = JSON.parse(decodeURIComponent(val));
+          } catch (err) {
+            frappe.route_options[key] = decodeURIComponent(val);
+          }
+        });
+
+        frappe.set_route('List', doctype);
+      } else {
+        const parts = r.split('/');
+        if (parts.length === 1) {
+          const SLUG_TO_DOCTYPE = {
+            'quotation': 'Quotation',
+            'sales-order': 'Sales Order',
+            'delivery-note': 'Delivery Note',
+            'sales-invoice': 'Sales Invoice',
+            'purchase-order': 'Purchase Order',
+            'material-request': 'Material Request',
+            'purchase-invoice': 'Purchase Invoice',
+            'batch': 'Batch',
+            'purchase-receipt': 'Purchase Receipt',
+            'quality-inspection': 'Quality Inspection',
+            'pick-list': 'Pick List',
+            'stock-reconciliation': 'Stock Reconciliation',
+            'payment-entry': 'Payment Entry',
+            'journal-entry': 'Journal Entry'
+          };
+          const dt = SLUG_TO_DOCTYPE[parts[0]] || parts[0];
+          frappe.set_route('List', dt);
+        } else {
+          frappe.set_route(parts);
+        }
+      }
     });
   }
 
