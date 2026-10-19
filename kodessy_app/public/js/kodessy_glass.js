@@ -18,6 +18,14 @@
       link.href = '/assets/kodessy_app/css/kodessy_glass.css?_v=' + Date.now();
       document.head.appendChild(link);
     }
+    // Enforce FIRMAI favicon in document head
+    let fav = document.querySelector('link[rel*="icon"]');
+    if (!fav) {
+      fav = document.createElement('link');
+      fav.rel = 'shortcut icon';
+      document.head.appendChild(fav);
+    }
+    fav.href = '/assets/kodessy_app/images/favicon.png?_v=' + Date.now();
   })();
   const esc  = (s) => frappe.utils.escape_html(String(s == null ? '' : s));
   const API  = 'kodessy_app.api.';

@@ -288,6 +288,17 @@ def ensure_brunei_masters_and_currency():
 	if frappe.db.exists("Workspace", "Manufacturing"):
 		frappe.db.set_value("Workspace", "Manufacturing", "is_hidden", 1)
 
+	# 6. Set Favicon, App Logo, and Splash Image in Website Settings
+	for field, val in [
+		("app_logo", "/assets/kodessy_app/images/logo.png"),
+		("favicon", "/assets/kodessy_app/images/favicon.png"),
+		("splash_image", "/assets/kodessy_app/images/splash.png"),
+		("app_name", "FIRMAI"),
+	]:
+		frappe.db.set_value("Website Settings", "Website Settings", field, val)
+		frappe.db.set_value("Navbar Settings", "Navbar Settings", field, val)
+
+
 
 
 # --------------------------------------------------------------------------

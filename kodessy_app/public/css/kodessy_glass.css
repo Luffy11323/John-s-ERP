@@ -946,4 +946,45 @@ div[data-doctype="General Ledger"] .print-format,
 .print-format tr:hover td,
 .report-print-format tr:hover td {
   background-color: #f1f5f9 !important;
-}
+}
+
+/* ======================================================================
+   SPLASH SCREEN & LOADING LOGO REPLACEMENT ('E' -> FIRMAI)
+   ====================================================================== */
+#splash {
+  background-color: #ffffff !important;
+}
+
+#splash img {
+  max-width: 220px !important;
+  max-height: 60px !important;
+  object-fit: contain !important;
+}
+
+/* Replace the standard Frappe / ERPNext 'E' logo on loading spinner with FIRMAI symbol */
+.splash,
+.frappe-spinner,
+.page-container .splash {
+  background-image: url("/assets/kodessy_app/images/favicon.png") !important;
+  background-size: contain !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+}
+
+/* Desk initial loader icon */
+svg.es-icon[data-name="erpnext"],
+svg[data-icon="erpnext"],
+.desk-loading svg,
+#freeze .splash svg {
+  display: none !important;
+}
+
+#freeze .splash,
+.desk-loading,
+.splash {
+  background-image: url("/assets/kodessy_app/images/splash.png") !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  background-size: 180px auto !important;
+}
+
