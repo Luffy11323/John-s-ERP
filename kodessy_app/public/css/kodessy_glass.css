@@ -40,7 +40,7 @@ body, .desk-sidebar, .form-control, .btn, .widget-title, .navbar {
   top: 0; bottom: 0; left: 0; right: 0;
   z-index: -1;
   pointer-events: none;
-  background: linear-gradient(90deg, #ffffff 0%, #ffffff 240px, #181A71 60%, #1f228a 85%, #2B2ECF 100%) !important;
+  background: linear-gradient(90deg, #ffffff 0%, #ffffff 380px, #181A71 68%, #1f228a 86%, #2B2ECF 100%) !important;
   animation: kodNavIn 0.7s ease forwards;
 }
 
@@ -52,7 +52,7 @@ body, .desk-sidebar, .form-control, .btn, .widget-title, .navbar {
 }
 
 [data-theme="dark"] .navbar::before {
-  background: linear-gradient(90deg, #09090b 0%, #09090b 240px, #10114a 60%, #181A71 85%, #1f228a 100%);
+  background: linear-gradient(90deg, #09090b 0%, #09090b 380px, #10114a 68%, #181A71 86%, #1f228a 100%);
 }
 
 @keyframes kodNavIn {
@@ -755,19 +755,19 @@ input[type="radio"]:checked,
    ====================================================================== */
 .modal-footer .btn-primary,
 .modal .btn-primary {
-  background: linear-gradient(135deg, #5a8fab 0%, #5a8f93 60%, #639a85 100%) !important;
+  background: linear-gradient(135deg, #181A71 0%, #1f228a 55%, #2B2ECF 100%) !important;
   border: none !important;
   color: #ffffff !important;
   border-radius: 8px !important;
   font-weight: 600 !important;
-  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.25) !important;
+  box-shadow: 0 2px 8px rgba(24, 26, 113, 0.25) !important;
   transition: transform 0.15s ease, box-shadow 0.15s ease !important;
 }
 
 .modal-footer .btn-primary:hover,
 .modal .btn-primary:hover {
-  background: linear-gradient(135deg, #4d7f9a 0%, #4e8084 60%, #568a76 100%) !important;
-  box-shadow: 0 6px 18px rgba(2, 132, 199, 0.20) !important;
+  background: linear-gradient(135deg, #121356 0%, #181A71 55%, #2325a8 100%) !important;
+  box-shadow: 0 6px 18px rgba(24, 26, 113, 0.28) !important;
   transform: translateY(-1px) !important;
 }
 
@@ -1173,6 +1173,49 @@ svg[data-icon="erpnext"],
 [data-theme="dark"] .list-row-col a,
 [data-theme="dark"] .list-row-col span {
   color: #e5e7eb !important;
+}
+
+/* ======================================================================
+   7. UNIVERSAL FIRMAI DEEP BLUE BUTTON & ELEMENT ENFORCEMENT
+   Ensures all primary buttons, save actions, dialogs, quick entry modals,
+   and child popups throughout the entire body use FIRMAI Deep Blue.
+   ====================================================================== */
+body .btn-primary,
+body button.btn-primary,
+body .btn-primary-dark,
+body .modal-footer .btn-primary,
+body .modal .btn-primary,
+body .form-footer .btn-primary,
+body .page-actions .btn-primary,
+body .standard-actions .btn-primary,
+body [data-action="save"],
+body button[data-action="save"],
+body .btn[data-label="Save"],
+body .btn[data-label="Submit"] {
+  background: linear-gradient(135deg, #181A71 0%, #1f228a 55%, #2B2ECF 100%) !important;
+  background-color: #181A71 !important;
+  border-color: #181A71 !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(24, 26, 113, 0.25) !important;
+}
+
+body .btn-primary:hover,
+body button.btn-primary:hover,
+body .btn-primary:focus,
+body .modal-footer .btn-primary:hover,
+body .modal .btn-primary:hover,
+body .form-footer .btn-primary:hover,
+body .page-actions .btn-primary:hover,
+body .standard-actions .btn-primary:hover,
+body [data-action="save"]:hover,
+body button[data-action="save"]:hover,
+body .btn[data-label="Save"]:hover,
+body .btn[data-label="Submit"]:hover {
+  background: linear-gradient(135deg, #121356 0%, #181A71 55%, #2325a8 100%) !important;
+  background-color: #121356 !important;
+  border-color: #121356 !important;
+  color: #ffffff !important;
+  box-shadow: 0 6px 18px rgba(24, 26, 113, 0.30) !important;
 }
 
 
