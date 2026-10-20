@@ -271,6 +271,12 @@ def ensure_brunei_masters_and_currency():
 			"parent_territory": "All Territories"
 		}).insert(ignore_permissions=True)
 
+	# 3b. Standardize Price Lists and Item Prices to BND
+	for pl in ("Standard Selling", "Standard Buying"):
+		if frappe.db.exists("Price List", pl):
+			frappe.db.set_value("Price List", pl, "currency", "BND")
+	frappe.db.sql("UPDATE `tabItem Price` SET currency = 'BND' WHERE currency = 'MYR'")
+
 	# 4. Suppliers from guideline image
 	suppliers = [
 		("B. Braun", "Pharmaceutical Supplier"),
