@@ -251,14 +251,23 @@ def ensure_brunei_masters_and_currency():
 		})
 
 	# 2. Global Defaults & Company
+	if not frappe.db.exists("Country", "Brunei"):
+		frappe.get_doc({
+			"doctype": "Country",
+			"country_name": "Brunei",
+			"date_format": "dd-mm-yyyy",
+			"time_format": "HH:mm:ss",
+			"code": "bn"
+		}).insert(ignore_permissions=True)
+
 	for comp in frappe.get_all("Company", pluck="name"):
 		frappe.db.set_value("Company", comp, {
 			"default_currency": "BND",
-			"country": "Brunei"
+			"country": "Brunei Darussalam"
 		})
 	frappe.db.set_default("company", "FIRMAI")
 	frappe.db.set_default("currency", "BND")
-	frappe.db.set_default("country", "Brunei")
+	frappe.db.set_default("country", "Brunei Darussalam")
 
 	if not frappe.db.exists("Customer Group", "Commercial Hospital"):
 		frappe.get_doc({"doctype": "Customer Group", "customer_group_name": "Commercial Hospital", "parent_customer_group": "All Customer Groups", "is_group": 0}).insert(ignore_permissions=True)
