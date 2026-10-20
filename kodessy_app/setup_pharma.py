@@ -256,8 +256,12 @@ def ensure_brunei_masters_and_currency():
 			"default_currency": "BND",
 			"country": "Brunei"
 		})
+	frappe.db.set_default("company", "FIRMAI")
 	frappe.db.set_default("currency", "BND")
 	frappe.db.set_default("country", "Brunei")
+
+	if not frappe.db.exists("Customer Group", "Commercial Hospital"):
+		frappe.get_doc({"doctype": "Customer Group", "customer_group_name": "Commercial Hospital", "parent_customer_group": "All Customer Groups", "is_group": 0}).insert(ignore_permissions=True)
 
 	# 3. Territory
 	if not frappe.db.exists("Territory", "Brunei"):
