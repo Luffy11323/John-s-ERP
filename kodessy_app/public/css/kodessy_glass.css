@@ -61,15 +61,14 @@ body, .desk-sidebar, .form-control, .btn, .widget-title, .navbar {
 }
 
 /* Right-hand nav items sit on the vivid gradient → crisp white */
-.navbar .navbar-collapse .navbar-nav.navbar-right .nav-link,
-.navbar .navbar-collapse .navbar-nav.navbar-right a,
-.navbar .navbar-collapse .navbar-nav.navbar-right .dropdown-toggle,
-.navbar .navbar-collapse .navbar-nav.navbar-right button,
-.navbar .navbar-collapse .navbar-nav.navbar-right span,
+.navbar .navbar-collapse .navbar-nav.navbar-right > li > .nav-link,
+.navbar .navbar-collapse .navbar-nav.navbar-right > li > a,
+.navbar .navbar-collapse .navbar-nav.navbar-right > li > .dropdown-toggle,
+.navbar .navbar-collapse .navbar-nav.navbar-right > li > button,
 .navbar .navbar-nav.navbar-right > li > a,
 .navbar .navbar-nav.navbar-right > li > button,
-.navbar .nav-item .nav-link,
-.navbar .dropdown-help .dropdown-toggle,
+.navbar .nav-item > .nav-link,
+.navbar .dropdown-help > .dropdown-toggle,
 .navbar .notifications-icon,
 .navbar .btn-notification,
 .navbar li.vertical-bar {
@@ -98,9 +97,116 @@ body, .desk-sidebar, .form-control, .btn, .widget-title, .navbar {
 
 /* Dropdown menus must stay readable in both light and dark mode */
 .navbar .dropdown-menu {
-  background: var(--card-bg, #ffffff) !important;
+  background: #ffffff !important;
   border: 1px solid var(--border-color, #e5e7eb) !important;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* ======================================================================
+   NOTIFICATIONS PANEL CONTRAST ENGINE (Light Mode & Dark Mode)
+   Resolves invisible notification text, badges, and dark-on-dark/white-on-white.
+   ====================================================================== */
+.navbar .dropdown-notifications .dropdown-menu,
+.navbar .notifications-list {
+  background: #ffffff !important;
+  color: #1e293b !important;
+}
+
+.navbar .notifications-list .notification-list-header {
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+
+.navbar .notifications-list .notifications-category {
+  color: #64748b !important;
+  font-weight: 600 !important;
+}
+
+.navbar .notifications-list .notifications-category.active {
+  color: #181A71 !important;
+  border-bottom: 2px solid #181A71 !important;
+}
+
+.navbar .notifications-list .recent-item,
+.navbar .notifications-list .notification-item {
+  color: #1e293b !important;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.navbar .notifications-list .recent-item:hover,
+.navbar .notifications-list .notification-item:hover {
+  background-color: #f8fafc !important;
+}
+
+.navbar .notifications-list .recent-item b,
+.navbar .notifications-list .notification-item b,
+.navbar .notifications-list .subject-title,
+.navbar .notifications-list .title,
+.navbar .notifications-list .message,
+.navbar .notifications-list .message * {
+  color: #0f172a !important;
+  font-weight: 600 !important;
+}
+
+.navbar .notifications-list .notification-timestamp,
+.navbar .notifications-list .text-muted,
+.navbar .notifications-list .subtitle {
+  color: #64748b !important;
+}
+
+.navbar .notifications-list svg,
+.navbar .notifications-list .mark-all-read svg,
+.navbar .notifications-list .notification-settings svg {
+  stroke: #475569 !important;
+  color: #475569 !important;
+}
+
+.navbar .notifications-list svg:hover {
+  stroke: #181A71 !important;
+}
+
+/* Dark mode notifications */
+[data-theme="dark"] .navbar .dropdown-notifications .dropdown-menu,
+[data-theme="dark"] .navbar .notifications-list {
+  background: #18181b !important;
+  color: #f1f5f9 !important;
+}
+
+[data-theme="dark"] .navbar .notifications-list .notification-list-header {
+  border-bottom: 1px solid #27272a !important;
+}
+
+[data-theme="dark"] .navbar .notifications-list .notifications-category {
+  color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .navbar .notifications-list .notifications-category.active {
+  color: #60a5fa !important;
+  border-bottom-color: #60a5fa !important;
+}
+
+[data-theme="dark"] .navbar .notifications-list .recent-item:hover,
+[data-theme="dark"] .navbar .notifications-list .notification-item:hover {
+  background-color: #27272a !important;
+}
+
+[data-theme="dark"] .navbar .notifications-list .recent-item b,
+[data-theme="dark"] .navbar .notifications-list .notification-item b,
+[data-theme="dark"] .navbar .notifications-list .subject-title,
+[data-theme="dark"] .navbar .notifications-list .title,
+[data-theme="dark"] .navbar .notifications-list .message,
+[data-theme="dark"] .navbar .notifications-list .message * {
+  color: #f8fafc !important;
+}
+
+[data-theme="dark"] .navbar .notifications-list .notification-timestamp,
+[data-theme="dark"] .navbar .notifications-list .text-muted,
+[data-theme="dark"] .navbar .notifications-list .subtitle {
+  color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .navbar .notifications-list svg {
+  stroke: #cbd5e1 !important;
+  color: #cbd5e1 !important;
 }
 
 .navbar .dropdown-menu,
@@ -1055,14 +1161,13 @@ svg[data-icon="erpnext"],
    ====================================================================== */
 
 /* 1. Global Navbar Icons, Bell, Help, and Badges — Pure White */
-.navbar [class*="notification"],
-.navbar [class*="help"],
+.navbar > * [class*="notification"]:not(.dropdown-menu):not(.dropdown-menu *),
 .navbar .notifications-icon,
 .navbar .btn-notification,
 .navbar .notifications-icon svg,
 .navbar .btn-notification svg,
-.navbar .nav-link svg,
-.navbar .dropdown-toggle svg,
+.navbar > * .nav-link svg,
+.navbar > * .dropdown-toggle svg,
 .navbar .vertical-bar {
   color: #ffffff !important;
   stroke: #ffffff !important;
@@ -1218,4 +1323,4 @@ body .btn[data-label="Submit"]:hover {
   box-shadow: 0 6px 18px rgba(24, 26, 113, 0.30) !important;
 }
 
-
+
