@@ -114,7 +114,12 @@ scheduler_events = {
 
 doctype_js = {
     "Sales Invoice": "public/js/sales_invoice.js",
-    "Batch": "public/js/batch.js"
+    "Batch": "public/js/batch.js",
+    "Delivery Trip": "public/js/delivery_trip.js"
+}
+
+override_doctype_class = {
+    "Delivery Trip": "kodessy_app.overrides.delivery_trip.CustomDeliveryTrip"
 }
 
 # Naming series, FEFO, roles, demo master data, custom fields, QC templates, workflows
