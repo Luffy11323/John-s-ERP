@@ -268,6 +268,10 @@ def ensure_brunei_masters_and_currency():
 	frappe.db.set_default("company", "FIRMAI")
 	frappe.db.set_default("currency", "BND")
 	frappe.db.set_default("country", "Brunei Darussalam")
+	frappe.db.set_default("time_zone", "Asia/Brunei")
+	if frappe.db.exists("DocType", "System Settings"):
+		frappe.db.set_single_value("System Settings", "time_zone", "Asia/Brunei")
+		frappe.db.set_single_value("System Settings", "country", "Brunei Darussalam")
 
 	if not frappe.db.exists("Customer Group", "Commercial Hospital"):
 		frappe.get_doc({"doctype": "Customer Group", "customer_group_name": "Commercial Hospital", "parent_customer_group": "All Customer Groups", "is_group": 0}).insert(ignore_permissions=True)
@@ -421,7 +425,7 @@ def ensure_custom_fields():
 
 
 def make_return_fields_mandatory():
-	"""Return reason / QA assessment become mandatory on return documents and visible in grid row view."""
+	"""Return reason / QA assessment become mandatory on return documents and visible in grid row view when is_return is active."""
 	for fieldname in ("custom_return_reason", "custom_assessment_status"):
 		for dt in ("Sales Invoice Item", "Delivery Note Item"):
 			name = f"{dt}-{fieldname}"
@@ -432,7 +436,7 @@ def make_return_fields_mandatory():
 					{
 						"mandatory_depends_on": "eval:parent.is_return",
 						"depends_on": "eval:parent.is_return",
-						"in_list_view": 1,
+						"in_list_view": 0,
 						"columns": 2,
 					},
 				)

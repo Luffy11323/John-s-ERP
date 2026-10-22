@@ -1,5 +1,10 @@
 frappe.ui.form.on("Sales Invoice", {
+	setup(frm) {
+		toggle_return_columns(frm);
+	},
 	refresh(frm) {
+		toggle_return_columns(frm);
+
 		if (!frm.doc.is_return) return;
 
 		if (frm.doc.custom_credit_note_approved_by) {
@@ -29,4 +34,18 @@ frappe.ui.form.on("Sales Invoice", {
 			}
 		}
 	},
+	is_return(frm) {
+		toggle_return_columns(frm);
+	}
 });
+
+function toggle_return_columns(frm) {
+	const is_ret = !!frm.doc.is_return;
+	if (frm.fields_dict.items && frm.fields_dict.items.grid) {
+		const grid = frm.fields_dict.items.grid;
+		if (typeof grid.set_column_disp === "function") {
+			grid.set_column_disp("custom_return_reason", is_ret);
+			grid.set_column_disp("custom_assessment_status", is_ret);
+		}
+	}
+}
