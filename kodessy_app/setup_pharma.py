@@ -334,6 +334,16 @@ def _options_of(doctype, fieldname):
 
 def ensure_custom_fields():
 	fields = {
+		"Contact": [
+			{
+				"fieldname": "is_billing_contact",
+				"label": "Is Billing Contact",
+				"fieldtype": "Check",
+				"insert_after": "is_primary_contact",
+				"in_list_view": 1,
+				"description": "Designates this contact to receive Statements of Accounts and Billing Invoices.",
+			}
+		],
 		"Batch": [
 			{
 				"fieldname": "custom_recalled",
