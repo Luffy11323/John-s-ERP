@@ -3207,5 +3207,20 @@
         "permlevel":  0,
         "columns":  0,
         "doctype":  "Custom Field"
+    },
+    {
+        "name":  "Contact-is_billing_contact",
+        "owner":  "Administrator",
+        "docstatus":  0,
+        "is_system_generated":  0,
+        "dt":  "Contact",
+        "label":  "Is Billing Contact",
+        "fieldname":  "is_billing_contact",
+        "insert_after":  "is_primary_contact",
+        "fieldtype":  "Check",
+        "default":  "1",
+        "in_list_view":  1,
+        "description":  "Designates this contact to receive Statements of Accounts and Billing Invoices.",
+        "doctype":  "Custom Field"
     }
 ]

@@ -48,6 +48,7 @@ def after_migrate():
 		ensure_warehouse_mandatory,
 		ensure_workflow_avoid_status_override,
 		ensure_brunei_masters_and_currency,
+		ensure_contact_defaults,
 	]
 	for step in steps:
 		try:
@@ -332,6 +333,15 @@ def _options_of(doctype, fieldname):
 	return field.options if field else None
 
 
+def ensure_contact_defaults():
+	"""Ensure both Is Primary Contact and Is Billing Contact are ticked by default."""
+	from frappe.custom.doctype.property_setter.property_setter import make_property_setter
+	make_property_setter("Contact", "is_primary_contact", "default", "1", "Check")
+	if frappe.db.exists("Custom Field", "Contact-is_billing_contact"):
+		frappe.db.set_value("Custom Field", "Contact-is_billing_contact", "default", "1")
+	frappe.clear_cache(doctype="Contact")
+
+
 def ensure_custom_fields():
 	fields = {
 		"Contact": [
@@ -341,6 +351,7 @@ def ensure_custom_fields():
 				"fieldtype": "Check",
 				"insert_after": "is_primary_contact",
 				"in_list_view": 1,
+				"default": "1",
 				"description": "Designates this contact to receive Statements of Accounts and Billing Invoices.",
 			}
 		],

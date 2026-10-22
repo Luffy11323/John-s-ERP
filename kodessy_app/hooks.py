@@ -118,7 +118,8 @@ scheduler_events = {
 doctype_js = {
     "Sales Invoice": "public/js/sales_invoice.js",
     "Batch": "public/js/batch.js",
-    "Delivery Trip": "public/js/delivery_trip.js"
+    "Delivery Trip": "public/js/delivery_trip.js",
+    "Contact": "public/js/contact.js"
 }
 
 override_doctype_class = {
