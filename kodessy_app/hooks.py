@@ -81,6 +81,9 @@ doc_events = {
     },
     "Stock Entry": {
         "validate": "kodessy_app.controllers.quarantine_control.validate_quarantine_release"
+    },
+    "Contact": {
+        "validate": "kodessy_app.controllers.contact_control.sync_customer_primary_contact"
     }
 }
 
